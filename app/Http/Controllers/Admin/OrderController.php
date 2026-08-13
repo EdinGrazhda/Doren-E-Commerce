@@ -8,13 +8,16 @@ use App\Models\Order;
 use App\OrderStatus;
 use App\PaymentStatus;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class OrderController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $request->session()->put('dashboard.orders_seen_at', now());
+
         $orders = Order::query()
             ->select([
                 'id',
@@ -34,6 +37,11 @@ class OrderController extends Controller
             ->paginate(15);
 
         return Inertia::render('admin/orders/index', [
+            'dashboard' => [
+                'orders' => [
+                    'pending_count' => 0,
+                ],
+            ],
             'orders' => $orders,
             'statusOptions' => collect(OrderStatus::cases())->map(fn (OrderStatus $status): array => [
                 'label' => $status->name,

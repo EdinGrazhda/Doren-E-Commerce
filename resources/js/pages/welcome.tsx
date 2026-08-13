@@ -16,7 +16,13 @@ import {
     Youtube,
 } from 'lucide-react';
 
-import { dashboard as adminDashboard, login } from '@/routes';
+import {
+    cart as cartRoute,
+    dashboard as adminDashboard,
+    login,
+} from '@/routes';
+import { home } from '@/routes';
+import { show as showProduct } from '@/routes/products';
 
 type StoreCategory = {
     id: number;
@@ -61,6 +67,11 @@ type StorefrontBanner = {
 };
 
 type Props = {
+    activeCategory: {
+        id: number;
+        name: string;
+        slug: string;
+    } | null;
     banners: Partial<Record<'top' | 'hero' | 'bottom', StorefrontBanner>>;
     categories: StoreCategory[];
     newInProducts: StoreProduct[];
@@ -173,6 +184,14 @@ function bannerTitleLines(title: string, fallback: string): string[] {
     return value.replace(' For ', '\nFor ').split('\n');
 }
 
+function categoryHref(categorySlug: string) {
+    return home({
+        query: {
+            category: categorySlug,
+        },
+    });
+}
+
 function ProductCard({
     product,
     index,
@@ -185,16 +204,22 @@ function ProductCard({
     return (
         <article className="group min-w-0">
             <div className="relative aspect-[0.91] overflow-hidden bg-[#ded7cc]">
-                <img
-                    src={imageFor(product.image_url, index)}
-                    alt={product.name}
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.035]"
-                />
-                {badge && (
-                    <span className="absolute top-3 left-3 bg-[#8d6b35] px-2 py-1 text-[9px] leading-none font-bold tracking-[0.08em] text-white uppercase">
-                        {badge}
-                    </span>
-                )}
+                <Link
+                    href={showProduct(product.slug)}
+                    className="block h-full w-full"
+                    aria-label={`View ${product.name}`}
+                >
+                    <img
+                        src={imageFor(product.image_url, index)}
+                        alt={product.name}
+                        className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.035]"
+                    />
+                    {badge && (
+                        <span className="absolute top-3 left-3 bg-[#8d6b35] px-2 py-1 text-[9px] leading-none font-bold tracking-[0.08em] text-white uppercase">
+                            {badge}
+                        </span>
+                    )}
+                </Link>
                 <button
                     type="button"
                     className="absolute top-3 right-3 grid h-7 w-7 place-items-center text-[#171716]"
@@ -204,9 +229,12 @@ function ProductCard({
                 </button>
             </div>
             <div className="mt-3">
-                <h3 className="truncate text-[13px] leading-tight font-medium">
+                <Link
+                    href={showProduct(product.slug)}
+                    className="block truncate text-[13px] leading-tight font-medium"
+                >
                     {product.name}
-                </h3>
+                </Link>
                 <p className="mt-1 text-[12px] leading-tight font-semibold">
                     {formatPrice(product)}
                 </p>
@@ -279,12 +307,13 @@ function ProductRail({
 }
 
 export default function Welcome({
+    activeCategory,
     banners,
     categories,
     newInProducts,
     bestSellerProducts,
 }: Props) {
-    const { auth } = usePage().props;
+    const { auth, cart } = usePage().props;
     const topBanner = banners.top;
     const heroBanner = banners.hero;
     const bottomBanner = banners.bottom;
@@ -347,16 +376,16 @@ export default function Welcome({
                             >
                                 <User className="h-5 w-5 stroke-[1.6]" />
                             </Link>
-                            <button
-                                type="button"
+                            <Link
+                                href={cartRoute()}
                                 className="relative h-9 w-9"
                                 aria-label="Shopping bag"
                             >
                                 <ShoppingBag className="mx-auto h-5 w-5 stroke-[1.6]" />
                                 <span className="absolute top-0 right-1 grid h-4 w-4 place-items-center rounded-full bg-[#151513] text-[9px] font-bold text-white">
-                                    0
+                                    {cart.count}
                                 </span>
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </header>
@@ -444,13 +473,25 @@ export default function Welcome({
                             <h2 className="text-center text-[14px] font-bold tracking-[0.08em] uppercase">
                                 Shop By Category
                             </h2>
+                            {activeCategory && (
+                                <div className="mt-3 flex justify-center">
+                                    <Link
+                                        href={home()}
+                                        preserveScroll
+                                        className="inline-flex h-8 items-center border border-[#d6cec0] bg-[#f8f4ed] px-4 text-[10px] font-bold tracking-[0.1em] uppercase"
+                                    >
+                                        Clear {activeCategory.name}
+                                    </Link>
+                                </div>
+                            )}
                             <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                                 {categories.map((category, index) => (
-                                    <a
+                                    <Link
                                         key={category.id}
                                         id={category.slug}
-                                        href="#new-in"
-                                        className="group relative aspect-[1.27] overflow-hidden bg-[#ded7cc]"
+                                        href={categoryHref(category.slug)}
+                                        preserveScroll
+                                        className={`group relative aspect-[1.27] overflow-hidden bg-[#ded7cc] ring-offset-2 ring-offset-[#f5f1e9] ${activeCategory?.slug === category.slug ? 'ring-2 ring-[#151513]' : ''}`}
                                     >
                                         <img
                                             src={imageFor(
@@ -470,7 +511,7 @@ export default function Welcome({
                                                 <ArrowRight className="h-3.5 w-3.5" />
                                             </span>
                                         </div>
-                                    </a>
+                                    </Link>
                                 ))}
                             </div>
                         </section>
@@ -478,7 +519,11 @@ export default function Welcome({
 
                     <ProductRail
                         id="new-in"
-                        title="New In"
+                        title={
+                            activeCategory
+                                ? `${activeCategory.name} Products`
+                                : 'New In'
+                        }
                         products={newInProducts}
                     />
                     <ProductRail

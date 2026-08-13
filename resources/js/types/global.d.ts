@@ -12,6 +12,14 @@ declare module '@inertiajs/core' {
         sharedPageProps: {
             name: string;
             auth: Auth;
+            cart: {
+                count: number;
+            };
+            dashboard: {
+                orders: {
+                    pending_count: number;
+                };
+            };
             sidebarOpen: boolean;
             [key: string]: unknown;
         };

@@ -30,18 +30,18 @@
     "semantic_hash": ""
   },
   "app/Http/Controllers/Admin/OrderController.php": {
-    "mtime": 1786471637.5712633,
-    "ast_hash": "939e105814c00e92b63f97bd803c8c29",
+    "mtime": 1786664672.9537244,
+    "ast_hash": "084e41d1ae81ee848b4061de638cd210",
     "semantic_hash": ""
   },
   "app/Http/Controllers/Admin/ProductCategoryController.php": {
-    "mtime": 1786473165.898288,
+    "mtime": 1786554623.99641,
     "ast_hash": "797d8c4c33adad248ddebb2519b1e360",
     "semantic_hash": ""
   },
   "app/Http/Controllers/Admin/ProductController.php": {
-    "mtime": 1786473264.1825013,
-    "ast_hash": "61942eea445b6052be265281bb89716c",
+    "mtime": 1786477173.0011127,
+    "ast_hash": "71e7d647641a2cf6db7659e1f5b35a0a",
     "semantic_hash": ""
   },
   "app/Http/Controllers/Admin/StoreSettingController.php": {
@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "app/Http/Middleware/HandleInertiaRequests.php": {
-    "mtime": 1785422079.0,
-    "ast_hash": "7091350ce4161b247d278753d6c4d83a",
+    "mtime": 1786664659.8199031,
+    "ast_hash": "927123cd7cf16d4a575c795266fee290",
     "semantic_hash": ""
   },
   "app/Http/Requests/Settings/PasswordUpdateRequest.php": {
@@ -325,13 +325,13 @@
     "semantic_hash": ""
   },
   "database/seeders/DatabaseSeeder.php": {
-    "mtime": 1786469162.757305,
-    "ast_hash": "5217318368a23b4ac5d01b3f1774b7a5",
+    "mtime": 1786475369.828431,
+    "ast_hash": "4b5f421ed87ff3bb98f890ce6edafa01",
     "semantic_hash": ""
   },
   "database/seeders/ProductCatalogSeeder.php": {
-    "mtime": 1786469221.2145593,
-    "ast_hash": "973392478d394f6b938ba776fc5d76bf",
+    "mtime": 1786660763.9243288,
+    "ast_hash": "87ccdc3d21259fd94fe12983dd7ee56d",
     "semantic_hash": ""
   },
   "eslint.config.js": {
@@ -350,13 +350,13 @@
     "semantic_hash": ""
   },
   "resources/js/app.tsx": {
-    "mtime": 1786470313.9618864,
-    "ast_hash": "2ac2e207ee3d4c54ef85933af8f2f420",
+    "mtime": 1786662697.137938,
+    "ast_hash": "948db9c4a2e6a49472145edb05817ce3",
     "semantic_hash": ""
   },
   "resources/js/components/admin-sidebar.tsx": {
-    "mtime": 1786473993.608395,
-    "ast_hash": "665477112af62ef307827a61ad374e6e",
+    "mtime": 1786664546.6484382,
+    "ast_hash": "4c68fe765341eb90b99f37a7f708421b",
     "semantic_hash": ""
   },
   "resources/js/components/alert-error.tsx": {
@@ -740,8 +740,8 @@
     "semantic_hash": ""
   },
   "resources/js/pages/admin/products/index.tsx": {
-    "mtime": 1786473264.3344972,
-    "ast_hash": "bfc3d41c018500d33d6d08f789110262",
+    "mtime": 1786477196.1775098,
+    "ast_hash": "383b0690c4a57dfae622c4000e6f0eb8",
     "semantic_hash": ""
   },
   "resources/js/pages/admin/settings/index.tsx": {
@@ -805,8 +805,8 @@
     "semantic_hash": ""
   },
   "resources/js/pages/welcome.tsx": {
-    "mtime": 1786471272.4105513,
-    "ast_hash": "5d8f3465da7a9dd7ada2ae7418332354",
+    "mtime": 1786662398.6667686,
+    "ast_hash": "ea537191e1d78ac90a5a5c7b495677b5",
     "semantic_hash": ""
   },
   "resources/js/types/auth.ts": {
@@ -815,8 +815,8 @@
     "semantic_hash": ""
   },
   "resources/js/types/global.d.ts": {
-    "mtime": 1785422079.0,
-    "ast_hash": "e0e764b6f787ba65dd6a07da5d57a5bb",
+    "mtime": 1786664495.0051358,
+    "ast_hash": "da329b7745a7f353572490429ff74cf6",
     "semantic_hash": ""
   },
   "resources/js/types/index.ts": {
@@ -855,13 +855,13 @@
     "semantic_hash": ""
   },
   "routes/web.php": {
-    "mtime": 1786471617.3734744,
-    "ast_hash": "0ef1bd138154b6a4ff5c03e8b68b3c8c",
+    "mtime": 1786662697.0189378,
+    "ast_hash": "fddd9c1d0e2111c4fddaaf1c1f931441",
     "semantic_hash": ""
   },
   "tests/Feature/AdminPanelTest.php": {
-    "mtime": 1786473264.488493,
-    "ast_hash": "9a1de4f34dcc93852de023905f32e586",
+    "mtime": 1786664659.9599013,
+    "ast_hash": "85f1aecf6e71fcb0d77b19efdfa536d7",
     "semantic_hash": ""
   },
   "tests/Feature/Auth/AuthenticationTest.php": {
@@ -905,8 +905,8 @@
     "semantic_hash": ""
   },
   "tests/Feature/EcommerceDatabaseTest.php": {
-    "mtime": 1786469206.1335475,
-    "ast_hash": "91fd42f93b821283d2181d91e6d0817f",
+    "mtime": 1786475595.3732362,
+    "ast_hash": "9bdc4cb01c02e1191208d32c9cb2c1a4",
     "semantic_hash": ""
   },
   "tests/Feature/ExampleTest.php": {
@@ -1135,8 +1135,8 @@
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/StoreProductRequest.php": {
-    "mtime": 1786473165.347304,
-    "ast_hash": "ee2d844b49963df39f366a1525de6a7d",
+    "mtime": 1786477158.9834852,
+    "ast_hash": "e01570d3e04bbd5b9dbe9431d7212549",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/UpdateOrderRequest.php": {
@@ -1150,8 +1150,138 @@
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/UpdateProductRequest.php": {
-    "mtime": 1786473165.6042967,
-    "ast_hash": "a070494d46eedbae45107bb5c91eb6ec",
+    "mtime": 1786477163.2863703,
+    "ast_hash": "0f526b13c39ab89eb5650191c1b4d9b3",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Admin/StorefrontBannerController.php": {
+    "mtime": 1786476823.2067375,
+    "ast_hash": "aba3f557d6d99af4c8a3bac538640e90",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/HomeController.php": {
+    "mtime": 1786660309.6978297,
+    "ast_hash": "b9d713c021bb9e719ea9bcc48b11d8f9",
+    "semantic_hash": ""
+  },
+  "app/Http/Requests/Admin/StoreStorefrontBannerRequest.php": {
+    "mtime": 1786476707.2665892,
+    "ast_hash": "27f843f82db019c426c4a25e73c47b1c",
+    "semantic_hash": ""
+  },
+  "app/Http/Requests/Admin/UpdateStorefrontBannerRequest.php": {
+    "mtime": 1786476712.0995543,
+    "ast_hash": "fff4f3699a4b13b3c60d4c9a3515b206",
+    "semantic_hash": ""
+  },
+  "app/Models/StorefrontBanner.php": {
+    "mtime": 1786475319.04577,
+    "ast_hash": "b8ab0bbc78ea15a7f6c4602bbaa4e31d",
+    "semantic_hash": ""
+  },
+  "database/factories/StorefrontBannerFactory.php": {
+    "mtime": 1786475351.3972034,
+    "ast_hash": "292a778764a035b4a1cdd1c72eefb1b7",
+    "semantic_hash": ""
+  },
+  "database/migrations/2026_08_11_190752_create_storefront_banners_table.php": {
+    "mtime": 1786475308.7796226,
+    "ast_hash": "a155dc1a73353e26d252e56f85701e1a",
+    "semantic_hash": ""
+  },
+  "database/seeders/StorefrontBannerSeeder.php": {
+    "mtime": 1786475366.020385,
+    "ast_hash": "573cd178dd0252fd920c22667e551bd7",
+    "semantic_hash": ""
+  },
+  "resources/js/components/ui/textarea.tsx": {
+    "mtime": 1786475430.1970818,
+    "ast_hash": "508c93293f2060f2c6e2ab2da13eadb8",
+    "semantic_hash": ""
+  },
+  "resources/js/pages/admin/banners/index.tsx": {
+    "mtime": 1786476778.5690696,
+    "ast_hash": "bec4902bce462294a4f993a3493fe1d7",
+    "semantic_hash": ""
+  },
+  "tests/Feature/StorefrontHomeTest.php": {
+    "mtime": 1786660781.6600382,
+    "ast_hash": "09bb5c4f6e116225b10624284fd2160b",
+    "semantic_hash": ""
+  },
+  "references/ecommerce2.png": {
+    "mtime": 1786474619.5082908,
+    "ast_hash": "834a48405de52bb5a70dfa7ae43b28a9",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/ProductShowController.php": {
+    "mtime": 1786659317.9793863,
+    "ast_hash": "d1b1513aacffe1f06cfd9033ebece174",
+    "semantic_hash": ""
+  },
+  "resources/js/pages/products/show.tsx": {
+    "mtime": 1786662364.7223184,
+    "ast_hash": "348924813fcbc4ba639daf428643126d",
+    "semantic_hash": ""
+  },
+  "tests/Feature/StorefrontProductShowTest.php": {
+    "mtime": 1786661570.971183,
+    "ast_hash": "28f3370d5db0552f8427ffda35e54d79",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/CartItemController.php": {
+    "mtime": 1786662388.572932,
+    "ast_hash": "96c57b1931dd8d386d2643ef84b4be73",
+    "semantic_hash": ""
+  },
+  "app/Http/Requests/StoreCartItemRequest.php": {
+    "mtime": 1786661576.4090064,
+    "ast_hash": "e5a96262868b07e73565a1d133201917",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/CartController.php": {
+    "mtime": 1786662340.8407052,
+    "ast_hash": "e104377559db4263c4fcea718565fc17",
+    "semantic_hash": ""
+  },
+  "resources/js/pages/cart.tsx": {
+    "mtime": 1786663340.5533078,
+    "ast_hash": "b1e1fcbd69500b495a10333fefa90187",
+    "semantic_hash": ""
+  },
+  "tests/Feature/StorefrontCartTest.php": {
+    "mtime": 1786662388.9909253,
+    "ast_hash": "5e3ceb895dbf891502c0e38fe67dcd8c",
+    "semantic_hash": ""
+  },
+  "app/Actions/Checkout/CreateCheckoutOrder.php": {
+    "mtime": 1786662688.3480778,
+    "ast_hash": "6af2254d63e21612bcdd8b240b4b510f",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/CheckoutController.php": {
+    "mtime": 1786662838.402767,
+    "ast_hash": "0e0304546225ebee0d9d2fb80e822ef5",
+    "semantic_hash": ""
+  },
+  "app/Http/Requests/StoreCheckoutRequest.php": {
+    "mtime": 1786662688.2420795,
+    "ast_hash": "75eea8deb060c41ee3e0ffa488760813",
+    "semantic_hash": ""
+  },
+  "resources/js/pages/checkout.tsx": {
+    "mtime": 1786662851.994726,
+    "ast_hash": "884130cac7d35a3a17616345dca76705",
+    "semantic_hash": ""
+  },
+  "resources/js/pages/checkout/thank-you.tsx": {
+    "mtime": 1786662852.0347257,
+    "ast_hash": "cc467d50ce7e6578dfae751b57be6d34",
+    "semantic_hash": ""
+  },
+  "tests/Feature/StorefrontCheckoutTest.php": {
+    "mtime": 1786662838.5167668,
+    "ast_hash": "53e5cbcf2ad1d9db912be2b347e51863",
     "semantic_hash": ""
   }
 }

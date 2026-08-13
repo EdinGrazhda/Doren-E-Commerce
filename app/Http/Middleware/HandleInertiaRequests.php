@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Order;
+use App\OrderStatus;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -41,7 +43,30 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'cart' => [
+                'count' => collect($request->session()->get('cart.items', []))->sum('quantity'),
+            ],
+            'dashboard' => [
+                'orders' => [
+                    'pending_count' => $this->pendingOrdersCount($request),
+                ],
+            ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
+    }
+
+    private function pendingOrdersCount(Request $request): int
+    {
+        if (! $request->user()?->is_admin) {
+            return 0;
+        }
+
+        return Order::query()
+            ->where('status', OrderStatus::Pending->value)
+            ->when(
+                $request->session()->get('dashboard.orders_seen_at'),
+                fn ($query, string $ordersSeenAt) => $query->where('created_at', '>', $ordersSeenAt),
+            )
+            ->count();
     }
 }
