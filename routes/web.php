@@ -7,10 +7,24 @@ use App\Http\Controllers\Admin\ProductCategoryController as AdminProductCategory
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\StorefrontBannerController;
 use App\Http\Controllers\Admin\StoreSettingController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CartItemController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductShowController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+Route::get('/cart', CartController::class)->name('cart');
+Route::post('/cart-items', [CartItemController::class, 'store'])->name('cart-items.store');
+Route::delete('/cart-items/{variantId}', [CartItemController::class, 'destroy'])
+    ->whereNumber('variantId')
+    ->name('cart-items.destroy');
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/checkout/thank-you/{order:order_number}', [CheckoutController::class, 'thankYou'])
+    ->name('checkout.thank-you');
+Route::get('/products/{product:slug}', ProductShowController::class)->name('products.show');
 
 Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('dashboard')

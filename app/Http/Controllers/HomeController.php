@@ -5,14 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\StorefrontBanner;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class HomeController extends Controller
 {
-    public function __invoke(): Response
+    public function __invoke(Request $request): Response
     {
+        $activeCategory = null;
+        $categorySlug = $request->string('category')->toString();
+
+        if ($categorySlug !== '') {
+            $activeCategory = ProductCategory::query()
+                ->select(['id', 'name', 'slug'])
+                ->where('is_visible', true)
+                ->where('slug', $categorySlug)
+                ->first();
+        }
+
         $categories = ProductCategory::query()
             ->select(['id', 'name', 'slug', 'description'])
             ->where('is_visible', true)
@@ -52,6 +64,7 @@ class HomeController extends Controller
                 'variants:id,product_id,color_name,color_hex,stock_quantity,is_active,sort_order',
             ])
             ->where('is_active', true)
+            ->when($activeCategory, fn ($query) => $query->whereBelongsTo($activeCategory, 'category'))
             ->orderBy('sort_order')
             ->limit(12)
             ->get()
@@ -83,6 +96,11 @@ class HomeController extends Controller
             ]);
 
         return Inertia::render('welcome', [
+            'activeCategory' => $activeCategory ? [
+                'id' => $activeCategory->id,
+                'name' => $activeCategory->name,
+                'slug' => $activeCategory->slug,
+            ] : null,
             'banners' => $banners,
             'categories' => $categories,
             'newInProducts' => $products->take(6)->values(),

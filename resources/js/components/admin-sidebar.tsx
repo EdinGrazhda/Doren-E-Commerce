@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import {
     Boxes,
     FolderTree,
@@ -109,6 +109,8 @@ const adminNavSections: AdminNavSection[] = [
 
 export function AdminSidebar() {
     const { isCurrentOrParentUrl } = useCurrentUrl();
+    const { dashboard: dashboardStats } = usePage().props;
+    const pendingOrdersCount = dashboardStats.orders.pending_count;
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -138,9 +140,35 @@ export function AdminSidebar() {
                                         )}
                                         tooltip={{ children: item.title }}
                                     >
-                                        <Link href={item.href} prefetch>
-                                            {item.icon && <item.icon />}
+                                        <Link
+                                            href={item.href}
+                                            prefetch
+                                            className="relative"
+                                        >
+                                            {item.icon && (
+                                                <span className="relative">
+                                                    <item.icon />
+                                                    {item.title === 'Orders' &&
+                                                        pendingOrdersCount >
+                                                            0 && (
+                                                            <span className="absolute -top-2 -right-2 grid h-4 min-w-4 place-items-center rounded-full bg-red-600 px-1 text-[9px] leading-none font-bold text-white ring-2 ring-sidebar">
+                                                                {pendingOrdersCount >
+                                                                99
+                                                                    ? '99+'
+                                                                    : pendingOrdersCount}
+                                                            </span>
+                                                        )}
+                                                </span>
+                                            )}
                                             <span>{item.title}</span>
+                                            {item.title === 'Orders' &&
+                                                pendingOrdersCount > 0 && (
+                                                <span className="ml-auto grid h-5 min-w-5 place-items-center rounded-full bg-red-600 px-1.5 text-[10px] leading-none font-bold text-white group-data-[collapsible=icon]:hidden">
+                                                    {pendingOrdersCount > 99
+                                                        ? '99+'
+                                                        : pendingOrdersCount}
+                                                </span>
+                                            )}
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
