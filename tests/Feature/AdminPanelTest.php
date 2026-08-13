@@ -111,6 +111,33 @@ test('admin dashboard eager loads compact order and product summaries', function
             ->has('lowStockProducts', 1));
 });
 
+test('admin sidebar shares pending order count until orders are opened', function () {
+    $admin = User::factory()->admin()->create();
+
+    Order::factory()->create([
+        'status' => OrderStatus::Pending,
+    ]);
+    Order::factory()->create([
+        'status' => OrderStatus::Confirmed,
+    ]);
+
+    $this->actingAs($admin)
+        ->get(route('dashboard'))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/dashboard')
+            ->where('dashboard.orders.pending_count', 1)
+        );
+
+    $this->actingAs($admin)
+        ->get(route('dashboard.orders.index'))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/orders/index')
+            ->where('dashboard.orders.pending_count', 0)
+        );
+});
+
 test('admins can create update and delete categories', function () {
     $admin = User::factory()->admin()->create();
 

@@ -1,31 +1,31 @@
 # Graph Report - doren  (2026-08-14)
 
 ## Corpus Check
-- 251 files · ~201,866 words
+- 251 files · ~202,053 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1384 nodes · 2483 edges · 154 communities (111 shown, 43 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 19 edges (avg confidence: 0.72)
+- 1385 nodes · 2491 edges · 155 communities (108 shown, 47 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 20 edges (avg confidence: 0.72)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `19d26b79`
+- Built from commit: `fbe726f8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- use-appearance.tsx
+- index.ts
 - StorefrontBanner
 - admin-sidebar.tsx
 - scripts
 - AGENTS.md
 - Inertia React Development
 - @laravel/passkeys
-- button.tsx
 - utils.ts
+- Illuminate\Http\RedirectResponse
 - dropdown-menu.tsx
-- index.ts
+- StoreProductRequest
 - Order
 - Pest 5 Features
 - compilerOptions
@@ -37,22 +37,22 @@
 - ProductCategory
 - devDependencies
 - Tailwind CSS Development
-- banners/index.tsx
-- admin/dashboard.tsx
-- Inertia\Response
 - products/index.tsx
+- orders/index.tsx
+- Inertia\Response
+- categories/index.tsx
 - optionalDependencies
 - two-factor-setup-modal.tsx
 - Detection Checklist
 - Process
 - Architecture Best Practices
 - Security Best Practices
-- useIsMobile
+- UpdateProductRequest
 - require-dev
 - cart.tsx
 - Queue & Job Best Practices
 - concurrently
-- app-logo-icon.tsx
+- package.json
 - auth.ts
 - Advanced Query Patterns
 - Database Performance Best Practices
@@ -61,7 +61,7 @@
 - Caching Best Practices
 - Eloquent Best Practices
 - Migration Best Practices
-- Illuminate\Database\Console\Seeds\WithoutModelEvents
+- @eslint/js
 - dependencies
 - scripts
 - Blade & Views Best Practices
@@ -78,65 +78,66 @@
 - Validation & Forms Best Practices
 - config
 - Product
-- Illuminate\Foundation\Http\FormRequest
+- ProductCategoryController.php
 - welcome.tsx
 - laravel-best-practices/SKILL.md
-- security.tsx
+- eslint-plugin-import
 - @radix-ui/react-navigation-menu
 - TestCase
 - psr-4
 - laravel
-- @radix-ui/react-toggle
+- ProfileValidationRules.php
 - placeholder-pattern.tsx
 - show.tsx
-- package.json
+- FortifyServiceProvider.php
 - autoload-dev
 - keywords
 - eslint.config.js
 - icon.tsx
-- cn
-- ProductVariant
-- @eslint/js
-- Illuminate\Http\RedirectResponse
+- sidebar.tsx
 - eslint-plugin-react
+- UserFactory
+- Illuminate\Foundation\Http\FormRequest
+- FortifyServiceProvider
+- PasswordValidationRules.php
 - eslint-plugin-react-hooks
-- globals
 - breadcrumbs.tsx
 - input-otp
-- toggle-group.tsx
+- cn
 - checkout.tsx
 - @radix-ui/react-avatar
 - @radix-ui/react-checkbox
 - @radix-ui/react-collapsible
 - @radix-ui/react-dialog
 - @radix-ui/react-dropdown-menu
-- @radix-ui/react-label
+- lucide-react
 - @inertiajs/react
 - @radix-ui/react-select
 - @radix-ui/react-separator
 - @radix-ui/react-slot
 - @radix-ui/react-toggle-group
 - @radix-ui/react-tooltip
-- react
+- globals
 - react-dom
 - sonner
 - tailwind-merge
-- tailwindcss
-- @tailwindcss/vite
+- @radix-ui/react-label
+- @radix-ui/react-toggle
 - tw-animate-css
-- @types/react
-- @types/react-dom
+- react
+- tailwindcss
 - typescript
 - vite
 - @vitejs/plugin-react
+- @tailwindcss/vite
+- @types/react-dom
 - prettier-plugin-tailwindcss
-- @stylistic/eslint-plugin
-- @types/node
 - Configuration Best Practices
 - app-header.tsx
 - thank-you.tsx
 - clsx
-- eslint-plugin-import
+- @stylistic/eslint-plugin
+- @types/node
 
 ## God Nodes (most connected - your core abstractions)
 1. `cn()` - 129 edges
@@ -144,7 +145,7 @@
 3. `Product` - 25 edges
 4. `ProductCategory` - 25 edges
 5. `Controller` - 24 edges
-6. `Order` - 17 edges
+6. `Order` - 18 edges
 7. `Input()` - 16 edges
 8. `Label()` - 15 edges
 9. `compilerOptions` - 15 edges
@@ -155,29 +156,29 @@
   resources/js/components/ui/breadcrumb.tsx → resources/js/lib/utils.ts
 - `CardFooter()` --calls--> `cn()`  [EXTRACTED]
   resources/js/components/ui/card.tsx → resources/js/lib/utils.ts
+- `DialogOverlay()` --calls--> `cn()`  [EXTRACTED]
+  resources/js/components/ui/dialog.tsx → resources/js/lib/utils.ts
 - `DropdownMenuCheckboxItem()` --calls--> `cn()`  [EXTRACTED]
   resources/js/components/ui/dropdown-menu.tsx → resources/js/lib/utils.ts
 - `DropdownMenuRadioItem()` --calls--> `cn()`  [EXTRACTED]
-  resources/js/components/ui/dropdown-menu.tsx → resources/js/lib/utils.ts
-- `DropdownMenuShortcut()` --calls--> `cn()`  [EXTRACTED]
   resources/js/components/ui/dropdown-menu.tsx → resources/js/lib/utils.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (154 total, 43 thin omitted)
+## Communities (155 total, 47 thin omitted)
 
-### Community 0 - "use-appearance.tsx"
-Cohesion: 0.10
-Nodes (26): AppearanceToggleTab(), TwoFactorSetupStep(), Toaster(), TooltipProvider(), Appearance, applyTheme(), getStoredAppearance(), handleSystemThemeChange() (+18 more)
+### Community 0 - "index.ts"
+Cohesion: 0.07
+Nodes (35): AppContent(), Props, AppLogoIcon(), AppShell(), Props, AppSidebar(), AppSidebarHeader(), AppearanceToggleTab() (+27 more)
 
 ### Community 1 - "StorefrontBanner"
-Cohesion: 0.15
+Cohesion: 0.14
 Nodes (5): StorefrontBannerController, HomeController, StoreStorefrontBannerRequest, UpdateStorefrontBannerRequest, StorefrontBanner
 
 ### Community 2 - "admin-sidebar.tsx"
-Cohesion: 0.19
-Nodes (19): AdminNavSection, adminNavSections, AppLogo(), footerNavItems, mainNavItems, NavFooter(), NavMain(), NavUser() (+11 more)
+Cohesion: 0.12
+Nodes (27): AdminNavSection, adminNavSections, AdminSidebar(), AppHeader(), AppLogo(), footerNavItems, mainNavItems, NavFooter() (+19 more)
 
 ### Community 3 - "scripts"
 Cohesion: 0.05
@@ -191,21 +192,17 @@ Nodes (33): APIs & Eloquent Resources, Application Structure & Architecture, Art
 Cohesion: 0.07
 Nodes (27): Basic Link Component, Basic Usage, Client-Side Navigation, Common Pitfalls, Deferred Props, Documentation, Form Component (Recommended), Form Component Reset Props (+19 more)
 
-### Community 7 - "button.tsx"
-Cohesion: 0.14
-Nodes (16): DeleteUser(), InputError(), Props, PasskeyVerify(), Props, PasswordInput(), Props, TextLink() (+8 more)
+### Community 7 - "utils.ts"
+Cohesion: 0.11
+Nodes (23): Heading(), InputError(), ManagePasskeys(), Props, PasskeyItem(), PasskeyRegistration(), Props, PasskeyVerify() (+15 more)
 
-### Community 8 - "utils.ts"
+### Community 8 - "Illuminate\Http\RedirectResponse"
 Cohesion: 0.25
-Nodes (10): AppHeader(), Separator(), IsCurrentOrParentUrlFn, IsCurrentUrlFn, useCurrentUrl(), UseCurrentUrlReturn, WhenCurrentUrlFn, SettingsLayout() (+2 more)
+Nodes (3): CartItemController, ProfileController, Illuminate\Http\RedirectResponse
 
 ### Community 9 - "dropdown-menu.tsx"
-Cohesion: 0.12
-Nodes (16): DropdownMenu(), DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuGroup(), DropdownMenuItem(), DropdownMenuLabel(), DropdownMenuRadioItem(), DropdownMenuSeparator() (+8 more)
-
-### Community 10 - "index.ts"
 Cohesion: 0.13
-Nodes (18): AdminSidebar(), AppContent(), Props, AppShell(), Props, AppSidebar(), AppSidebarHeader(), Breadcrumbs() (+10 more)
+Nodes (16): DropdownMenu(), DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuGroup(), DropdownMenuItem(), DropdownMenuLabel(), DropdownMenuRadioItem(), DropdownMenuSeparator() (+8 more)
 
 ### Community 11 - "Order"
 Cohesion: 0.12
@@ -224,8 +221,8 @@ Cohesion: 0.48
 Nodes (5): AlertError(), Alert(), AlertDescription(), AlertTitle(), alertVariants
 
 ### Community 15 - "User.php"
-Cohesion: 0.05
-Nodes (19): CreateNewUser, ResetUserPassword, emailRules(), nameRules(), profileRules(), ProfileUpdateRequest, User, AppServiceProvider (+11 more)
+Cohesion: 0.13
+Nodes (6): User, Illuminate\Foundation\Auth\User, Illuminate\Notifications\Notifiable, Laravel\Fortify\Contracts\PasskeyUser, Laravel\Fortify\PasskeyAuthenticatable, Laravel\Fortify\TwoFactorAuthenticatable
 
 ### Community 16 - "components.json"
 Cohesion: 0.11
@@ -240,8 +237,8 @@ Cohesion: 0.23
 Nodes (8): EnsureUserIsAdmin, HandleAppearance, HandleInertiaRequests, Closure, Illuminate\Foundation\Configuration\Middleware, Illuminate\Http\Request, Inertia\Middleware, Symfony\Component\HttpFoundation\Response
 
 ### Community 19 - "ProductCategory"
-Cohesion: 0.10
-Nodes (11): ProductCategory, OrderFactory, OrderItemFactory, ProductCategoryFactory, ProductFactory, ProductVariantFactory, StorefrontBannerFactory, Illuminate\Database\Eloquent\Factories\Factory (+3 more)
+Cohesion: 0.06
+Nodes (20): OrderItem, ProductCategory, ProductVariant, OrderFactory, OrderItemFactory, ProductCategoryFactory, ProductFactory, ProductVariantFactory (+12 more)
 
 ### Community 21 - "devDependencies"
 Cohesion: 0.13
@@ -251,29 +248,29 @@ Nodes (15): babel-plugin-react-compiler, eslint-config-prettier, eslint-import-r
 Cohesion: 0.14
 Nodes (13): Basic Usage, Common Patterns, Common Pitfalls, CSS-First Configuration, Dark Mode, Documentation, Flexbox Layout, Grid Layout (+5 more)
 
-### Community 23 - "banners/index.tsx"
-Cohesion: 0.15
-Nodes (17): Badge(), badgeVariants, Select(), SelectContent(), SelectItem(), SelectTrigger(), SelectValue(), Banner (+9 more)
+### Community 23 - "products/index.tsx"
+Cohesion: 0.09
+Nodes (26): Checkbox(), Select(), SelectContent(), SelectItem(), SelectLabel(), SelectScrollDownButton(), SelectScrollUpButton(), SelectSeparator() (+18 more)
 
-### Community 24 - "admin/dashboard.tsx"
-Cohesion: 0.15
-Nodes (21): Props, Card(), CardContent(), CardDescription(), CardFooter(), CardHeader(), CardTitle(), formatDate() (+13 more)
+### Community 24 - "orders/index.tsx"
+Cohesion: 0.12
+Nodes (28): Props, Badge(), badgeVariants, Card(), CardContent(), CardDescription(), CardFooter(), CardHeader() (+20 more)
 
 ### Community 25 - "Inertia\Response"
-Cohesion: 0.15
-Nodes (8): CustomerController, DashboardController, StoreSettingController, CartController, Controller, ProfileController, SecurityController, Inertia\Response
+Cohesion: 0.24
+Nodes (6): CustomerController, DashboardController, StoreSettingController, CartController, Controller, Inertia\Response
 
-### Community 26 - "products/index.tsx"
-Cohesion: 0.13
-Nodes (24): Props, Checkbox(), Dialog(), DialogClose(), DialogContent(), DialogDescription(), DialogFooter(), DialogTitle() (+16 more)
+### Community 26 - "categories/index.tsx"
+Cohesion: 0.21
+Nodes (15): DeleteUser(), Props, Dialog(), DialogClose(), DialogContent(), DialogDescription(), DialogFooter(), DialogOverlay() (+7 more)
 
 ### Community 27 - "optionalDependencies"
 Cohesion: 0.15
 Nodes (13): lightningcss-linux-x64-gnu, lightningcss-win32-x64-msvc, optionalDependencies, lightningcss-linux-x64-gnu, lightningcss-win32-x64-msvc, @rollup/rollup-linux-x64-gnu, @rollup/rollup-win32-x64-msvc, @tailwindcss/oxide-linux-x64-gnu (+5 more)
 
 ### Community 28 - "two-factor-setup-modal.tsx"
-Cohesion: 0.20
-Nodes (9): Props, TwoFactorSetupModal(), DialogHeader(), InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, OTP_MAX_LENGTH (+1 more)
+Cohesion: 0.12
+Nodes (18): ManageTwoFactor(), Props, TwoFactorRecoveryCodes(), Props, TwoFactorSetupModal(), TwoFactorSetupStep(), DialogHeader(), InputOTP (+10 more)
 
 ### Community 29 - "Detection Checklist"
 Cohesion: 0.17
@@ -291,10 +288,6 @@ Nodes (11): Architecture Best Practices, Code to Interfaces, Convention Over Con
 Cohesion: 0.18
 Nodes (11): Audit Dependencies, Authorize Every Action, CSRF Protection, Encrypt Sensitive Database Fields, Escape Output to Prevent XSS, Keep Secrets Out of Code, Mass Assignment Protection, Prevent SQL Injection (+3 more)
 
-### Community 33 - "useIsMobile"
-Cohesion: 0.70
-Nodes (4): getServerSnapshot(), isSmallerThanBreakpoint(), mediaQueryListener(), useIsMobile()
-
 ### Community 34 - "require-dev"
 Cohesion: 0.17
 Nodes (12): require-dev, fakerphp/faker, larastan/larastan, laravel/boost, laravel/pail, laravel/pao, laravel/pint, laravel/sail (+4 more)
@@ -306,6 +299,10 @@ Nodes (4): Cart(), CartItem, formatPrice(), Props
 ### Community 36 - "Queue & Job Best Practices"
 Cohesion: 0.18
 Nodes (10): Always Implement `failed()`, Batch Related Jobs, Implement `ShouldBeUnique`, Queue & Job Best Practices, Rate Limit External API Calls in Jobs, `retryUntil()` Needs `$tries = 0`, Set `retry_after` Greater Than `timeout`, Use Exponential Backoff (+2 more)
+
+### Community 38 - "package.json"
+Cohesion: 0.50
+Nodes (3): private, $schema, type
 
 ### Community 39 - "auth.ts"
 Cohesion: 0.22
@@ -339,13 +336,9 @@ Nodes (8): Apply Global Scopes Sparingly, Avoid Hardcoded Table Names in Queries
 Cohesion: 0.22
 Nodes (8): Add Indexes in the Migration, Generate Migrations with Artisan, Keep Migrations Focused, Migration Best Practices, Mirror Defaults in Model `$attributes`, Never Modify Deployed Migrations, Use `constrained()` for Foreign Keys, Write Reversible `down()` Methods by Default
 
-### Community 48 - "Illuminate\Database\Console\Seeds\WithoutModelEvents"
-Cohesion: 0.24
-Nodes (6): AdminUserSeeder, DatabaseSeeder, ProductCatalogSeeder, StorefrontBannerSeeder, Illuminate\Database\Console\Seeds\WithoutModelEvents, Illuminate\Database\Seeder
-
 ### Community 49 - "dependencies"
 Cohesion: 0.22
-Nodes (9): class-variance-authority, @inertiajs/vite, laravel-vite-plugin, lucide-react, dependencies, class-variance-authority, @inertiajs/vite, laravel-vite-plugin (+1 more)
+Nodes (9): class-variance-authority, @inertiajs/vite, laravel-vite-plugin, dependencies, class-variance-authority, @inertiajs/vite, laravel-vite-plugin, @types/react (+1 more)
 
 ### Community 50 - "scripts"
 Cohesion: 0.22
@@ -404,12 +397,12 @@ Cohesion: 0.29
 Nodes (7): pestphp/pest-plugin, php-http/discovery, config, allow-plugins, optimize-autoloader, preferred-install, sort-packages
 
 ### Community 64 - "Product"
-Cohesion: 0.15
-Nodes (4): ProductController, ProductShowController, UpdateProductRequest, Product
+Cohesion: 0.23
+Nodes (3): ProductController, ProductShowController, Product
 
-### Community 65 - "Illuminate\Foundation\Http\FormRequest"
-Cohesion: 0.10
-Nodes (7): StoreProductRequest, PasswordUpdateRequest, ProfileDeleteRequest, TwoFactorAuthenticationRequest, StoreCartItemRequest, Illuminate\Foundation\Http\FormRequest, Laravel\Fortify\InteractsWithTwoFactorState
+### Community 65 - "ProductCategoryController.php"
+Cohesion: 0.14
+Nodes (3): ProductCategoryController, StoreProductCategoryRequest, UpdateProductCategoryRequest
 
 ### Community 66 - "welcome.tsx"
 Cohesion: 0.16
@@ -419,10 +412,6 @@ Nodes (15): bannerTitleLines(), benefits, categoryHref(), fallbackImages, footer
 Cohesion: 0.29
 Nodes (5): Consistency First, Decision Rules, How to Apply, Laravel Best Practices, Rule Index
 
-### Community 68 - "security.tsx"
-Cohesion: 0.21
-Nodes (10): Heading(), ManagePasskeys(), Props, ManageTwoFactor(), Props, PasskeyItem(), PasskeyRegistration(), TwoFactorRecoveryCodes() (+2 more)
-
 ### Community 71 - "psr-4"
 Cohesion: 0.40
 Nodes (5): autoload, psr-4, App\\, Database\\Factories\\, Database\\Seeders\\
@@ -431,13 +420,13 @@ Nodes (5): autoload, psr-4, App\\, Database\\Factories\\, Database\\Seeders\\
 Cohesion: 0.40
 Nodes (5): extra, laravel, post-create-project, dont-discover, installer
 
+### Community 73 - "ProfileValidationRules.php"
+Cohesion: 0.27
+Nodes (6): CreateNewUser, emailRules(), nameRules(), profileRules(), ProfileUpdateRequest, Laravel\Fortify\Contracts\CreatesNewUsers
+
 ### Community 75 - "show.tsx"
 Cohesion: 0.22
 Nodes (12): fallbackImages, formatPrice(), imageFor(), navigationItems, Product, ProductColor, ProductTile(), ProductVariantOption (+4 more)
-
-### Community 76 - "package.json"
-Cohesion: 0.50
-Nodes (3): private, $schema, type
 
 ### Community 78 - "autoload-dev"
 Cohesion: 0.67
@@ -447,25 +436,25 @@ Nodes (3): autoload-dev, psr-4, Tests\\
 Cohesion: 0.67
 Nodes (3): keywords, framework, laravel
 
-### Community 94 - "cn"
-Cohesion: 0.10
-Nodes (31): DialogOverlay(), NavigationMenu(), NavigationMenuContent(), NavigationMenuIndicator(), NavigationMenuItem(), NavigationMenuLink(), NavigationMenuList(), NavigationMenuTrigger() (+23 more)
+### Community 94 - "sidebar.tsx"
+Cohesion: 0.11
+Nodes (23): NavUser(), SheetDescription(), Sidebar(), SidebarContext, SidebarGroupAction(), SidebarInput(), SidebarInset(), SidebarMenuAction() (+15 more)
 
-### Community 95 - "ProductVariant"
-Cohesion: 0.20
-Nodes (3): OrderItem, ProductVariant, Illuminate\Database\Eloquent\Relations\BelongsTo
+### Community 97 - "Illuminate\Foundation\Http\FormRequest"
+Cohesion: 0.17
+Nodes (6): SecurityController, PasswordUpdateRequest, TwoFactorAuthenticationRequest, StoreCartItemRequest, Illuminate\Foundation\Http\FormRequest, Laravel\Fortify\InteractsWithTwoFactorState
 
-### Community 97 - "Illuminate\Http\RedirectResponse"
-Cohesion: 0.13
-Nodes (5): ProductCategoryController, CartItemController, StoreProductCategoryRequest, UpdateProductCategoryRequest, Illuminate\Http\RedirectResponse
+### Community 99 - "PasswordValidationRules.php"
+Cohesion: 0.27
+Nodes (3): ResetUserPassword, ProfileDeleteRequest, Laravel\Fortify\Contracts\ResetsUserPasswords
 
 ### Community 101 - "breadcrumbs.tsx"
-Cohesion: 0.39
-Nodes (7): Breadcrumb(), BreadcrumbEllipsis(), BreadcrumbItem(), BreadcrumbLink(), BreadcrumbList(), BreadcrumbPage(), BreadcrumbSeparator()
+Cohesion: 0.33
+Nodes (8): Breadcrumbs(), Breadcrumb(), BreadcrumbEllipsis(), BreadcrumbItem(), BreadcrumbLink(), BreadcrumbList(), BreadcrumbPage(), BreadcrumbSeparator()
 
-### Community 103 - "toggle-group.tsx"
-Cohesion: 0.43
-Nodes (5): ToggleGroup(), ToggleGroupContext, ToggleGroupItem(), Toggle(), toggleVariants
+### Community 103 - "cn"
+Cohesion: 0.22
+Nodes (15): NavigationMenu(), NavigationMenuContent(), NavigationMenuIndicator(), NavigationMenuItem(), NavigationMenuLink(), NavigationMenuList(), NavigationMenuTrigger(), navigationMenuTriggerStyle (+7 more)
 
 ### Community 104 - "checkout.tsx"
 Cohesion: 0.38
@@ -477,7 +466,7 @@ Nodes (5): Configuration Best Practices, `env()` Only in Config Files, Use `App:
 
 ### Community 150 - "app-header.tsx"
 Cohesion: 0.12
-Nodes (20): mainNavItems, Props, rightNavItems, Avatar(), AvatarFallback(), AvatarImage(), Sheet(), SheetContent() (+12 more)
+Nodes (21): mainNavItems, Props, rightNavItems, Avatar(), AvatarFallback(), AvatarImage(), Sheet(), SheetContent() (+13 more)
 
 ### Community 151 - "thank-you.tsx"
 Cohesion: 0.50
@@ -486,22 +475,22 @@ Nodes (4): formatPrice(), Order, Props, ThankYou()
 ## Knowledge Gaps
 - **506 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+501 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **43 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **47 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn()` connect `cn` to `use-appearance.tsx`, `admin-sidebar.tsx`, `breadcrumbs.tsx`, `button.tsx`, `utils.ts`, `dropdown-menu.tsx`, `index.ts`, `toggle-group.tsx`, `alert-error.tsx`, `app-header.tsx`, `banners/index.tsx`, `admin/dashboard.tsx`, `products/index.tsx`, `two-factor-setup-modal.tsx`?**
-  _High betweenness centrality (0.031) - this node is a cross-community bridge._
-- **Why does `dependencies` connect `dependencies` to `@vitejs/plugin-react`, `@laravel/passkeys`, `clsx`, `concurrently`, `@radix-ui/react-navigation-menu`, `@radix-ui/react-toggle`, `package.json`, `globals`, `input-otp`, `@radix-ui/react-avatar`, `@radix-ui/react-checkbox`, `@radix-ui/react-collapsible`, `@radix-ui/react-dialog`, `@radix-ui/react-dropdown-menu`, `@radix-ui/react-label`, `@inertiajs/react`, `@radix-ui/react-select`, `@radix-ui/react-separator`, `@radix-ui/react-slot`, `@radix-ui/react-toggle-group`, `@radix-ui/react-tooltip`, `react`, `react-dom`, `sonner`, `tailwind-merge`, `tailwindcss`, `@tailwindcss/vite`, `tw-animate-css`, `@types/react`, `@types/react-dom`, `typescript`, `vite`?**
+- **Why does `cn()` connect `cn` to `index.ts`, `admin-sidebar.tsx`, `breadcrumbs.tsx`, `utils.ts`, `dropdown-menu.tsx`, `alert-error.tsx`, `app-header.tsx`, `products/index.tsx`, `orders/index.tsx`, `categories/index.tsx`, `two-factor-setup-modal.tsx`, `sidebar.tsx`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+- **Why does `dependencies` connect `dependencies` to `@vitejs/plugin-react`, `@tailwindcss/vite`, `@types/react-dom`, `@laravel/passkeys`, `clsx`, `concurrently`, `package.json`, `@radix-ui/react-navigation-menu`, `input-otp`, `@radix-ui/react-avatar`, `@radix-ui/react-checkbox`, `@radix-ui/react-collapsible`, `@radix-ui/react-dialog`, `@radix-ui/react-dropdown-menu`, `lucide-react`, `@inertiajs/react`, `@radix-ui/react-select`, `@radix-ui/react-separator`, `@radix-ui/react-slot`, `@radix-ui/react-toggle-group`, `@radix-ui/react-tooltip`, `globals`, `react-dom`, `sonner`, `tailwind-merge`, `@radix-ui/react-label`, `@radix-ui/react-toggle`, `tw-animate-css`, `react`, `tailwindcss`, `typescript`, `vite`?**
   _High betweenness centrality (0.008) - this node is a cross-community bridge._
-- **Why does `ProductCategory` connect `ProductCategory` to `Product`, `Illuminate\Http\RedirectResponse`, `StorefrontBanner`, `Illuminate\Database\Console\Seeds\WithoutModelEvents`, `Inertia\Response`?**
-  _High betweenness centrality (0.008) - this node is a cross-community bridge._
+- **Why does `devDependencies` connect `devDependencies` to `prettier-plugin-tailwindcss`, `eslint-plugin-react-hooks`, `eslint-plugin-import`, `package.json`, `@eslint/js`, `@stylistic/eslint-plugin`, `@types/node`, `eslint-plugin-react`?**
+  _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
   _506 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `use-appearance.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.09747899159663866 - nodes in this community are weakly interconnected._
+- **Should `index.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.07130333138515488 - nodes in this community are weakly interconnected._
 - **Should `StorefrontBanner` be split into smaller, more focused modules?**
-  _Cohesion score 0.1471861471861472 - nodes in this community are weakly interconnected._
-- **Should `scripts` be split into smaller, more focused modules?**
-  _Cohesion score 0.052564102564102565 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1383399209486166 - nodes in this community are weakly interconnected._
+- **Should `admin-sidebar.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.12121212121212122 - nodes in this community are weakly interconnected._

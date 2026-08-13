@@ -146,7 +146,7 @@ export function AdminSidebar() {
                                             className="relative"
                                         >
                                             {item.icon && (
-                                                <span className="relative">
+                                                <span className="relative [&>svg]:size-4 [&>svg]:shrink-0">
                                                     <item.icon />
                                                     {item.title === 'Orders' &&
                                                         pendingOrdersCount >
@@ -161,14 +161,6 @@ export function AdminSidebar() {
                                                 </span>
                                             )}
                                             <span>{item.title}</span>
-                                            {item.title === 'Orders' &&
-                                                pendingOrdersCount > 0 && (
-                                                <span className="ml-auto grid h-5 min-w-5 place-items-center rounded-full bg-red-600 px-1.5 text-[10px] leading-none font-bold text-white group-data-[collapsible=icon]:hidden">
-                                                    {pendingOrdersCount > 99
-                                                        ? '99+'
-                                                        : pendingOrdersCount}
-                                                </span>
-                                            )}
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
