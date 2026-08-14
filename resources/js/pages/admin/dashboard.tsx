@@ -8,11 +8,14 @@ import {
     Wallet,
 } from 'lucide-react';
 
+import { AdminApiState } from '@/components/admin-api-state';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAdminApi } from '@/hooks/use-admin-api';
 import { formatDate, formatMoney, titleCase } from '@/lib/admin-format';
 import { dashboard } from '@/routes';
+import { dashboard as dashboardApi } from '@/routes/api/admin';
 import { index as ordersIndex } from '@/routes/dashboard/orders';
 import { index as productsIndex } from '@/routes/dashboard/products';
 
@@ -54,11 +57,19 @@ type Props = {
     lowStockProducts: LowStockProduct[];
 };
 
-export default function AdminDashboard({
-    metrics,
-    recentOrders,
-    lowStockProducts,
-}: Props) {
+export default function AdminDashboard() {
+    const { data, error } = useAdminApi<Props>(dashboardApi.url());
+
+    if (!data) {
+        return (
+            <>
+                <Head title="Admin Dashboard" />
+                <AdminApiState error={error} />
+            </>
+        );
+    }
+
+    const { metrics, recentOrders, lowStockProducts } = data;
     const metricCards = [
         {
             title: 'Revenue',

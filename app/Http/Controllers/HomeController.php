@@ -6,7 +6,6 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\StorefrontBanner;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -46,7 +45,7 @@ class HomeController extends Controller
                 'image_url' => $category->products->first()?->primary_image_url,
             ]);
 
-        $products = Product::query()
+        $productQuery = Product::query()
             ->select([
                 'id',
                 'product_category_id',
@@ -65,10 +64,23 @@ class HomeController extends Controller
             ])
             ->where('is_active', true)
             ->when($activeCategory, fn ($query) => $query->whereBelongsTo($activeCategory, 'category'))
-            ->orderBy('sort_order')
-            ->limit(12)
+            ->orderBy('sort_order');
+
+        $products = (clone $productQuery)
+            ->paginate(20)
+            ->withQueryString()
+            ->fragment('new-in')
+            ->through(fn (Product $product): array => $this->productPayload($product));
+
+        $bestSellerProducts = (clone $productQuery)
+            ->where('is_featured', true)
+            ->limit(6)
             ->get()
             ->map(fn (Product $product): array => $this->productPayload($product));
+
+        if ($bestSellerProducts->isEmpty()) {
+            $bestSellerProducts = $products->getCollection()->take(6)->values();
+        }
 
         $banners = StorefrontBanner::query()
             ->select([
@@ -103,12 +115,8 @@ class HomeController extends Controller
             ] : null,
             'banners' => $banners,
             'categories' => $categories,
-            'newInProducts' => $products->take(6)->values(),
-            'bestSellerProducts' => $products
-                ->filter(fn (array $product): bool => $product['is_featured'])
-                ->whenEmpty(fn (Collection $collection): Collection => $products->take(6))
-                ->take(6)
-                ->values(),
+            'newInProducts' => $products,
+            'bestSellerProducts' => $bestSellerProducts,
         ]);
     }
 

@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
 
+import { AdminApiState } from '@/components/admin-api-state';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +13,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { useAdminApi } from '@/hooks/use-admin-api';
 import { dashboard } from '@/routes';
+import { index as settingsApiIndex } from '@/routes/api/admin/settings';
 import { settings as adminSettings } from '@/routes/dashboard';
 
 type Props = {
@@ -24,7 +27,20 @@ type Props = {
     };
 };
 
-export default function AdminSettingsIndex({ settings }: Props) {
+export default function AdminSettingsIndex() {
+    const { data, error } = useAdminApi<Props>(settingsApiIndex.url());
+
+    if (!data) {
+        return (
+            <>
+                <Head title="Admin Settings" />
+                <AdminApiState error={error} />
+            </>
+        );
+    }
+
+    const { settings } = data;
+
     return (
         <>
             <Head title="Admin Settings" />

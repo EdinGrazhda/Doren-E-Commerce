@@ -9,10 +9,21 @@ use App\Models\StorefrontBanner;
 use App\Models\User;
 use App\OrderStatus;
 use App\PaymentStatus;
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+
+test('Sanctum recognizes the current local host and port as stateful', function () {
+    $request = Request::create(
+        'http://127.0.0.1:8001/api/admin/dashboard',
+        server: ['HTTP_REFERER' => 'http://127.0.0.1:8001/dashboard'],
+    );
+
+    expect(EnsureFrontendRequestsAreStateful::fromFrontend($request))->toBeTrue();
+});
 
 test('guests are redirected away from the admin panel', function () {
     $this->get(route('dashboard'))
@@ -32,6 +43,37 @@ test('non admin users cannot access the admin panel', function () {
 
     $this->actingAs($user)
         ->get(route('dashboard'))
+        ->assertForbidden();
+});
+
+test('admin APIs reject guests and non admin users', function () {
+    $this->getJson(route('api.admin.dashboard'))
+        ->assertUnauthorized();
+
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->getJson(route('api.admin.dashboard'))
+        ->assertForbidden();
+
+    $this->actingAs($user)
+        ->postJson(route('api.admin.categories.store'), [
+            'name' => 'Private category',
+            'slug' => 'private-category',
+            'is_visible' => true,
+        ])
+        ->assertForbidden();
+});
+
+test('unverified admins cannot access admin pages or APIs', function () {
+    $admin = User::factory()->admin()->unverified()->create();
+
+    $this->actingAs($admin)
+        ->get(route('dashboard'))
+        ->assertRedirect(route('verification.notice'));
+
+    $this->actingAs($admin)
+        ->getJson(route('api.admin.dashboard'))
         ->assertForbidden();
 });
 
@@ -76,7 +118,24 @@ test('admin users can view every sidebar section', function (string $routeName) 
     'settings' => 'dashboard.settings',
 ]);
 
-test('admin dashboard eager loads compact order and product summaries', function () {
+test('admin users can retrieve every admin API section', function (string $routeName, string $dataKey) {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->getJson(route($routeName))
+        ->assertSuccessful()
+        ->assertJsonPath('data', fn (array $data): bool => array_key_exists($dataKey, $data));
+})->with([
+    'dashboard' => ['api.admin.dashboard', 'metrics'],
+    'orders' => ['api.admin.orders.index', 'orders'],
+    'products' => ['api.admin.products.index', 'products'],
+    'categories' => ['api.admin.categories.index', 'categories'],
+    'banners' => ['api.admin.banners.index', 'banners'],
+    'customers' => ['api.admin.customers.index', 'customers'],
+    'settings' => ['api.admin.settings.index', 'settings'],
+]);
+
+test('admin dashboard API returns compact order and product summaries', function () {
     $admin = User::factory()->admin()->create();
 
     $category = ProductCategory::factory()->create(['name' => 'Polos']);
@@ -100,15 +159,12 @@ test('admin dashboard eager loads compact order and product summaries', function
     ]);
 
     $this->actingAs($admin)
-        ->get(route('dashboard'))
+        ->getJson(route('api.admin.dashboard'))
         ->assertSuccessful()
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('admin/dashboard')
-            ->has('metrics')
-            ->where('metrics.orders_count', 1)
-            ->where('metrics.products_count', 1)
-            ->has('recentOrders', 1)
-            ->has('lowStockProducts', 1));
+        ->assertJsonPath('data.metrics.orders_count', 1)
+        ->assertJsonPath('data.metrics.products_count', 1)
+        ->assertJsonCount(1, 'data.recentOrders')
+        ->assertJsonCount(1, 'data.lowStockProducts');
 });
 
 test('admin sidebar shares pending order count until orders are opened', function () {
@@ -142,14 +198,14 @@ test('admins can create update and delete categories', function () {
     $admin = User::factory()->admin()->create();
 
     $this->actingAs($admin)
-        ->post(route('dashboard.categories.store'), [
+        ->postJson(route('api.admin.categories.store'), [
             'name' => 'Summer Shirts',
             'slug' => '',
             'description' => 'Warm weather shirting.',
             'is_visible' => true,
         ])
-        ->assertRedirect(route('dashboard.categories.index'))
-        ->assertSessionHasNoErrors();
+        ->assertCreated()
+        ->assertJsonPath('data.name', 'Summer Shirts');
 
     $category = ProductCategory::query()->where('slug', 'summer-shirts')->firstOrFail();
 
@@ -157,14 +213,14 @@ test('admins can create update and delete categories', function () {
         ->and($category->is_visible)->toBeTrue();
 
     $this->actingAs($admin)
-        ->put(route('dashboard.categories.update', $category), [
+        ->putJson(route('api.admin.categories.update', $category), [
             'name' => 'Resort Shirts',
             'slug' => 'resort-shirts',
             'description' => null,
             'is_visible' => false,
         ])
-        ->assertRedirect(route('dashboard.categories.index'))
-        ->assertSessionHasNoErrors();
+        ->assertSuccessful()
+        ->assertJsonPath('data.slug', 'resort-shirts');
 
     $category->refresh();
 
@@ -173,8 +229,8 @@ test('admins can create update and delete categories', function () {
         ->and($category->is_visible)->toBeFalse();
 
     $this->actingAs($admin)
-        ->delete(route('dashboard.categories.destroy', $category))
-        ->assertRedirect(route('dashboard.categories.index'));
+        ->deleteJson(route('api.admin.categories.destroy', $category))
+        ->assertSuccessful();
 
     $this->assertModelMissing($category);
 });
@@ -185,7 +241,7 @@ test('admins can create update and delete storefront banners', function () {
     $admin = User::factory()->admin()->create();
 
     $this->actingAs($admin)
-        ->post(route('dashboard.banners.store'), [
+        ->post(route('api.admin.banners.store'), [
             'position' => 'hero',
             'eyebrow' => 'New season',
             'title' => 'Quiet luxury essentials',
@@ -199,9 +255,9 @@ test('admins can create update and delete storefront banners', function () {
             'image_upload' => UploadedFile::fake()->image('hero.jpg', 1600, 700),
             'is_active' => true,
             'sort_order' => 15,
-        ])
-        ->assertRedirect(route('dashboard.banners.index'))
-        ->assertSessionHasNoErrors();
+        ], ['Accept' => 'application/json'])
+        ->assertCreated()
+        ->assertJsonPath('data.title', 'Quiet luxury essentials');
 
     $banner = StorefrontBanner::query()->where('title', 'Quiet luxury essentials')->firstOrFail();
 
@@ -213,7 +269,8 @@ test('admins can create update and delete storefront banners', function () {
     Storage::disk('public')->assertExists(Str::after($banner->image_url, '/storage/'));
 
     $this->actingAs($admin)
-        ->put(route('dashboard.banners.update', $banner), [
+        ->post(route('api.admin.banners.update', $banner), [
+            '_method' => 'put',
             'position' => 'bottom',
             'eyebrow' => 'Spring / Summer',
             'title' => 'Elevated Essentials',
@@ -227,9 +284,9 @@ test('admins can create update and delete storefront banners', function () {
             'image_upload' => UploadedFile::fake()->image('bottom.webp', 1600, 700),
             'is_active' => false,
             'sort_order' => 20,
-        ])
-        ->assertRedirect(route('dashboard.banners.index'))
-        ->assertSessionHasNoErrors();
+        ], ['Accept' => 'application/json'])
+        ->assertSuccessful()
+        ->assertJsonPath('data.title', 'Elevated Essentials');
 
     $banner->refresh();
 
@@ -242,8 +299,8 @@ test('admins can create update and delete storefront banners', function () {
     Storage::disk('public')->assertExists(Str::after($banner->image_url, '/storage/'));
 
     $this->actingAs($admin)
-        ->delete(route('dashboard.banners.destroy', $banner))
-        ->assertRedirect(route('dashboard.banners.index'));
+        ->deleteJson(route('api.admin.banners.destroy', $banner))
+        ->assertSuccessful();
 
     $this->assertModelMissing($banner);
 });
@@ -255,7 +312,7 @@ test('admins can create update and delete products without order history', funct
     $category = ProductCategory::factory()->create();
 
     $this->actingAs($admin)
-        ->post(route('dashboard.products.store'), [
+        ->post(route('api.admin.products.store'), [
             'product_category_id' => $category->id,
             'name' => 'Cotton Overshirt',
             'slug' => '',
@@ -268,9 +325,9 @@ test('admins can create update and delete products without order history', funct
             'is_active' => true,
             'is_featured' => false,
             'variants' => variantsPayload('Olive', '#4b4a35', [3, 4, 5, 2, 1]),
-        ])
-        ->assertRedirect(route('dashboard.products.index'))
-        ->assertSessionHasNoErrors();
+        ], ['Accept' => 'application/json'])
+        ->assertCreated()
+        ->assertJsonPath('data.name', 'Cotton Overshirt');
 
     $product = Product::query()->where('slug', 'cotton-overshirt')->firstOrFail();
 
@@ -285,7 +342,7 @@ test('admins can create update and delete products without order history', funct
     Storage::disk('public')->assertExists(Str::after($product->primary_image_url, '/storage/'));
 
     $this->actingAs($admin)
-        ->post(route('dashboard.products.update', $product), [
+        ->post(route('api.admin.products.update', $product), [
             '_method' => 'put',
             'product_category_id' => null,
             'name' => 'Cotton Work Shirt',
@@ -299,9 +356,9 @@ test('admins can create update and delete products without order history', funct
             'is_active' => false,
             'is_featured' => true,
             'variants' => variantsPayload('Navy', '#101828', [8, 9, 10, 6, 4]),
-        ])
-        ->assertRedirect(route('dashboard.products.index'))
-        ->assertSessionHasNoErrors();
+        ], ['Accept' => 'application/json'])
+        ->assertSuccessful()
+        ->assertJsonPath('data.name', 'Cotton Work Shirt');
 
     $product->refresh();
 
@@ -316,8 +373,8 @@ test('admins can create update and delete products without order history', funct
     Storage::disk('public')->assertExists(Str::after($product->primary_image_url, '/storage/'));
 
     $this->actingAs($admin)
-        ->delete(route('dashboard.products.destroy', $product))
-        ->assertRedirect(route('dashboard.products.index'));
+        ->deleteJson(route('api.admin.products.destroy', $product))
+        ->assertSuccessful();
 
     $this->assertModelMissing($product);
 });
@@ -334,9 +391,9 @@ test('admins cannot delete products with order history', function () {
     ]);
 
     $this->actingAs($admin)
-        ->delete(route('dashboard.products.destroy', $product))
-        ->assertRedirect()
-        ->assertSessionHasErrors('product');
+        ->deleteJson(route('api.admin.products.destroy', $product))
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('product');
 
     $this->assertModelExists($product);
 });
@@ -349,12 +406,12 @@ test('admins can update and delete orders', function () {
     ]);
 
     $this->actingAs($admin)
-        ->put(route('dashboard.orders.update', $order), [
+        ->putJson(route('api.admin.orders.update', $order), [
             'status' => OrderStatus::Shipped->value,
             'payment_status' => PaymentStatus::Paid->value,
         ])
-        ->assertRedirect(route('dashboard.orders.index'))
-        ->assertSessionHasNoErrors();
+        ->assertSuccessful()
+        ->assertJsonPath('data.status', OrderStatus::Shipped->value);
 
     $order->refresh();
 
@@ -362,8 +419,8 @@ test('admins can update and delete orders', function () {
         ->and($order->payment_status)->toBe(PaymentStatus::Paid);
 
     $this->actingAs($admin)
-        ->delete(route('dashboard.orders.destroy', $order))
-        ->assertRedirect(route('dashboard.orders.index'));
+        ->deleteJson(route('api.admin.orders.destroy', $order))
+        ->assertSuccessful();
 
     $this->assertModelMissing($order);
     $this->assertModelMissing($item);

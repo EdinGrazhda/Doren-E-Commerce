@@ -1,7 +1,9 @@
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, useHttp } from '@inertiajs/react';
 import { Edit, Plus, Trash2 } from 'lucide-react';
-import { type FormEvent, useState } from 'react';
+import {  useState } from 'react';
+import type {FormEvent} from 'react';
 
+import { AdminApiState } from '@/components/admin-api-state';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,14 +19,16 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAdminApi } from '@/hooks/use-admin-api';
 import { formatDate } from '@/lib/admin-format';
 import { dashboard } from '@/routes';
 import {
     destroy as destroyCategory,
-    index as categoriesIndex,
+    index as categoriesApiIndex,
     store as storeCategory,
     update as updateCategory,
-} from '@/routes/dashboard/categories';
+} from '@/routes/api/admin/categories';
+import { index as categoriesIndex } from '@/routes/dashboard/categories';
 
 type Category = {
     id: number;
@@ -55,12 +59,25 @@ const emptyCategory: CategoryFormData = {
     is_visible: true,
 };
 
-export default function AdminCategoriesIndex({ categories }: Props) {
+export default function AdminCategoriesIndex() {
     const [open, setOpen] = useState(false);
     const [editingCategory, setEditingCategory] = useState<Category | null>(
         null,
     );
-    const form = useForm<CategoryFormData>(emptyCategory);
+    const listing = useAdminApi<Props>(categoriesApiIndex.url());
+    const form = useHttp<CategoryFormData>(emptyCategory);
+    const deleteRequest = useHttp<Record<string, never>>({});
+
+    if (!listing.data) {
+        return (
+            <>
+                <Head title="Admin Categories" />
+                <AdminApiState error={listing.error} />
+            </>
+        );
+    }
+
+    const { categories } = listing.data;
 
     const openCreateDialog = () => {
         setEditingCategory(null);
@@ -85,21 +102,21 @@ export default function AdminCategoriesIndex({ categories }: Props) {
         event.preventDefault();
 
         const options = {
-            preserveScroll: true,
             onSuccess: () => {
                 setOpen(false);
                 setEditingCategory(null);
                 form.reset();
+                void listing.reload();
             },
         };
 
         if (editingCategory) {
-            form.put(updateCategory.url(editingCategory.id), options);
+            void form.put(updateCategory.url(editingCategory.id), options);
 
             return;
         }
 
-        form.post(storeCategory.url(), options);
+        void form.post(storeCategory.url(), options);
     };
 
     const deleteCategory = (category: Category) => {
@@ -107,9 +124,11 @@ export default function AdminCategoriesIndex({ categories }: Props) {
             return;
         }
 
-        router.delete(destroyCategory.url(category.id), {
-            preserveScroll: true,
-        });
+        void deleteRequest
+            .delete(destroyCategory.url(category.id), {
+                onSuccess: () => void listing.reload(),
+            })
+            .catch(() => undefined);
     };
 
     return (

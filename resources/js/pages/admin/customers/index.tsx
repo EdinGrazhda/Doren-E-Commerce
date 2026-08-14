@@ -1,9 +1,12 @@
 import { Head } from '@inertiajs/react';
 
+import { AdminApiState } from '@/components/admin-api-state';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { useAdminApi } from '@/hooks/use-admin-api';
 import { formatDate, formatMoney } from '@/lib/admin-format';
 import { dashboard } from '@/routes';
+import { index as customersApiIndex } from '@/routes/api/admin/customers';
 import { index as customersIndex } from '@/routes/dashboard/customers';
 
 type Customer = {
@@ -19,7 +22,20 @@ type Props = {
     customers: Customer[];
 };
 
-export default function AdminCustomersIndex({ customers }: Props) {
+export default function AdminCustomersIndex() {
+    const { data, error } = useAdminApi<Props>(customersApiIndex.url());
+
+    if (!data) {
+        return (
+            <>
+                <Head title="Admin Customers" />
+                <AdminApiState error={error} />
+            </>
+        );
+    }
+
+    const { customers } = data;
+
     return (
         <>
             <Head title="Admin Customers" />

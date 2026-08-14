@@ -191,39 +191,6 @@ Use Wayfinder to generate TypeScript functions for Laravel routes. Import from `
 # Inertia + React
 
 - IMPORTANT: Activate `inertia-react-development` when working with Inertia React client-side patterns.
-===Graphify and RTK usage===
-
-## graphify
-
-This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
-
-When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
-For codebase questions or file changes, use Graphify before broad source browsing by default.
-Even if the user does not mention Graphify, the agent must assume Graphify should be used first whenever the task involves understanding, changing, locating, or explaining project code.
-The user should not need to ask for Graphify explicitly. Translate natural-language codebase requests into the appropriate `graphify query`, `graphify explain`, or `graphify path` call automatically before raw source browsing.
-
-Rules:
-- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
-- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
-- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
-- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
-- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
-
-## RTK
-
-RTK is available for token-optimized shell output. Use it after Graphify has oriented codebase work, especially for noisy commands such as `git status`, `git diff`, `rg`, `find`, `ls`, test runners, Docker logs, package managers, and build/lint output.
-The user should not need to ask for RTK explicitly. When a shell command is likely to produce broad, repetitive, or low-signal output, choose the matching `rtk ...` wrapper automatically.
-
-Rules:
-- Graphify remains the first step for understanding, changing, locating, or explaining project code. RTK reduces command-output noise; it does not replace graph traversal.
-- If both could apply, run Graphify first for orientation, then use RTK for follow-up shell commands whose output may be noisy.
-- Do not wrap `graphify query`, `graphify path`, `graphify explain`, or `graphify update` in RTK unless the user explicitly asks for command-output compression there.
-- Do not use RTK when exact full output, exact file contents, or exact formatting is required. Use the native command, or `rtk proxy <cmd>` when raw passthrough plus RTK tracking is useful.
-- If RTK reports that full output was saved to a tee file after a failure, read that file only when the compact output is insufficient.
-
-@RTK.md
 
 </laravel-boost-guidelines>
-
-
 

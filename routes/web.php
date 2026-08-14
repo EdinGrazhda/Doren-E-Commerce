@@ -30,18 +30,14 @@ Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('dashboard')
     ->group(function (): void {
         Route::get('/', AdminDashboardController::class)->name('dashboard');
-        Route::resource('orders', AdminOrderController::class)
-            ->only(['index', 'update', 'destroy'])
-            ->names('dashboard.orders');
-        Route::resource('products', AdminProductController::class)
-            ->only(['index', 'store', 'update', 'destroy'])
-            ->names('dashboard.products');
+        Route::resource('orders', AdminOrderController::class)->only('index')->names('dashboard.orders');
+        Route::resource('products', AdminProductController::class)->only('index')->names('dashboard.products');
         Route::resource('categories', AdminProductCategoryController::class)
-            ->only(['index', 'store', 'update', 'destroy'])
+            ->only('index')
             ->names('dashboard.categories')
             ->parameters(['categories' => 'productCategory']);
         Route::resource('banners', StorefrontBannerController::class)
-            ->only(['index', 'store', 'update', 'destroy'])
+            ->only('index')
             ->names('dashboard.banners');
         Route::get('/customers', [CustomerController::class, 'index'])->name('dashboard.customers.index');
         Route::get('/settings', StoreSettingController::class)->name('dashboard.settings');

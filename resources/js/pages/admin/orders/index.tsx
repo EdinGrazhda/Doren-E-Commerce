@@ -1,7 +1,9 @@
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, useHttp } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
-import { type FormEvent, useState } from 'react';
+import {  useState } from 'react';
+import type {FormEvent} from 'react';
 
+import { AdminApiState } from '@/components/admin-api-state';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,13 +24,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { useAdminApi } from '@/hooks/use-admin-api';
 import { formatDate, formatMoney, titleCase } from '@/lib/admin-format';
 import { dashboard } from '@/routes';
 import {
     destroy as destroyOrder,
-    index as ordersIndex,
+    index as ordersApiIndex,
     update as updateOrder,
-} from '@/routes/dashboard/orders';
+} from '@/routes/api/admin/orders';
+import { index as ordersIndex } from '@/routes/dashboard/orders';
 
 type Order = {
     id: number;
@@ -68,16 +72,25 @@ type OrderFormData = {
     payment_status: string;
 };
 
-export default function AdminOrdersIndex({
-    orders,
-    statusOptions,
-    paymentStatusOptions,
-}: Props) {
+export default function AdminOrdersIndex() {
     const [editingOrder, setEditingOrder] = useState<Order | null>(null);
-    const form = useForm<OrderFormData>({
+    const listing = useAdminApi<Props>(ordersApiIndex.url());
+    const form = useHttp<OrderFormData>({
         status: '',
         payment_status: '',
     });
+    const deleteRequest = useHttp<Record<string, never>>({});
+
+    if (!listing.data) {
+        return (
+            <>
+                <Head title="Admin Orders" />
+                <AdminApiState error={listing.error} />
+            </>
+        );
+    }
+
+    const { orders, statusOptions, paymentStatusOptions } = listing.data;
 
     const openStatusDialog = (order: Order) => {
         setEditingOrder(order);
@@ -95,9 +108,11 @@ export default function AdminOrdersIndex({
             return;
         }
 
-        form.put(updateOrder.url(editingOrder.id), {
-            preserveScroll: true,
-            onSuccess: () => setEditingOrder(null),
+        void form.put(updateOrder.url(editingOrder.id), {
+            onSuccess: () => {
+                setEditingOrder(null);
+                void listing.reload();
+            },
         });
     };
 
@@ -106,9 +121,11 @@ export default function AdminOrdersIndex({
             return;
         }
 
-        router.delete(destroyOrder.url(order.id), {
-            preserveScroll: true,
-        });
+        void deleteRequest
+            .delete(destroyOrder.url(order.id), {
+                onSuccess: () => void listing.reload(),
+            })
+            .catch(() => undefined);
     };
 
     return (

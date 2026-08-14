@@ -45,7 +45,7 @@ test('production seeders create an admin account and starter catalog', function 
     expect($admin->is_admin)->toBeTrue()
         ->and(ProductCategory::count())->toBe(4)
         ->and(StorefrontBanner::count())->toBe(3)
-        ->and($products)->toHaveCount(4)
+        ->and($products)->toHaveCount(24)
         ->and($products->first()->relationLoaded('category'))->toBeTrue()
         ->and($products->first()->relationLoaded('variants'))->toBeTrue()
         ->and(ProductVariant::where('stock_quantity', '>', 0)->count())->toBeGreaterThan(0);

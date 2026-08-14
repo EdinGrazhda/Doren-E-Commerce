@@ -1,5 +1,6 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import {
+    ArrowLeft,
     ArrowRight,
     ChevronDown,
     Heart,
@@ -66,6 +67,15 @@ type StorefrontBanner = {
     image_url: string | null;
 };
 
+type PaginatedProducts = {
+    data: StoreProduct[];
+    current_page: number;
+    last_page: number;
+    from: number | null;
+    to: number | null;
+    total: number;
+};
+
 type Props = {
     activeCategory: {
         id: number;
@@ -74,7 +84,7 @@ type Props = {
     } | null;
     banners: Partial<Record<'top' | 'hero' | 'bottom', StorefrontBanner>>;
     categories: StoreCategory[];
-    newInProducts: StoreProduct[];
+    newInProducts: PaginatedProducts;
     bestSellerProducts: StoreProduct[];
 };
 
@@ -192,6 +202,15 @@ function categoryHref(categorySlug: string) {
     });
 }
 
+function productPageHref(page: number, categorySlug?: string): string {
+    return `${home.url({
+        query: {
+            page,
+            ...(categorySlug ? { category: categorySlug } : {}),
+        },
+    })}#new-in`;
+}
+
 function ProductCard({
     product,
     index,
@@ -306,6 +325,84 @@ function ProductRail({
     );
 }
 
+function ProductPagination({
+    pagination,
+    categorySlug,
+}: {
+    pagination: PaginatedProducts;
+    categorySlug?: string;
+}) {
+    if (pagination.last_page <= 1) {
+        return null;
+    }
+
+    const pages = Array.from(
+        { length: pagination.last_page },
+        (_, index) => index + 1,
+    );
+
+    return (
+        <nav
+            className="mx-auto flex max-w-[1158px] items-center justify-center gap-2 px-6 pb-9"
+            aria-label="Product pagination"
+        >
+            {pagination.current_page > 1 ? (
+                <Link
+                    href={productPageHref(
+                        pagination.current_page - 1,
+                        categorySlug,
+                    )}
+                    className="grid h-9 w-9 place-items-center border border-[#cfc6b8] transition hover:bg-[#151513] hover:text-white"
+                    aria-label="Previous product page"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                </Link>
+            ) : (
+                <span
+                    className="grid h-9 w-9 place-items-center border border-[#ded7cc] text-[#aaa196]"
+                    aria-hidden="true"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                </span>
+            )}
+
+            {pages.map((page) => (
+                <Link
+                    key={page}
+                    href={productPageHref(page, categorySlug)}
+                    className={`grid h-9 min-w-9 place-items-center border px-2 text-[11px] font-bold ${page === pagination.current_page ? 'border-[#151513] bg-[#151513] text-white' : 'border-[#cfc6b8] transition hover:bg-[#151513] hover:text-white'}`}
+                    aria-label={`Product page ${page}`}
+                    aria-current={
+                        page === pagination.current_page ? 'page' : undefined
+                    }
+                >
+                    {page}
+                </Link>
+            ))}
+
+            {pagination.current_page < pagination.last_page ? (
+                <Link
+                    href={productPageHref(
+                        pagination.current_page + 1,
+                        categorySlug,
+                    )}
+                    className="grid h-9 w-9 place-items-center border border-[#cfc6b8] transition hover:bg-[#151513] hover:text-white"
+                    aria-label="Next product page"
+                >
+                    <ArrowRight className="h-4 w-4" />
+                </Link>
+            ) : (
+                <span
+                    className="grid h-9 w-9 place-items-center border border-[#ded7cc] text-[#aaa196]"
+                    aria-hidden="true"
+                >
+                    <ArrowRight className="h-4 w-4" />
+                </span>
+            )}
+        </nav>
+    );
+}
+
 export default function Welcome({
     activeCategory,
     banners,
@@ -378,10 +475,10 @@ export default function Welcome({
                             </Link>
                             <Link
                                 href={cartRoute()}
-                                className="relative h-9 w-9"
+                                className="relative grid h-9 w-9 place-items-center"
                                 aria-label="Shopping bag"
                             >
-                                <ShoppingBag className="mx-auto h-5 w-5 stroke-[1.6]" />
+                                <ShoppingBag className="h-5 w-5 stroke-[1.6]" />
                                 <span className="absolute top-0 right-1 grid h-4 w-4 place-items-center rounded-full bg-[#151513] text-[9px] font-bold text-white">
                                     {cart.count}
                                 </span>
@@ -524,7 +621,11 @@ export default function Welcome({
                                 ? `${activeCategory.name} Products`
                                 : 'New In'
                         }
-                        products={newInProducts}
+                        products={newInProducts.data}
+                    />
+                    <ProductPagination
+                        pagination={newInProducts}
+                        categorySlug={activeCategory?.slug}
                     />
                     <ProductRail
                         id="best-sellers"
