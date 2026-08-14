@@ -13,13 +13,6 @@ class StoreSettingController extends Controller
      */
     public function __invoke(): Response
     {
-        return Inertia::render('admin/settings/index', [
-            'settings' => [
-                'store_name' => 'Doren',
-                'currency' => 'USD',
-                'guest_checkout' => true,
-                'admin_accounts' => true,
-            ],
-        ]);
+        return Inertia::render('admin/settings/index');
     }
 }

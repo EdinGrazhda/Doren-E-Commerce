@@ -1,7 +1,9 @@
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, useHttp } from '@inertiajs/react';
 import { Edit, Plus, Trash2 } from 'lucide-react';
-import { type FormEvent, useState } from 'react';
+import {  useState } from 'react';
+import type {FormEvent} from 'react';
 
+import { AdminApiState } from '@/components/admin-api-state';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,14 +26,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { useAdminApi } from '@/hooks/use-admin-api';
 import { formatDate, formatMoney } from '@/lib/admin-format';
 import { dashboard } from '@/routes';
 import {
     destroy as destroyProduct,
-    index as productsIndex,
+    index as productsApiIndex,
     store as storeProduct,
     update as updateProduct,
-} from '@/routes/dashboard/products';
+} from '@/routes/api/admin/products';
+import { index as productsIndex } from '@/routes/dashboard/products';
 
 type Product = {
     id: number;
@@ -119,15 +123,31 @@ const makeEmptyProduct = (sizeOptions: string[]): ProductFormData => ({
 
 const centsToPrice = (cents: number): string => (cents / 100).toFixed(2);
 
-export default function AdminProductsIndex({
-    products,
-    categories,
-    sizeOptions,
-}: Props) {
+export default function AdminProductsIndex() {
     const [open, setOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-    const form = useForm<ProductFormData>(makeEmptyProduct(sizeOptions));
+    const listing = useAdminApi<Props>(productsApiIndex.url());
+    const sizeOptions = listing.data?.sizeOptions ?? [
+        'S',
+        'M',
+        'L',
+        'XL',
+        'XXL',
+    ];
+    const form = useHttp<ProductFormData>(makeEmptyProduct(sizeOptions));
+    const deleteRequest = useHttp<Record<string, never>>({});
     const formErrors = form.errors as Record<string, string>;
+
+    if (!listing.data) {
+        return (
+            <>
+                <Head title="Admin Products" />
+                <AdminApiState error={listing.error} />
+            </>
+        );
+    }
+
+    const { products, categories } = listing.data;
 
     const openCreateDialog = () => {
         setEditingProduct(null);
@@ -178,12 +198,11 @@ export default function AdminProductsIndex({
         event.preventDefault();
 
         const options = {
-            preserveScroll: true,
-            forceFormData: true,
             onSuccess: () => {
                 setOpen(false);
                 setEditingProduct(null);
                 form.reset();
+                void listing.reload();
             },
         };
 
@@ -192,13 +211,13 @@ export default function AdminProductsIndex({
                 ...data,
                 _method: 'put',
             }));
-            form.post(updateProduct.url(editingProduct.id), options);
+            void form.post(updateProduct.url(editingProduct.id), options);
 
             return;
         }
 
         form.transform((data) => data);
-        form.post(storeProduct.url(), options);
+        void form.post(storeProduct.url(), options);
     };
 
     const deleteProduct = (product: Product) => {
@@ -206,9 +225,12 @@ export default function AdminProductsIndex({
             return;
         }
 
-        router.delete(destroyProduct.url(product.id), {
-            preserveScroll: true,
-        });
+        void deleteRequest
+            .delete(destroyProduct.url(product.id), {
+                onSuccess: () => void listing.reload(),
+                onError: (errors) => form.setError(errors),
+            })
+            .catch(() => undefined);
     };
 
     const updateVariant = (

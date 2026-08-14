@@ -29,8 +29,12 @@ test('storefront home renders real catalog data', function () {
                 ->whereNot('image_url', null)
                 ->etc()
             )
-            ->has('newInProducts', 6)
-            ->has('newInProducts.0', fn (Assert $page) => $page
+            ->where('newInProducts.current_page', 1)
+            ->where('newInProducts.last_page', 2)
+            ->where('newInProducts.per_page', 20)
+            ->where('newInProducts.total', 24)
+            ->has('newInProducts.data', 20)
+            ->has('newInProducts.data.0', fn (Assert $page) => $page
                 ->where('name', 'Pima Cotton Polo')
                 ->where('price_cents', 8900)
                 ->where('currency', 'USD')
@@ -40,6 +44,25 @@ test('storefront home renders real catalog data', function () {
             )
             ->has('bestSellerProducts', 6)
             ->where('bestSellerProducts.0.is_featured', true)
+        );
+});
+
+test('storefront home paginates the catalog after twenty products', function () {
+    $this->seed([
+        StorefrontBannerSeeder::class,
+        ProductCatalogSeeder::class,
+    ]);
+
+    $this->get(route('home', ['page' => 2]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('welcome')
+            ->where('newInProducts.current_page', 2)
+            ->where('newInProducts.last_page', 2)
+            ->where('newInProducts.from', 21)
+            ->where('newInProducts.to', 24)
+            ->where('newInProducts.total', 24)
+            ->has('newInProducts.data', 4)
         );
 });
 
@@ -55,9 +78,11 @@ test('storefront home filters products by category', function () {
             ->component('welcome')
             ->where('activeCategory.name', 'Shirts')
             ->where('activeCategory.slug', 'shirts')
-            ->has('newInProducts', 6)
-            ->where('newInProducts.0.name', 'Cotton Poplin Shirt')
-            ->where('newInProducts.0.category.slug', 'shirts')
+            ->where('newInProducts.current_page', 1)
+            ->where('newInProducts.total', 6)
+            ->has('newInProducts.data', 6)
+            ->where('newInProducts.data.0.name', 'Cotton Poplin Shirt')
+            ->where('newInProducts.data.0.category.slug', 'shirts')
             ->has('bestSellerProducts', 3)
             ->where('bestSellerProducts.0.name', 'Cotton Poplin Shirt')
         );

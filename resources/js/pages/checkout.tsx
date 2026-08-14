@@ -7,7 +7,7 @@ import {
     ShoppingBag,
     User,
 } from 'lucide-react';
-import { FormEvent } from 'react';
+import type { FormEvent } from 'react';
 
 import { cart as cartRoute, home, login } from '@/routes';
 import { store as storeCheckout } from '@/routes/checkout';

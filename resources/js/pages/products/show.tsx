@@ -1,5 +1,4 @@
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { FormEvent, useEffect, useMemo, useState } from 'react';
 import {
     ArrowLeft,
     ArrowRight,
@@ -18,6 +17,8 @@ import {
     Youtube,
     ZoomIn,
 } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import type { FormEvent } from 'react';
 
 import { cart as cartRoute, home, login } from '@/routes';
 import { store as storeCartItem } from '@/routes/cart-items';
@@ -203,33 +204,25 @@ export default function Show({ product, relatedProducts }: Props) {
         quantity: 1,
     });
 
-    useEffect(() => {
-        form.setData('product_variant_id', selectedVariant?.id ?? 0);
-    }, [selectedVariant?.id]);
+    const selectColor = (colorName: string) => {
+        setSelectedColorName(colorName);
 
-    useEffect(() => {
-        if (!selectedColorName) {
-            return;
-        }
-
-        const sizeIsAvailable = availableVariants.some(
+        const selectedSizeIsAvailable = availableVariants.some(
             (variant) =>
-                variant.color_name === selectedColorName &&
+                variant.color_name === colorName &&
                 variant.size === selectedSize,
         );
 
-        if (sizeIsAvailable) {
-            return;
-        }
+        if (!selectedSizeIsAvailable) {
+            const nextVariant = availableVariants.find(
+                (variant) => variant.color_name === colorName,
+            );
 
-        const nextVariant = availableVariants.find(
-            (variant) => variant.color_name === selectedColorName,
-        );
-
-        if (nextVariant) {
-            setSelectedSize(nextVariant.size);
+            if (nextVariant) {
+                setSelectedSize(nextVariant.size);
+            }
         }
-    }, [availableVariants, selectedColorName, selectedSize]);
+    };
 
     const submitCart = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -243,6 +236,10 @@ export default function Show({ product, relatedProducts }: Props) {
             return;
         }
 
+        form.transform((data) => ({
+            ...data,
+            product_variant_id: selectedVariant.id,
+        }));
         form.post(storeCartItem.url(), {
             preserveScroll: true,
         });
@@ -299,10 +296,10 @@ export default function Show({ product, relatedProducts }: Props) {
                             </Link>
                             <Link
                                 href={cartRoute()}
-                                className="relative h-9 w-9"
+                                className="relative grid h-9 w-9 place-items-center"
                                 aria-label="Shopping bag"
                             >
-                                <ShoppingBag className="mx-auto h-5 w-5 stroke-[1.6]" />
+                                <ShoppingBag className="h-5 w-5 stroke-[1.6]" />
                                 <span className="absolute top-0 right-1 grid h-4 w-4 place-items-center rounded-full bg-[#151513] text-[9px] font-bold text-white">
                                     {cart.count}
                                 </span>
@@ -397,7 +394,7 @@ export default function Show({ product, relatedProducts }: Props) {
                                             key={`${color.name}-${color.hex}`}
                                             type="button"
                                             onClick={() =>
-                                                setSelectedColorName(color.name)
+                                                selectColor(color.name)
                                             }
                                             className={`h-7 w-7 rounded-full border ${selectedColorName === color.name ? 'border-[#151513] p-1' : 'border-black/10 p-0'}`}
                                             aria-label={`Select ${color.name}`}

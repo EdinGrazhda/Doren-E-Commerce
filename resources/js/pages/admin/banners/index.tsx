@@ -1,7 +1,9 @@
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, useHttp } from '@inertiajs/react';
 import { Edit, Image, Plus, Trash2 } from 'lucide-react';
-import { type FormEvent, useState } from 'react';
+import {  useState } from 'react';
+import type {FormEvent} from 'react';
 
+import { AdminApiState } from '@/components/admin-api-state';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,14 +27,16 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useAdminApi } from '@/hooks/use-admin-api';
 import { formatDate } from '@/lib/admin-format';
 import { dashboard } from '@/routes';
 import {
     destroy as destroyBanner,
-    index as bannersIndex,
+    index as bannersApiIndex,
     store as storeBanner,
     update as updateBanner,
-} from '@/routes/dashboard/banners';
+} from '@/routes/api/admin/banners';
+import { index as bannersIndex } from '@/routes/dashboard/banners';
 
 type Banner = {
     id: number;
@@ -94,10 +98,23 @@ const positionLabels: Record<string, string> = {
     bottom: 'Bottom campaign',
 };
 
-export default function AdminBannersIndex({ banners, positions }: Props) {
+export default function AdminBannersIndex() {
     const [open, setOpen] = useState(false);
     const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
-    const form = useForm<BannerFormData>(emptyBanner);
+    const listing = useAdminApi<Props>(bannersApiIndex.url());
+    const form = useHttp<BannerFormData>(emptyBanner);
+    const deleteRequest = useHttp<Record<string, never>>({});
+
+    if (!listing.data) {
+        return (
+            <>
+                <Head title="Admin Banners" />
+                <AdminApiState error={listing.error} />
+            </>
+        );
+    }
+
+    const { banners, positions } = listing.data;
 
     const openCreateDialog = () => {
         setEditingBanner(null);
@@ -131,12 +148,11 @@ export default function AdminBannersIndex({ banners, positions }: Props) {
         event.preventDefault();
 
         const options = {
-            preserveScroll: true,
-            forceFormData: true,
             onSuccess: () => {
                 setOpen(false);
                 setEditingBanner(null);
                 form.reset();
+                void listing.reload();
             },
         };
 
@@ -145,13 +161,13 @@ export default function AdminBannersIndex({ banners, positions }: Props) {
                 ...data,
                 _method: 'put',
             }));
-            form.post(updateBanner.url(editingBanner.id), options);
+            void form.post(updateBanner.url(editingBanner.id), options);
 
             return;
         }
 
         form.transform((data) => data);
-        form.post(storeBanner.url(), options);
+        void form.post(storeBanner.url(), options);
     };
 
     const deleteBanner = (banner: Banner) => {
@@ -163,9 +179,11 @@ export default function AdminBannersIndex({ banners, positions }: Props) {
             return;
         }
 
-        router.delete(destroyBanner.url(banner.id), {
-            preserveScroll: true,
-        });
+        void deleteRequest
+            .delete(destroyBanner.url(banner.id), {
+                onSuccess: () => void listing.reload(),
+            })
+            .catch(() => undefined);
     };
 
     return (
