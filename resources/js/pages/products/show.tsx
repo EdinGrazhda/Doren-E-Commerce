@@ -27,6 +27,7 @@ import { show as showProduct } from '@/routes/products';
 type ProductColor = {
     name: string;
     hex: string;
+    image_url: string | null;
 };
 
 type Product = {
@@ -55,6 +56,7 @@ type ProductVariantOption = {
     size: string;
     color_name: string;
     color_hex: string | null;
+    image_url: string | null;
     stock_quantity: number;
     price_cents: number | null;
 };
@@ -107,6 +109,21 @@ function sectionId(label: string): string {
     return label.toLowerCase().replace(/\s+/g, '-');
 }
 
+function requestedColorName(colorOptions: ProductColor[]): string | null {
+    if (typeof window === 'undefined') {
+        return null;
+    }
+
+    const requestedColor = new URLSearchParams(window.location.search).get(
+        'color',
+    );
+
+    return (
+        colorOptions.find((color) => color.name === requestedColor)?.name ??
+        null
+    );
+}
+
 function ProductTile({
     product,
     index,
@@ -148,7 +165,7 @@ function ProductTile({
             <div className="mt-3 flex gap-2">
                 {(product.colors.length
                     ? product.colors
-                    : [{ name: 'Stone', hex: '#d9cfbd' }]
+                    : [{ name: 'Stone', hex: '#d9cfbd', image_url: null }]
                 ).map((color) => (
                     <span
                         key={`${product.id}-${color.name}-${color.hex}`}
@@ -164,7 +181,10 @@ function ProductTile({
 
 export default function Show({ product, relatedProducts }: Props) {
     const { cart } = usePage().props;
-    const images = product.images.length ? product.images : [product.image_url];
+    const images = useMemo(
+        () => (product.images.length ? product.images : [product.image_url]),
+        [product.image_url, product.images],
+    );
     const availableVariants = useMemo(
         () => product.variants.filter((variant) => variant.stock_quantity > 0),
         [product.variants],
@@ -176,6 +196,7 @@ export default function Show({ product, relatedProducts }: Props) {
             colors.set(variant.color_name, {
                 name: variant.color_name,
                 hex: variant.color_hex || '#d9cfbd',
+                image_url: variant.image_url,
             });
         });
 
@@ -185,12 +206,23 @@ export default function Show({ product, relatedProducts }: Props) {
         ? product.sizes
         : ['S', 'M', 'L', 'XL'];
     const firstVariant = availableVariants[0];
-    const [selectedColorName, setSelectedColorName] = useState(
-        firstVariant?.color_name ?? colorOptions[0]?.name ?? '',
-    );
+    const initialColorName =
+        requestedColorName(colorOptions) ??
+        firstVariant?.color_name ??
+        colorOptions[0]?.name ??
+        '';
+    const initialVariant =
+        availableVariants.find(
+            (variant) => variant.color_name === initialColorName,
+        ) ?? firstVariant;
+    const [selectedColorName, setSelectedColorName] =
+        useState(initialColorName);
     const [selectedSize, setSelectedSize] = useState(
-        firstVariant?.size ?? sizeOptions[0] ?? '',
+        initialVariant?.size ?? sizeOptions[0] ?? '',
     );
+    const [selectedGalleryImage, setSelectedGalleryImage] = useState<
+        string | null
+    >(null);
     const selectedColor = colorOptions.find(
         (color) => color.name === selectedColorName,
     );
@@ -199,6 +231,22 @@ export default function Show({ product, relatedProducts }: Props) {
             variant.color_name === selectedColorName &&
             variant.size === selectedSize,
     );
+    const selectedColorIndex = colorOptions.findIndex(
+        (color) => color.name === selectedColorName,
+    );
+    const selectedImage =
+        selectedGalleryImage ??
+        selectedColor?.image_url ??
+        images[selectedColorIndex >= 0 ? selectedColorIndex : 0] ??
+        images[0];
+    const hasSelectedColorImage = Boolean(selectedColor?.image_url);
+    const galleryImages = useMemo(
+        () =>
+            Array.from(
+                new Set([selectedImage, ...images].filter(Boolean) as string[]),
+            ).slice(0, 5),
+        [images, selectedImage],
+    );
     const form = useForm({
         product_variant_id: selectedVariant?.id ?? 0,
         quantity: 1,
@@ -206,6 +254,7 @@ export default function Show({ product, relatedProducts }: Props) {
 
     const selectColor = (colorName: string) => {
         setSelectedColorName(colorName);
+        setSelectedGalleryImage(null);
 
         const selectedSizeIsAvailable = availableVariants.some(
             (variant) =>
@@ -310,40 +359,105 @@ export default function Show({ product, relatedProducts }: Props) {
 
                 <main>
                     <section className="mx-auto grid max-w-[1158px] gap-8 px-6 py-7 lg:grid-cols-[1.18fr_0.82fr]">
-                        <div className="grid gap-4 sm:grid-cols-[76px_1fr]">
-                            <div className="hidden gap-3 sm:grid">
-                                {images.slice(0, 5).map((image, index) => (
-                                    <button
-                                        key={`${image}-${index}`}
-                                        type="button"
-                                        className="aspect-[0.78] overflow-hidden border border-[#d6cec0] bg-[#ded7cc]"
-                                        aria-label={`Preview image ${index + 1}`}
-                                    >
-                                        <img
-                                            src={imageFor(image, index)}
-                                            alt=""
-                                            className="h-full w-full object-cover"
-                                        />
-                                    </button>
-                                ))}
-                            </div>
+                        <div
+                            className={
+                                galleryImages.length > 1
+                                    ? 'grid gap-4 sm:grid-cols-[76px_1fr]'
+                                    : 'grid gap-4'
+                            }
+                        >
+                            {galleryImages.length > 1 && (
+                                <div className="hidden gap-3 sm:grid">
+                                    {galleryImages.map((image, index) => (
+                                        <button
+                                            key={`${image}-${index}`}
+                                            type="button"
+                                            onClick={() =>
+                                                setSelectedGalleryImage(image)
+                                            }
+                                            className={`aspect-[0.78] overflow-hidden border bg-[#ded7cc] ${selectedImage === image ? 'border-[#151513]' : 'border-[#d6cec0]'}`}
+                                            aria-label={`Preview image ${index + 1}`}
+                                            aria-pressed={
+                                                selectedImage === image
+                                            }
+                                        >
+                                            <img
+                                                src={imageFor(image, index)}
+                                                alt=""
+                                                className="h-full w-full object-cover"
+                                            />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
 
-                            <div className="relative aspect-[0.86] overflow-hidden bg-[#ded7cc]">
-                                <span className="absolute top-4 left-4 z-10 bg-[#8d6b35] px-3 py-2 text-[10px] leading-none font-bold tracking-[0.08em] text-white uppercase">
-                                    Best Seller
-                                </span>
-                                <img
-                                    src={imageFor(images[0], 0)}
-                                    alt={product.name}
-                                    className="h-full w-full object-cover"
-                                />
-                                <button
-                                    type="button"
-                                    className="absolute right-4 bottom-4 grid h-10 w-10 place-items-center rounded-full bg-white text-[#151513] shadow-sm"
-                                    aria-label="Zoom product image"
-                                >
-                                    <ZoomIn className="h-4 w-4" />
-                                </button>
+                            <div className="grid gap-3">
+                                <div className="relative aspect-[0.86] overflow-hidden bg-[#ded7cc]">
+                                    <span className="absolute top-4 left-4 z-10 bg-[#8d6b35] px-3 py-2 text-[10px] leading-none font-bold tracking-[0.08em] text-white uppercase">
+                                        Best Seller
+                                    </span>
+                                    <img
+                                        src={imageFor(
+                                            selectedImage,
+                                            selectedColorIndex >= 0
+                                                ? selectedColorIndex
+                                                : 0,
+                                        )}
+                                        alt={product.name}
+                                        className="h-full w-full object-cover"
+                                    />
+                                    {selectedColor &&
+                                        !hasSelectedColorImage &&
+                                        !selectedGalleryImage && (
+                                            <span
+                                                className="pointer-events-none absolute inset-0 opacity-35 mix-blend-color"
+                                                style={{
+                                                    backgroundColor:
+                                                        selectedColor.hex,
+                                                }}
+                                                aria-hidden="true"
+                                            />
+                                        )}
+                                    <button
+                                        type="button"
+                                        className="absolute right-4 bottom-4 grid h-10 w-10 place-items-center rounded-full bg-white text-[#151513] shadow-sm"
+                                        aria-label="Zoom product image"
+                                    >
+                                        <ZoomIn className="h-4 w-4" />
+                                    </button>
+                                </div>
+
+                                {galleryImages.length > 1 && (
+                                    <div className="grid grid-cols-4 gap-2 sm:hidden">
+                                        {galleryImages
+                                            .slice(0, 4)
+                                            .map((image, index) => (
+                                                <button
+                                                    key={`${image}-${index}`}
+                                                    type="button"
+                                                    onClick={() =>
+                                                        setSelectedGalleryImage(
+                                                            image,
+                                                        )
+                                                    }
+                                                    className={`aspect-[0.82] overflow-hidden border bg-[#ded7cc] ${selectedImage === image ? 'border-[#151513]' : 'border-[#d6cec0]'}`}
+                                                    aria-label={`Preview image ${index + 1}`}
+                                                    aria-pressed={
+                                                        selectedImage === image
+                                                    }
+                                                >
+                                                    <img
+                                                        src={imageFor(
+                                                            image,
+                                                            index,
+                                                        )}
+                                                        alt=""
+                                                        className="h-full w-full object-cover"
+                                                    />
+                                                </button>
+                                            ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
 

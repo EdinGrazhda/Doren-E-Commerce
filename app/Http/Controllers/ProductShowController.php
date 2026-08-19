@@ -21,6 +21,7 @@ class ProductShowController extends Controller
                     'size',
                     'color_name',
                     'color_hex',
+                    'image_url',
                     'price_cents',
                     'stock_quantity',
                     'is_active',
@@ -42,7 +43,7 @@ class ProductShowController extends Controller
                 'is_featured',
                 'sort_order',
             ])
-            ->with('variants:id,product_id,color_name,color_hex,stock_quantity,is_active,sort_order')
+            ->with('variants:id,product_id,color_name,color_hex,image_url,stock_quantity,is_active,sort_order')
             ->where('is_active', true)
             ->whereKeyNot($product->id)
             ->when($product->category, fn ($query) => $query->whereBelongsTo($product->category, 'category'))
@@ -86,10 +87,11 @@ class ProductShowController extends Controller
             ] : null,
             'colors' => $product->variants
                 ->where('stock_quantity', '>', 0)
-                ->unique('color_hex')
+                ->unique('color_name')
                 ->map(fn ($variant): array => [
                     'name' => $variant->color_name,
                     'hex' => $variant->color_hex ?: '#d9cfbd',
+                    'image_url' => $variant->image_url,
                 ])
                 ->values(),
             'sizes' => $product->variants
@@ -103,6 +105,7 @@ class ProductShowController extends Controller
                     'size' => $variant->size,
                     'color_name' => $variant->color_name,
                     'color_hex' => $variant->color_hex,
+                    'image_url' => $variant->image_url,
                     'stock_quantity' => $variant->stock_quantity,
                     'price_cents' => $variant->price_cents,
                 ])
@@ -126,11 +129,12 @@ class ProductShowController extends Controller
             'colors' => $product->variants
                 ->where('is_active', true)
                 ->where('stock_quantity', '>', 0)
-                ->unique('color_hex')
+                ->unique('color_name')
                 ->take(4)
                 ->map(fn ($variant): array => [
                     'name' => $variant->color_name,
                     'hex' => $variant->color_hex ?: '#d9cfbd',
+                    'image_url' => $variant->image_url,
                 ])
                 ->values(),
         ];

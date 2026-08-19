@@ -27,6 +27,7 @@ class ProductVariantFactory extends Factory
             'size' => fake()->randomElement(['S', 'M', 'L', 'XL']),
             'color_name' => $colorName,
             'color_hex' => fake()->hexColor(),
+            'image_url' => null,
             'price_cents' => null,
             'stock_quantity' => fake()->numberBetween(5, 75),
             'reserved_quantity' => 0,

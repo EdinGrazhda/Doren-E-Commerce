@@ -21,18 +21,22 @@ test('storefront product detail renders active product data', function () {
             'is_active' => true,
             'gallery_image_urls' => [
                 'https://example.com/detail.jpg',
+                'https://example.com/back.jpg',
+                'https://example.com/fit.jpg',
             ],
         ]);
     ProductVariant::factory()->for($product)->create([
         'size' => 'M',
         'color_name' => 'Olive Green',
         'color_hex' => '#4e5738',
+        'image_url' => 'https://example.com/olive-polo.jpg',
         'stock_quantity' => 12,
     ]);
     ProductVariant::factory()->for($product)->create([
         'size' => 'L',
         'color_name' => 'Olive Green',
         'color_hex' => '#4e5738',
+        'image_url' => 'https://example.com/olive-polo.jpg',
         'stock_quantity' => 8,
     ]);
     Product::factory()
@@ -53,6 +57,9 @@ test('storefront product detail renders active product data', function () {
             ->where('product.category.name', 'Polos')
             ->has('product.colors', 1)
             ->where('product.colors.0.name', 'Olive Green')
+            ->where('product.colors.0.image_url', 'https://example.com/olive-polo.jpg')
+            ->where('product.variants.0.image_url', 'https://example.com/olive-polo.jpg')
+            ->has('product.images', 4)
             ->has('product.sizes', 2)
             ->has('relatedProducts', 1)
             ->where('relatedProducts.0.name', 'Pima Cotton Polo')
@@ -80,6 +87,7 @@ test('storefront product variant can be added to cart', function () {
         'size' => 'M',
         'color_name' => 'Olive Green',
         'color_hex' => '#4e5738',
+        'image_url' => 'https://example.com/olive-polo.jpg',
         'stock_quantity' => 2,
         'is_active' => true,
     ]);
@@ -92,7 +100,8 @@ test('storefront product variant can be added to cart', function () {
         ->assertRedirect(route('products.show', $product))
         ->assertSessionHas("cart.items.{$variant->id}.quantity", 1)
         ->assertSessionHas("cart.items.{$variant->id}.size", 'M')
-        ->assertSessionHas("cart.items.{$variant->id}.color_name", 'Olive Green');
+        ->assertSessionHas("cart.items.{$variant->id}.color_name", 'Olive Green')
+        ->assertSessionHas("cart.items.{$variant->id}.image_url", 'https://example.com/olive-polo.jpg');
 
     $this->get(route('products.show', $product))
         ->assertInertia(fn (Assert $page) => $page

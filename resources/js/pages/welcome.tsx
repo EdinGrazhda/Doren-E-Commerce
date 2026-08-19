@@ -211,6 +211,14 @@ function productPageHref(page: number, categorySlug?: string): string {
     })}#new-in`;
 }
 
+function productColorHref(product: StoreProduct, colorName: string): string {
+    return showProduct.url(product.slug, {
+        query: {
+            color: colorName,
+        },
+    });
+}
+
 function ProductCard({
     product,
     index,
@@ -262,11 +270,13 @@ function ProductCard({
                         ? product.colors
                         : [{ name: 'Stone', hex: '#d9cfbd' }]
                     ).map((color) => (
-                        <span
+                        <Link
                             key={`${product.id}-${color.name}-${color.hex}`}
-                            className="h-3 w-3 rounded-full border border-black/15"
+                            href={productColorHref(product, color.name)}
+                            className="h-3 w-3 rounded-full border border-black/15 ring-offset-2 ring-offset-[#f5f1e9] transition hover:ring-1 hover:ring-[#151513] focus:ring-1 focus:ring-[#151513] focus:outline-none"
                             style={{ backgroundColor: color.hex }}
                             title={color.name}
+                            aria-label={`View ${product.name} in ${color.name}`}
                         />
                     ))}
                 </div>

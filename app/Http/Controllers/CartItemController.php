@@ -26,7 +26,7 @@ class CartItemController extends Controller
             'variant_id' => $variant->id,
             'name' => $variant->product->name,
             'slug' => $variant->product->slug,
-            'image_url' => $variant->product->primary_image_url,
+            'image_url' => $variant->image_url ?? $variant->product->primary_image_url,
             'size' => $variant->size,
             'color_name' => $variant->color_name,
             'color_hex' => $variant->color_hex,

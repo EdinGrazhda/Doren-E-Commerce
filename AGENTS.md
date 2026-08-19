@@ -81,6 +81,14 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Inspect routes with `php artisan route:list`. Filter with: `--method=GET`, `--name=users`, `--path=api`, `--except-vendor`, `--only-vendor`.
 - Read configuration values using dot notation: `php artisan config:show app.name`, `php artisan config:show database.default`. Or read config files directly from the `config/` directory.
 
+## Command Usage
+
+- Laravel framework commands must be run as `php artisan ...`. Examples: `php artisan route:list`, `php artisan make:test --pest SomeFeatureTest --no-interaction`, `php artisan test --compact`.
+- Composer scripts must be run as `composer run ...`. Use `composer run dev` for the full Laravel local development runner configured by this project.
+- Vite and frontend package scripts must be run as `npm run ...`. Examples: `npm run dev`, `npm run build`, `npm run types:check`, `npm run lint:check`, `npm run format:check`.
+- Graphify commands must be run as `graphify ...`. Run `graphify update .` after code changes that should refresh `graphify-out/`.
+- Do not invent unsupported combined commands such as `rtk composer run dev`. RTK is a shell-output wrapper for noisy commands, not a replacement for Laravel, Composer, Vite, or Graphify command syntax.
+
 ## Tinker
 
 - Execute PHP in app context for debugging and testing code. Do not create models without user approval, prefer tests with factories instead. Prefer existing Artisan commands over custom tinker code.
@@ -192,5 +200,27 @@ Use Wayfinder to generate TypeScript functions for Laravel routes. Import from `
 
 - IMPORTANT: Activate `inertia-react-development` when working with Inertia React client-side patterns.
 
-</laravel-boost-guidelines>
+=== graphify rules ===
+## graphify
 
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
+For codebase questions or file changes, use Graphify before broad source browsing by default.
+Even if the user does not mention Graphify, the agent must assume Graphify should be used first whenever the task involves understanding, changing, locating, or explaining project code.
+The user should not need to ask for Graphify explicitly. Translate natural-language codebase requests into the appropriate `graphify query`, `graphify explain`, or `graphify path` call automatically before raw source browsing.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+## RTK
+
+RTK is available for token-optimized shell output. Use Graphify first for codebase orientation, then RTK for noisy shell commands.
+
+@RTK.md
+
+</laravel-boost-guidelines>

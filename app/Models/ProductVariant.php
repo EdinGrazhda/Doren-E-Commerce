@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property string $size
  * @property string $color_name
  * @property string|null $color_hex
+ * @property string|null $image_url
  * @property int|null $price_cents
  * @property int $stock_quantity
  * @property int $reserved_quantity
@@ -31,6 +32,7 @@ use Illuminate\Support\Carbon;
     'size',
     'color_name',
     'color_hex',
+    'image_url',
     'price_cents',
     'stock_quantity',
     'reserved_quantity',

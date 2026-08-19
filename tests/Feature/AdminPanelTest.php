@@ -320,11 +320,22 @@ test('admins can create update and delete products without order history', funct
             'description' => 'Structured overshirt.',
             'price' => '129.00',
             'currency' => 'usd',
-            'primary_image_url' => 'https://example.com/overshirt.jpg',
-            'primary_image_upload' => UploadedFile::fake()->image('overshirt.jpg', 900, 1100),
+            'image_uploads' => [
+                UploadedFile::fake()->image('overshirt-front.jpg', 900, 1100),
+                UploadedFile::fake()->image('overshirt-back.jpg', 900, 1100),
+                UploadedFile::fake()->image('overshirt-detail.jpg', 900, 1100),
+                UploadedFile::fake()->image('overshirt-fit.jpg', 900, 1100),
+            ],
+            'color_image_uploads' => [
+                UploadedFile::fake()->image('olive-overshirt.jpg', 900, 1100),
+                UploadedFile::fake()->image('sand-overshirt.jpg', 900, 1100),
+            ],
             'is_active' => true,
             'is_featured' => false,
-            'variants' => variantsPayload('Olive', '#4b4a35', [3, 4, 5, 2, 1]),
+            'variants' => [
+                ...variantsPayload('Olive', '#4b4a35', [3, 4, 5, 2, 1], 0),
+                ...variantsPayload('Sand', '#d8c9aa', [1, 2, 3, 4, 5], 1),
+            ],
         ], ['Accept' => 'application/json'])
         ->assertCreated()
         ->assertJsonPath('data.name', 'Cotton Overshirt');
@@ -336,10 +347,18 @@ test('admins can create update and delete products without order history', funct
         ->and($product->price_cents)->toBe(12900)
         ->and($product->category?->is($category))->toBeTrue()
         ->and($product->primary_image_url)->toContain('/storage/products/')
-        ->and($product->variants()->count())->toBe(5)
-        ->and($product->variants()->where('size', 'M')->first()?->stock_quantity)->toBe(4);
+        ->and($product->gallery_image_urls)->toHaveCount(3)
+        ->and($product->variants()->count())->toBe(10)
+        ->and($product->variants()->where('color_name', 'Olive')->where('size', 'M')->first()?->stock_quantity)->toBe(4)
+        ->and($product->variants()->where('color_name', 'Olive')->where('size', 'M')->first()?->image_url)->toContain('/storage/product-variants/')
+        ->and($product->variants()->where('color_name', 'Sand')->where('size', 'XL')->first()?->stock_quantity)->toBe(4);
 
     Storage::disk('public')->assertExists(Str::after($product->primary_image_url, '/storage/'));
+    Storage::disk('public')->assertExists(Str::after($product->gallery_image_urls[0], '/storage/'));
+    Storage::disk('public')->assertExists(Str::after(
+        $product->variants()->where('color_name', 'Olive')->where('size', 'M')->firstOrFail()->image_url,
+        '/storage/',
+    ));
 
     $this->actingAs($admin)
         ->post(route('api.admin.products.update', $product), [
@@ -351,11 +370,20 @@ test('admins can create update and delete products without order history', funct
             'description' => null,
             'price' => '99.00',
             'currency' => 'USD',
-            'primary_image_url' => null,
-            'primary_image_upload' => UploadedFile::fake()->image('work-shirt.webp', 900, 1100),
+            'image_uploads' => [
+                UploadedFile::fake()->image('work-shirt-front.webp', 900, 1100),
+                UploadedFile::fake()->image('work-shirt-detail.webp', 900, 1100),
+            ],
+            'color_image_uploads' => [
+                UploadedFile::fake()->image('navy-work-shirt.jpg', 900, 1100),
+                UploadedFile::fake()->image('ecru-work-shirt.jpg', 900, 1100),
+            ],
             'is_active' => false,
             'is_featured' => true,
-            'variants' => variantsPayload('Navy', '#101828', [8, 9, 10, 6, 4]),
+            'variants' => [
+                ...variantsPayload('Navy', '#101828', [8, 9, 10, 6, 4], 0),
+                ...variantsPayload('Ecru', '#ece6d8', [2, 3, 4, 3, 2], 1),
+            ],
         ], ['Accept' => 'application/json'])
         ->assertSuccessful()
         ->assertJsonPath('data.name', 'Cotton Work Shirt');
@@ -367,8 +395,12 @@ test('admins can create update and delete products without order history', funct
         ->and($product->price_cents)->toBe(9900)
         ->and($product->is_featured)->toBeTrue()
         ->and($product->primary_image_url)->toContain('/storage/products/')
-        ->and($product->variants()->where('size', 'L')->first()?->color_name)->toBe('Navy')
-        ->and($product->variants()->where('size', 'L')->first()?->stock_quantity)->toBe(10);
+        ->and($product->gallery_image_urls)->toHaveCount(1)
+        ->and($product->variants()->count())->toBe(10)
+        ->and($product->variants()->where('color_name', 'Olive')->exists())->toBeFalse()
+        ->and($product->variants()->where('color_name', 'Navy')->where('size', 'L')->first()?->stock_quantity)->toBe(10)
+        ->and($product->variants()->where('color_name', 'Navy')->where('size', 'L')->first()?->image_url)->toContain('/storage/product-variants/')
+        ->and($product->variants()->where('color_name', 'Ecru')->where('size', 'L')->first()?->stock_quantity)->toBe(4);
 
     Storage::disk('public')->assertExists(Str::after($product->primary_image_url, '/storage/'));
 
@@ -428,15 +460,16 @@ test('admins can update and delete orders', function () {
 
 /**
  * @param  array<int, int>  $quantities
- * @return array<int, array{size: string, color_name: string, color_hex: string, stock_quantity: int}>
+ * @return array<int, array{size: string, color_name: string, color_hex: string, color_image_upload_index: int, stock_quantity: int}>
  */
-function variantsPayload(string $colorName, string $colorHex, array $quantities): array
+function variantsPayload(string $colorName, string $colorHex, array $quantities, int $colorImageUploadIndex): array
 {
     return collect(['S', 'M', 'L', 'XL', 'XXL'])
         ->map(fn (string $size, int $index): array => [
             'size' => $size,
             'color_name' => $colorName,
             'color_hex' => $colorHex,
+            'color_image_upload_index' => $colorImageUploadIndex,
             'stock_quantity' => $quantities[$index],
         ])
         ->all();
