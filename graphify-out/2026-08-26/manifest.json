@@ -155,8 +155,8 @@
     "semantic_hash": ""
   },
   "bootstrap/app.php": {
-    "mtime": 1786714749.4225397,
-    "ast_hash": "7eb566b12636fa5c1d2a309e03a70069",
+    "mtime": 1787774502.550442,
+    "ast_hash": "6dd799b758c51d3e6a951e4b0bac2214",
     "semantic_hash": ""
   },
   "bootstrap/providers.php": {
@@ -860,8 +860,8 @@
     "semantic_hash": ""
   },
   "tests/Feature/AdminPanelTest.php": {
-    "mtime": 1787773561.0902967,
-    "ast_hash": "c76b2e85f3afb4788e49a43943a8f520",
+    "mtime": 1787774622.842771,
+    "ast_hash": "3705b996d74d85134e2d6540d6a222ee",
     "semantic_hash": ""
   },
   "tests/Feature/Auth/AuthenticationTest.php": {
@@ -1135,8 +1135,8 @@
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/StoreProductRequest.php": {
-    "mtime": 1787159511.3141534,
-    "ast_hash": "f248956bbd284a6e992f6fc6c2af8dae",
+    "mtime": 1787774537.743945,
+    "ast_hash": "cac28dd656f5739bfcde43a53ab378bc",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/UpdateOrderRequest.php": {
@@ -1150,8 +1150,8 @@
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/UpdateProductRequest.php": {
-    "mtime": 1787159511.314286,
-    "ast_hash": "0a25ac9e95d5f7d500d80c210d3f7e0f",
+    "mtime": 1787774538.028941,
+    "ast_hash": "70a32c72a609fc783c023f4fcc701590",
     "semantic_hash": ""
   },
   "app/Http/Controllers/Admin/StorefrontBannerController.php": {
@@ -1165,13 +1165,13 @@
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/StoreStorefrontBannerRequest.php": {
-    "mtime": 1786476707.2665892,
-    "ast_hash": "27f843f82db019c426c4a25e73c47b1c",
+    "mtime": 1787774538.3469365,
+    "ast_hash": "db177a916a9d00192bb478158c7a6ee3",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/UpdateStorefrontBannerRequest.php": {
-    "mtime": 1786476712.0995543,
-    "ast_hash": "fff4f3699a4b13b3c60d4c9a3515b206",
+    "mtime": 1787774538.6250484,
+    "ast_hash": "f8c994129dd6b0317a2f68ff08f8eb65",
     "semantic_hash": ""
   },
   "app/Models/StorefrontBanner.php": {
@@ -1382,6 +1382,21 @@
   "resources/js/components/admin-pagination.tsx": {
     "mtime": 1787773410.450381,
     "ast_hash": "1da133e90d6192d0a109346a21e40ceb",
+    "semantic_hash": ""
+  },
+  "app/Http/Middleware/SecurityHeaders.php": {
+    "mtime": 1787774502.3394449,
+    "ast_hash": "a140b525351b5962bb005a75ffe8a3f6",
+    "semantic_hash": ""
+  },
+  "app/Rules/SafeActionUrl.php": {
+    "mtime": 1787774581.1848118,
+    "ast_hash": "3ac6bd6c1dea4542037eb3881ce8bf3b",
+    "semantic_hash": ""
+  },
+  "app/Rules/SafeImageUrl.php": {
+    "mtime": 1787774581.212014,
+    "ast_hash": "49b9c3cd72f74e918fc9806df059c31a",
     "semantic_hash": ""
   }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Admin\CustomerController;
 use App\Http\Controllers\Api\Admin\DashboardController;
+use App\Http\Controllers\Api\Admin\InventoryController;
 use App\Http\Controllers\Api\Admin\OrderController;
 use App\Http\Controllers\Api\Admin\ProductCategoryController;
 use App\Http\Controllers\Api\Admin\ProductController;
@@ -23,6 +24,7 @@ Route::middleware(['auth:sanctum', 'verified', 'admin', 'throttle:api'])
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
         Route::apiResource('orders', OrderController::class)->only(['index', 'update', 'destroy']);
         Route::apiResource('products', ProductController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::apiResource('inventory', InventoryController::class)->only(['index', 'store']);
         Route::apiResource('categories', ProductCategoryController::class)
             ->only(['index', 'store', 'update', 'destroy'])
             ->parameters(['categories' => 'productCategory']);

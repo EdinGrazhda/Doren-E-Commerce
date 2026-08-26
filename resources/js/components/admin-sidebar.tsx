@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { dashboard, home } from '@/routes';
-import { settings } from '@/routes/dashboard';
+import { inventory, settings } from '@/routes/dashboard';
 import { index as bannersIndex } from '@/routes/dashboard/banners';
 import { index as categoriesIndex } from '@/routes/dashboard/categories';
 import { index as customersIndex } from '@/routes/dashboard/customers';
@@ -70,7 +70,7 @@ const adminNavSections: AdminNavSection[] = [
             },
             {
                 title: 'Inventory',
-                href: productsIndex(),
+                href: inventory(),
                 icon: Boxes,
             },
         ],

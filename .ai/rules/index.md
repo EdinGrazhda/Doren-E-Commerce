@@ -6,5 +6,6 @@ Before planning or editing, find the row whose globs match the file's path and r
 | --- | --- |
 | resources/js/pages/admin/products/** | .ai/rules/admin-products.md |
 | {routes/{web,api}.php,app/Http/Controllers/{Admin,Api/Admin}/**,resources/js/pages/admin/**} | .ai/rules/admin.md |
+| {app/Actions/Inventory/**,app/Http/Controllers/Api/Admin/InventoryController.php,resources/js/pages/admin/inventory/**} | .ai/rules/inventory.md |
 | resources/js/pages/admin/products/**,app/Http/Controllers/Api/Admin/ProductController.php,app/Http/Requests/Admin/*ProductRequest.php,resources/js/pages/products/show.tsx | .ai/rules/products.md |
 | {resources/js/pages/admin/products/**,app/Http/Controllers/Api/Admin/ProductController.php,app/Http/Requests/Admin/*ProductRequest.php} | .ai/rules/requests-admin.md |

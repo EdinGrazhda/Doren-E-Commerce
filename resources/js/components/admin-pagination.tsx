@@ -19,6 +19,7 @@ export type AdminPaginationMeta<T> = {
 type AdminPaginationProps<T> = {
     pagination: AdminPaginationMeta<T>;
     onPageChange: (url: string) => void;
+    pageParameter?: string;
 };
 
 function pageNumbers(currentPage: number, lastPage: number): number[] {
@@ -47,15 +48,24 @@ function pageNumbers(currentPage: number, lastPage: number): number[] {
     return pages;
 }
 
-function pageUrl<T>(pagination: AdminPaginationMeta<T>, page: number): string {
-    const separator = pagination.path.includes('?') ? '&' : '?';
+function pageUrl<T>(
+    pagination: AdminPaginationMeta<T>,
+    page: number,
+    pageParameter: string,
+): string {
+    const url = new URL(
+        pagination.first_page_url ?? pagination.path,
+        window.location.origin,
+    );
+    url.searchParams.set(pageParameter, String(page));
 
-    return `${pagination.path}${separator}page=${page}`;
+    return url.toString();
 }
 
 export function AdminPagination<T>({
     pagination,
     onPageChange,
+    pageParameter = 'page',
 }: AdminPaginationProps<T>) {
     if (pagination.total === 0) {
         return null;
@@ -115,7 +125,13 @@ export function AdminPagination<T>({
                                         : undefined
                                 }
                                 onClick={() =>
-                                    onPageChange(pageUrl(pagination, page))
+                                    onPageChange(
+                                        pageUrl(
+                                            pagination,
+                                            page,
+                                            pageParameter,
+                                        ),
+                                    )
                                 }
                             >
                                 {page}
