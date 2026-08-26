@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use App\Models\Product;
+use App\Rules\SafeImageUrl;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -42,21 +43,21 @@ class UpdateProductRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:2000'],
             'price' => ['required', 'numeric', 'min:0', 'max:999999.99'],
             'currency' => ['required', 'string', 'size:3'],
-            'primary_image_url' => ['nullable', 'url', 'max:2048'],
-            'primary_image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'primary_image_url' => ['nullable', 'max:2048', new SafeImageUrl],
+            'primary_image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'mimetypes:image/jpeg,image/png,image/webp', 'extensions:jpg,jpeg,png,webp', 'max:5120'],
             'existing_image_urls' => ['nullable', 'array', 'max:4'],
-            'existing_image_urls.*' => ['nullable', 'url', 'max:2048'],
+            'existing_image_urls.*' => ['nullable', 'max:2048', new SafeImageUrl],
             'image_uploads' => ['nullable', 'array', 'max:4'],
-            'image_uploads.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'image_uploads.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'mimetypes:image/jpeg,image/png,image/webp', 'extensions:jpg,jpeg,png,webp', 'max:5120'],
             'color_image_uploads' => ['nullable', 'array', 'max:20'],
-            'color_image_uploads.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'color_image_uploads.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'mimetypes:image/jpeg,image/png,image/webp', 'extensions:jpg,jpeg,png,webp', 'max:5120'],
             'is_active' => ['required', 'boolean'],
             'is_featured' => ['required', 'boolean'],
             'variants' => ['required', 'array', 'min:5', 'max:100'],
             'variants.*.size' => ['required', 'string', Rule::in(self::Sizes)],
             'variants.*.color_name' => ['required', 'string', 'max:80'],
             'variants.*.color_hex' => ['nullable', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
-            'variants.*.image_url' => ['nullable', 'url', 'max:2048'],
+            'variants.*.image_url' => ['nullable', 'max:2048', new SafeImageUrl],
             'variants.*.color_image_upload_index' => ['nullable', 'integer', 'min:0', 'max:19'],
             'variants.*.stock_quantity' => ['required', 'integer', 'min:0', 'max:999999'],
         ];

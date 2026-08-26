@@ -65,6 +65,27 @@ test('admin APIs reject guests and non admin users', function () {
         ->assertForbidden();
 });
 
+test('security headers are sent with web and api responses', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->get(route('home'))
+        ->assertSuccessful()
+        ->assertHeader('X-Content-Type-Options', 'nosniff')
+        ->assertHeader('X-Frame-Options', 'DENY')
+        ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
+        ->assertHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()')
+        ->assertHeader('Content-Security-Policy', "base-uri 'self'; frame-ancestors 'none'; form-action 'self'");
+
+    $this->actingAs($admin)
+        ->getJson(route('api.admin.dashboard'))
+        ->assertSuccessful()
+        ->assertHeader('X-Content-Type-Options', 'nosniff')
+        ->assertHeader('X-Frame-Options', 'DENY')
+        ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
+        ->assertHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()')
+        ->assertHeader('Content-Security-Policy', "base-uri 'self'; frame-ancestors 'none'; form-action 'self'");
+});
+
 test('unverified admins cannot access admin pages or APIs', function () {
     $admin = User::factory()->admin()->unverified()->create();
 
@@ -133,6 +154,42 @@ test('admin users can retrieve every admin API section', function (string $route
     'banners' => ['api.admin.banners.index', 'banners'],
     'customers' => ['api.admin.customers.index', 'customers'],
     'settings' => ['api.admin.settings.index', 'settings'],
+]);
+
+test('admin list APIs return paginated data', function (string $routeName, string $dataKey, string $section) {
+    $admin = User::factory()->admin()->create();
+
+    match ($section) {
+        'orders' => Order::factory()->count(16)->create(),
+        'products' => Product::factory()->count(16)->create(),
+        'categories' => ProductCategory::factory()->count(16)->create(),
+        'banners' => StorefrontBanner::factory()->count(16)->create(),
+        'customers' => collect(range(1, 16))->each(fn (int $index) => Order::factory()->create([
+            'customer_email' => "customer{$index}@example.com",
+        ])),
+    };
+
+    $this->actingAs($admin)
+        ->getJson(route($routeName))
+        ->assertSuccessful()
+        ->assertJsonPath("data.{$dataKey}.current_page", 1)
+        ->assertJsonPath("data.{$dataKey}.per_page", 15)
+        ->assertJsonPath("data.{$dataKey}.total", 16)
+        ->assertJsonPath("data.{$dataKey}.last_page", 2)
+        ->assertJsonPath("data.{$dataKey}.next_page_url", fn (?string $url): bool => filled($url))
+        ->assertJsonCount(15, "data.{$dataKey}.data");
+
+    $this->actingAs($admin)
+        ->getJson(route($routeName, ['page' => 2]))
+        ->assertSuccessful()
+        ->assertJsonPath("data.{$dataKey}.current_page", 2)
+        ->assertJsonCount(1, "data.{$dataKey}.data");
+})->with([
+    'orders' => ['api.admin.orders.index', 'orders', 'orders'],
+    'products' => ['api.admin.products.index', 'products', 'products'],
+    'categories' => ['api.admin.categories.index', 'categories', 'categories'],
+    'banners' => ['api.admin.banners.index', 'banners', 'banners'],
+    'customers' => ['api.admin.customers.index', 'customers', 'customers'],
 ]);
 
 test('admin dashboard API returns compact order and product summaries', function () {
@@ -305,6 +362,32 @@ test('admins can create update and delete storefront banners', function () {
     $this->assertModelMissing($banner);
 });
 
+test('admins cannot store unsafe banner urls', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->postJson(route('api.admin.banners.store'), [
+            'position' => 'hero',
+            'eyebrow' => 'New season',
+            'title' => 'Quiet luxury essentials',
+            'subtitle' => 'Refined pieces for every day.',
+            'body' => null,
+            'primary_action_label' => 'Shop Now',
+            'primary_action_url' => 'javascript:alert(1)',
+            'secondary_action_label' => 'Explore',
+            'secondary_action_url' => 'data:text/html,<script>alert(1)</script>',
+            'image_url' => 'javascript:alert(1)',
+            'is_active' => true,
+            'sort_order' => 15,
+        ])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors([
+            'primary_action_url',
+            'secondary_action_url',
+            'image_url',
+        ]);
+});
+
 test('admins can create update and delete products without order history', function () {
     Storage::fake('public');
 
@@ -411,6 +494,32 @@ test('admins can create update and delete products without order history', funct
     $this->assertModelMissing($product);
 });
 
+test('admins cannot store unsafe product image urls', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->postJson(route('api.admin.products.store'), productPayload([
+            'primary_image_url' => 'javascript:alert(1)',
+            'variants' => variantsPayload('Olive', '#4b4a35', [3, 4, 5, 2, 1], 0),
+        ]))
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('primary_image_url');
+});
+
+test('admins can store safe uploaded image paths on products', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->postJson(route('api.admin.products.store'), productPayload([
+            'existing_image_urls' => ['/storage/products/overshirt-front.jpg'],
+            'variants' => variantsPayload('Olive', '#4b4a35', [3, 4, 5, 2, 1], 0),
+        ]))
+        ->assertCreated();
+
+    expect(Product::query()->where('slug', 'cotton-overshirt')->first()?->primary_image_url)
+        ->toBe('/storage/products/overshirt-front.jpg');
+});
+
 test('admins cannot delete products with order history', function () {
     $admin = User::factory()->admin()->create();
     $product = Product::factory()->create();
@@ -473,4 +582,24 @@ function variantsPayload(string $colorName, string $colorHex, array $quantities,
             'stock_quantity' => $quantities[$index],
         ])
         ->all();
+}
+
+/**
+ * @param  array<string, mixed>  $overrides
+ * @return array<string, mixed>
+ */
+function productPayload(array $overrides = []): array
+{
+    return array_replace([
+        'product_category_id' => null,
+        'name' => 'Cotton Overshirt',
+        'slug' => '',
+        'sku' => 'DRN-100',
+        'description' => 'Structured overshirt.',
+        'price' => '129.00',
+        'currency' => 'usd',
+        'is_active' => true,
+        'is_featured' => false,
+        'variants' => variantsPayload('Olive', '#4b4a35', [3, 4, 5, 2, 1], 0),
+    ], $overrides);
 }

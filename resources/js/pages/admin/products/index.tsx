@@ -4,6 +4,8 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 
 import { AdminApiState } from '@/components/admin-api-state';
+import { AdminPagination } from '@/components/admin-pagination';
+import type { AdminPaginationMeta } from '@/components/admin-pagination';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -70,13 +72,8 @@ type CategoryOption = {
     name: string;
 };
 
-type Paginated<T> = {
-    data: T[];
-    total: number;
-};
-
 type Props = {
-    products: Paginated<Product>;
+    products: AdminPaginationMeta<Product>;
     categories: CategoryOption[];
     sizeOptions: string[];
 };
@@ -190,7 +187,10 @@ const toIndexedRecord = <Value,>(values: Value[]): Record<string, Value> =>
 export default function AdminProductsIndex() {
     const [open, setOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-    const listing = useAdminApi<Props>(productsApiIndex.url());
+    const [productsPageUrl, setProductsPageUrl] = useState(
+        productsApiIndex.url(),
+    );
+    const listing = useAdminApi<Props>(productsPageUrl);
     const sizeOptions = listing.data?.sizeOptions ?? [
         'S',
         'M',
@@ -1132,171 +1132,191 @@ export default function AdminProductsIndex() {
                             {products.total.toLocaleString()} products
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="overflow-x-auto">
-                        <table className="w-full min-w-[860px] text-sm">
-                            <thead>
-                                <tr className="border-b text-left text-xs text-muted-foreground">
-                                    <th className="py-3 font-medium">
-                                        Product
-                                    </th>
-                                    <th className="py-3 font-medium">
-                                        Category
-                                    </th>
-                                    <th className="py-3 font-medium">SKU</th>
-                                    <th className="py-3 font-medium">
-                                        Variants
-                                    </th>
-                                    <th className="py-3 font-medium">Stock</th>
-                                    <th className="py-3 font-medium">Colors</th>
-                                    <th className="py-3 font-medium">Status</th>
-                                    <th className="py-3 font-medium">
-                                        Updated
-                                    </th>
-                                    <th className="py-3 text-right font-medium">
-                                        Price
-                                    </th>
-                                    <th className="py-3 text-right font-medium">
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {products.data.map((product) => (
-                                    <tr
-                                        key={product.id}
-                                        className="border-b last:border-0"
-                                    >
-                                        <td className="py-3">
-                                            <div className="flex items-center gap-3">
-                                                <div className="h-12 w-10 overflow-hidden rounded-md bg-muted">
-                                                    {product.primary_image_url && (
-                                                        <img
-                                                            src={
-                                                                product.primary_image_url
-                                                            }
-                                                            alt={product.name}
-                                                            className="h-full w-full object-cover"
-                                                        />
+                    <CardContent className="grid gap-4">
+                        <div className="overflow-x-auto">
+                            <table className="w-full min-w-[860px] text-sm">
+                                <thead>
+                                    <tr className="border-b text-left text-xs text-muted-foreground">
+                                        <th className="py-3 font-medium">
+                                            Product
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Category
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            SKU
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Variants
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Stock
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Colors
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Status
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Updated
+                                        </th>
+                                        <th className="py-3 text-right font-medium">
+                                            Price
+                                        </th>
+                                        <th className="py-3 text-right font-medium">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {products.data.map((product) => (
+                                        <tr
+                                            key={product.id}
+                                            className="border-b last:border-0"
+                                        >
+                                            <td className="py-3">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="h-12 w-10 overflow-hidden rounded-md bg-muted">
+                                                        {product.primary_image_url && (
+                                                            <img
+                                                                src={
+                                                                    product.primary_image_url
+                                                                }
+                                                                alt={
+                                                                    product.name
+                                                                }
+                                                                className="h-full w-full object-cover"
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-medium">
+                                                            {product.name}
+                                                        </div>
+                                                        <div className="text-xs text-muted-foreground">
+                                                            /{product.slug}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="py-3">
+                                                {product.category?.name ??
+                                                    'Uncategorized'}
+                                            </td>
+                                            <td className="py-3">
+                                                {product.sku ?? 'Not set'}
+                                            </td>
+                                            <td className="py-3">
+                                                {product.variants_count}
+                                            </td>
+                                            <td className="py-3">
+                                                {product.variants
+                                                    .reduce(
+                                                        (total, variant) =>
+                                                            total +
+                                                            Number(
+                                                                variant.stock_quantity,
+                                                            ),
+                                                        0,
+                                                    )
+                                                    .toLocaleString()}
+                                            </td>
+                                            <td className="py-3">
+                                                <div className="flex flex-wrap gap-2">
+                                                    {Array.from(
+                                                        new Map(
+                                                            product.variants.map(
+                                                                (variant) => [
+                                                                    `${variant.color_name}-${variant.color_hex}`,
+                                                                    variant,
+                                                                ],
+                                                            ),
+                                                        ).values(),
+                                                    ).map((variant) => (
+                                                        <span
+                                                            key={`${variant.color_name}-${variant.color_hex}`}
+                                                            className="inline-flex items-center gap-1.5 text-xs"
+                                                        >
+                                                            <span
+                                                                className="size-3 rounded-full border"
+                                                                style={{
+                                                                    backgroundColor:
+                                                                        variant.color_hex ??
+                                                                        'transparent',
+                                                                }}
+                                                            />
+                                                            {variant.color_name}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </td>
+                                            <td className="py-3">
+                                                <div className="flex gap-2">
+                                                    <Badge
+                                                        variant={
+                                                            product.is_active
+                                                                ? 'default'
+                                                                : 'secondary'
+                                                        }
+                                                    >
+                                                        {product.is_active
+                                                            ? 'Active'
+                                                            : 'Draft'}
+                                                    </Badge>
+                                                    {product.is_featured && (
+                                                        <Badge variant="outline">
+                                                            Featured
+                                                        </Badge>
                                                     )}
                                                 </div>
-                                                <div>
-                                                    <div className="font-medium">
-                                                        {product.name}
-                                                    </div>
-                                                    <div className="text-xs text-muted-foreground">
-                                                        /{product.slug}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="py-3">
-                                            {product.category?.name ??
-                                                'Uncategorized'}
-                                        </td>
-                                        <td className="py-3">
-                                            {product.sku ?? 'Not set'}
-                                        </td>
-                                        <td className="py-3">
-                                            {product.variants_count}
-                                        </td>
-                                        <td className="py-3">
-                                            {product.variants
-                                                .reduce(
-                                                    (total, variant) =>
-                                                        total +
-                                                        Number(
-                                                            variant.stock_quantity,
-                                                        ),
-                                                    0,
-                                                )
-                                                .toLocaleString()}
-                                        </td>
-                                        <td className="py-3">
-                                            <div className="flex flex-wrap gap-2">
-                                                {Array.from(
-                                                    new Map(
-                                                        product.variants.map(
-                                                            (variant) => [
-                                                                `${variant.color_name}-${variant.color_hex}`,
-                                                                variant,
-                                                            ],
-                                                        ),
-                                                    ).values(),
-                                                ).map((variant) => (
-                                                    <span
-                                                        key={`${variant.color_name}-${variant.color_hex}`}
-                                                        className="inline-flex items-center gap-1.5 text-xs"
-                                                    >
-                                                        <span
-                                                            className="size-3 rounded-full border"
-                                                            style={{
-                                                                backgroundColor:
-                                                                    variant.color_hex ??
-                                                                    'transparent',
-                                                            }}
-                                                        />
-                                                        {variant.color_name}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </td>
-                                        <td className="py-3">
-                                            <div className="flex gap-2">
-                                                <Badge
-                                                    variant={
-                                                        product.is_active
-                                                            ? 'default'
-                                                            : 'secondary'
-                                                    }
-                                                >
-                                                    {product.is_active
-                                                        ? 'Active'
-                                                        : 'Draft'}
-                                                </Badge>
-                                                {product.is_featured && (
-                                                    <Badge variant="outline">
-                                                        Featured
-                                                    </Badge>
+                                            </td>
+                                            <td className="py-3">
+                                                {formatDate(product.updated_at)}
+                                            </td>
+                                            <td className="py-3 text-right font-medium">
+                                                {formatMoney(
+                                                    product.price_cents,
+                                                    product.currency,
                                                 )}
-                                            </div>
-                                        </td>
-                                        <td className="py-3">
-                                            {formatDate(product.updated_at)}
-                                        </td>
-                                        <td className="py-3 text-right font-medium">
-                                            {formatMoney(
-                                                product.price_cents,
-                                                product.currency,
-                                            )}
-                                        </td>
-                                        <td className="py-3">
-                                            <div className="flex justify-end gap-2">
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline"
-                                                    onClick={() =>
-                                                        openEditDialog(product)
-                                                    }
-                                                >
-                                                    <Edit />
-                                                    Edit
-                                                </Button>
-                                                <Button
-                                                    size="sm"
-                                                    variant="destructive"
-                                                    onClick={() =>
-                                                        deleteProduct(product)
-                                                    }
-                                                >
-                                                    <Trash2 />
-                                                    Delete
-                                                </Button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                            </td>
+                                            <td className="py-3">
+                                                <div className="flex justify-end gap-2">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() =>
+                                                            openEditDialog(
+                                                                product,
+                                                            )
+                                                        }
+                                                    >
+                                                        <Edit />
+                                                        Edit
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="destructive"
+                                                        onClick={() =>
+                                                            deleteProduct(
+                                                                product,
+                                                            )
+                                                        }
+                                                    >
+                                                        <Trash2 />
+                                                        Delete
+                                                    </Button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <AdminPagination
+                            pagination={products}
+                            onPageChange={setProductsPageUrl}
+                        />
                     </CardContent>
                 </Card>
             </div>

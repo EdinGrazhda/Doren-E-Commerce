@@ -1,9 +1,11 @@
 import { Head, useHttp } from '@inertiajs/react';
 import { Edit, Image, Plus, Trash2 } from 'lucide-react';
-import {  useState } from 'react';
-import type {FormEvent} from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 
 import { AdminApiState } from '@/components/admin-api-state';
+import { AdminPagination } from '@/components/admin-pagination';
+import type { AdminPaginationMeta } from '@/components/admin-pagination';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -56,7 +58,7 @@ type Banner = {
 };
 
 type Props = {
-    banners: Banner[];
+    banners: AdminPaginationMeta<Banner>;
     positions: string[];
 };
 
@@ -101,7 +103,8 @@ const positionLabels: Record<string, string> = {
 export default function AdminBannersIndex() {
     const [open, setOpen] = useState(false);
     const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
-    const listing = useAdminApi<Props>(bannersApiIndex.url());
+    const [bannersPageUrl, setBannersPageUrl] = useState(bannersApiIndex.url());
+    const listing = useAdminApi<Props>(bannersPageUrl);
     const form = useHttp<BannerFormData>(emptyBanner);
     const deleteRequest = useHttp<Record<string, never>>({});
 
@@ -555,11 +558,11 @@ export default function AdminBannersIndex() {
                 <Card className="rounded-lg">
                     <CardHeader>
                         <CardTitle>
-                            {banners.length.toLocaleString()} banners
+                            {banners.total.toLocaleString()} banners
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-4">
-                        {banners.map((banner) => (
+                        {banners.data.map((banner) => (
                             <div
                                 key={banner.id}
                                 className="grid gap-4 rounded-lg border p-4 md:grid-cols-[160px_1fr_auto]"
@@ -640,6 +643,10 @@ export default function AdminBannersIndex() {
                                 </div>
                             </div>
                         ))}
+                        <AdminPagination
+                            pagination={banners}
+                            onPageChange={setBannersPageUrl}
+                        />
                     </CardContent>
                 </Card>
             </div>

@@ -58,7 +58,7 @@ class DashboardController extends Controller
                     'revenue_cents' => Order::sum('total_cents'),
                 ],
                 'recentOrders' => $recentOrders,
-                'lowStockProducts' => $lowStockP2roducts,
+                'lowStockProducts' => $lowStockProducts,
             ],
         ]);
     }

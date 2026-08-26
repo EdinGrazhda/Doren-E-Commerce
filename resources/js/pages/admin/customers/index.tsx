@@ -1,6 +1,9 @@
 import { Head } from '@inertiajs/react';
+import { useState } from 'react';
 
 import { AdminApiState } from '@/components/admin-api-state';
+import { AdminPagination } from '@/components/admin-pagination';
+import type { AdminPaginationMeta } from '@/components/admin-pagination';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useAdminApi } from '@/hooks/use-admin-api';
@@ -19,11 +22,14 @@ type Customer = {
 };
 
 type Props = {
-    customers: Customer[];
+    customers: AdminPaginationMeta<Customer>;
 };
 
 export default function AdminCustomersIndex() {
-    const { data, error } = useAdminApi<Props>(customersApiIndex.url());
+    const [customersPageUrl, setCustomersPageUrl] = useState(
+        customersApiIndex.url(),
+    );
+    const { data, error } = useAdminApi<Props>(customersPageUrl);
 
     if (!data) {
         return (
@@ -59,54 +65,66 @@ export default function AdminCustomersIndex() {
                 <Card className="rounded-lg">
                     <CardHeader>
                         <CardTitle>
-                            {customers.length.toLocaleString()} recent customers
+                            {customers.total.toLocaleString()} customers
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="overflow-x-auto">
-                        <table className="w-full min-w-[720px] text-sm">
-                            <thead>
-                                <tr className="border-b text-left text-xs text-muted-foreground">
-                                    <th className="py-3 font-medium">
-                                        Customer
-                                    </th>
-                                    <th className="py-3 font-medium">Email</th>
-                                    <th className="py-3 font-medium">Orders</th>
-                                    <th className="py-3 font-medium">
-                                        Last order
-                                    </th>
-                                    <th className="py-3 text-right font-medium">
-                                        Total spent
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {customers.map((customer) => (
-                                    <tr
-                                        key={customer.customer_email}
-                                        className="border-b last:border-0"
-                                    >
-                                        <td className="py-3 font-medium">
-                                            {customer.first_name}{' '}
-                                            {customer.last_name}
-                                        </td>
-                                        <td className="py-3">
-                                            {customer.customer_email}
-                                        </td>
-                                        <td className="py-3">
-                                            {customer.orders_count}
-                                        </td>
-                                        <td className="py-3">
-                                            {formatDate(customer.last_order_at)}
-                                        </td>
-                                        <td className="py-3 text-right font-medium">
-                                            {formatMoney(
-                                                customer.total_spent_cents,
-                                            )}
-                                        </td>
+                    <CardContent className="grid gap-4">
+                        <div className="overflow-x-auto">
+                            <table className="w-full min-w-[720px] text-sm">
+                                <thead>
+                                    <tr className="border-b text-left text-xs text-muted-foreground">
+                                        <th className="py-3 font-medium">
+                                            Customer
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Email
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Orders
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Last order
+                                        </th>
+                                        <th className="py-3 text-right font-medium">
+                                            Total spent
+                                        </th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {customers.data.map((customer) => (
+                                        <tr
+                                            key={customer.customer_email}
+                                            className="border-b last:border-0"
+                                        >
+                                            <td className="py-3 font-medium">
+                                                {customer.first_name}{' '}
+                                                {customer.last_name}
+                                            </td>
+                                            <td className="py-3">
+                                                {customer.customer_email}
+                                            </td>
+                                            <td className="py-3">
+                                                {customer.orders_count}
+                                            </td>
+                                            <td className="py-3">
+                                                {formatDate(
+                                                    customer.last_order_at,
+                                                )}
+                                            </td>
+                                            <td className="py-3 text-right font-medium">
+                                                {formatMoney(
+                                                    customer.total_spent_cents,
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <AdminPagination
+                            pagination={customers}
+                            onPageChange={setCustomersPageUrl}
+                        />
                     </CardContent>
                 </Card>
             </div>

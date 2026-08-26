@@ -1,9 +1,11 @@
 import { Head, useHttp } from '@inertiajs/react';
 import { Edit, Plus, Trash2 } from 'lucide-react';
-import {  useState } from 'react';
-import type {FormEvent} from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 
 import { AdminApiState } from '@/components/admin-api-state';
+import { AdminPagination } from '@/components/admin-pagination';
+import type { AdminPaginationMeta } from '@/components/admin-pagination';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -42,7 +44,7 @@ type Category = {
 };
 
 type Props = {
-    categories: Category[];
+    categories: AdminPaginationMeta<Category>;
 };
 
 type CategoryFormData = {
@@ -64,7 +66,10 @@ export default function AdminCategoriesIndex() {
     const [editingCategory, setEditingCategory] = useState<Category | null>(
         null,
     );
-    const listing = useAdminApi<Props>(categoriesApiIndex.url());
+    const [categoriesPageUrl, setCategoriesPageUrl] = useState(
+        categoriesApiIndex.url(),
+    );
+    const listing = useAdminApi<Props>(categoriesPageUrl);
     const form = useHttp<CategoryFormData>(emptyCategory);
     const deleteRequest = useHttp<Record<string, never>>({});
 
@@ -259,96 +264,112 @@ export default function AdminCategoriesIndex() {
                 <Card className="rounded-lg">
                     <CardHeader>
                         <CardTitle>
-                            {categories.length.toLocaleString()} categories
+                            {categories.total.toLocaleString()} categories
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="overflow-x-auto">
-                        <table className="w-full min-w-[760px] text-sm">
-                            <thead>
-                                <tr className="border-b text-left text-xs text-muted-foreground">
-                                    <th className="py-3 font-medium">
-                                        Category
-                                    </th>
-                                    <th className="py-3 font-medium">Slug</th>
-                                    <th className="py-3 font-medium">
-                                        Products
-                                    </th>
-                                    <th className="py-3 font-medium">Status</th>
-                                    <th className="py-3 font-medium">
-                                        Updated
-                                    </th>
-                                    <th className="py-3 text-right font-medium">
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {categories.map((category) => (
-                                    <tr
-                                        key={category.id}
-                                        className="border-b last:border-0"
-                                    >
-                                        <td className="py-3">
-                                            <div className="font-medium">
-                                                {category.name}
-                                            </div>
-                                            <div className="max-w-md truncate text-xs text-muted-foreground">
-                                                {category.description ??
-                                                    'No description'}
-                                            </div>
-                                        </td>
-                                        <td className="py-3">
-                                            /{category.slug}
-                                        </td>
-                                        <td className="py-3">
-                                            {category.active_products_count}{' '}
-                                            active / {category.products_count}{' '}
-                                            total
-                                        </td>
-                                        <td className="py-3">
-                                            <Badge
-                                                variant={
-                                                    category.is_visible
-                                                        ? 'default'
-                                                        : 'secondary'
-                                                }
-                                            >
-                                                {category.is_visible
-                                                    ? 'Visible'
-                                                    : 'Hidden'}
-                                            </Badge>
-                                        </td>
-                                        <td className="py-3">
-                                            {formatDate(category.updated_at)}
-                                        </td>
-                                        <td className="py-3">
-                                            <div className="flex justify-end gap-2">
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline"
-                                                    onClick={() =>
-                                                        openEditDialog(category)
-                                                    }
-                                                >
-                                                    <Edit />
-                                                    Edit
-                                                </Button>
-                                                <Button
-                                                    size="sm"
-                                                    variant="destructive"
-                                                    onClick={() =>
-                                                        deleteCategory(category)
-                                                    }
-                                                >
-                                                    <Trash2 />
-                                                    Delete
-                                                </Button>
-                                            </div>
-                                        </td>
+                    <CardContent className="grid gap-4">
+                        <div className="overflow-x-auto">
+                            <table className="w-full min-w-[760px] text-sm">
+                                <thead>
+                                    <tr className="border-b text-left text-xs text-muted-foreground">
+                                        <th className="py-3 font-medium">
+                                            Category
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Slug
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Products
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Status
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Updated
+                                        </th>
+                                        <th className="py-3 text-right font-medium">
+                                            Actions
+                                        </th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {categories.data.map((category) => (
+                                        <tr
+                                            key={category.id}
+                                            className="border-b last:border-0"
+                                        >
+                                            <td className="py-3">
+                                                <div className="font-medium">
+                                                    {category.name}
+                                                </div>
+                                                <div className="max-w-md truncate text-xs text-muted-foreground">
+                                                    {category.description ??
+                                                        'No description'}
+                                                </div>
+                                            </td>
+                                            <td className="py-3">
+                                                /{category.slug}
+                                            </td>
+                                            <td className="py-3">
+                                                {category.active_products_count}{' '}
+                                                active /{' '}
+                                                {category.products_count} total
+                                            </td>
+                                            <td className="py-3">
+                                                <Badge
+                                                    variant={
+                                                        category.is_visible
+                                                            ? 'default'
+                                                            : 'secondary'
+                                                    }
+                                                >
+                                                    {category.is_visible
+                                                        ? 'Visible'
+                                                        : 'Hidden'}
+                                                </Badge>
+                                            </td>
+                                            <td className="py-3">
+                                                {formatDate(
+                                                    category.updated_at,
+                                                )}
+                                            </td>
+                                            <td className="py-3">
+                                                <div className="flex justify-end gap-2">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() =>
+                                                            openEditDialog(
+                                                                category,
+                                                            )
+                                                        }
+                                                    >
+                                                        <Edit />
+                                                        Edit
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="destructive"
+                                                        onClick={() =>
+                                                            deleteCategory(
+                                                                category,
+                                                            )
+                                                        }
+                                                    >
+                                                        <Trash2 />
+                                                        Delete
+                                                    </Button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <AdminPagination
+                            pagination={categories}
+                            onPageChange={setCategoriesPageUrl}
+                        />
                     </CardContent>
                 </Card>
             </div>

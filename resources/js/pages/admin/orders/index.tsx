@@ -1,9 +1,11 @@
 import { Head, useHttp } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
-import {  useState } from 'react';
-import type {FormEvent} from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 
 import { AdminApiState } from '@/components/admin-api-state';
+import { AdminPagination } from '@/components/admin-pagination';
+import type { AdminPaginationMeta } from '@/components/admin-pagination';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -49,20 +51,13 @@ type Order = {
     items_count: number;
 };
 
-type Paginated<T> = {
-    data: T[];
-    current_page: number;
-    last_page: number;
-    total: number;
-};
-
 type Option = {
     label: string;
     value: string;
 };
 
 type Props = {
-    orders: Paginated<Order>;
+    orders: AdminPaginationMeta<Order>;
     statusOptions: Option[];
     paymentStatusOptions: Option[];
 };
@@ -74,7 +69,8 @@ type OrderFormData = {
 
 export default function AdminOrdersIndex() {
     const [editingOrder, setEditingOrder] = useState<Order | null>(null);
-    const listing = useAdminApi<Props>(ordersApiIndex.url());
+    const [ordersPageUrl, setOrdersPageUrl] = useState(ordersApiIndex.url());
+    const listing = useAdminApi<Props>(ordersPageUrl);
     const form = useHttp<OrderFormData>({
         status: '',
         payment_status: '',
@@ -151,102 +147,120 @@ export default function AdminOrdersIndex() {
                             {orders.total.toLocaleString()} orders
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="overflow-x-auto">
-                        <table className="w-full min-w-[860px] text-sm">
-                            <thead>
-                                <tr className="border-b text-left text-xs text-muted-foreground">
-                                    <th className="py-3 font-medium">Order</th>
-                                    <th className="py-3 font-medium">
-                                        Customer
-                                    </th>
-                                    <th className="py-3 font-medium">City</th>
-                                    <th className="py-3 font-medium">Items</th>
-                                    <th className="py-3 font-medium">Status</th>
-                                    <th className="py-3 font-medium">
-                                        Payment
-                                    </th>
-                                    <th className="py-3 text-right font-medium">
-                                        Total
-                                    </th>
-                                    <th className="py-3 text-right font-medium">
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {orders.data.map((order) => (
-                                    <tr
-                                        key={order.id}
-                                        className="border-b last:border-0"
-                                    >
-                                        <td className="py-3">
-                                            <div className="font-medium">
-                                                {order.order_number}
-                                            </div>
-                                            <div className="text-xs text-muted-foreground">
-                                                {formatDate(order.created_at)}
-                                            </div>
-                                        </td>
-                                        <td className="py-3">
-                                            <div>
-                                                {order.customer_first_name}{' '}
-                                                {order.customer_last_name}
-                                            </div>
-                                            <div className="text-xs text-muted-foreground">
-                                                {order.customer_email}
-                                            </div>
-                                        </td>
-                                        <td className="py-3">
-                                            {order.shipping_city}
-                                        </td>
-                                        <td className="py-3">
-                                            {order.items_count}
-                                        </td>
-                                        <td className="py-3">
-                                            <Badge variant="outline">
-                                                {titleCase(order.status)}
-                                            </Badge>
-                                        </td>
-                                        <td className="py-3">
-                                            <Badge variant="secondary">
-                                                {titleCase(
-                                                    order.payment_status,
-                                                )}
-                                            </Badge>
-                                        </td>
-                                        <td className="py-3 text-right font-medium">
-                                            {formatMoney(
-                                                order.total_cents,
-                                                order.currency,
-                                            )}
-                                        </td>
-                                        <td className="py-3">
-                                            <div className="flex justify-end gap-2">
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline"
-                                                    onClick={() =>
-                                                        openStatusDialog(order)
-                                                    }
-                                                >
-                                                    Edit
-                                                </Button>
-                                                <Button
-                                                    size="sm"
-                                                    variant="destructive"
-                                                    onClick={() =>
-                                                        deleteOrder(order)
-                                                    }
-                                                >
-                                                    <Trash2 />
-                                                    Delete
-                                                </Button>
-                                            </div>
-                                        </td>
+                    <CardContent className="grid gap-4">
+                        <div className="overflow-x-auto">
+                            <table className="w-full min-w-[860px] text-sm">
+                                <thead>
+                                    <tr className="border-b text-left text-xs text-muted-foreground">
+                                        <th className="py-3 font-medium">
+                                            Order
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Customer
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            City
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Items
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Status
+                                        </th>
+                                        <th className="py-3 font-medium">
+                                            Payment
+                                        </th>
+                                        <th className="py-3 text-right font-medium">
+                                            Total
+                                        </th>
+                                        <th className="py-3 text-right font-medium">
+                                            Actions
+                                        </th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {orders.data.map((order) => (
+                                        <tr
+                                            key={order.id}
+                                            className="border-b last:border-0"
+                                        >
+                                            <td className="py-3">
+                                                <div className="font-medium">
+                                                    {order.order_number}
+                                                </div>
+                                                <div className="text-xs text-muted-foreground">
+                                                    {formatDate(
+                                                        order.created_at,
+                                                    )}
+                                                </div>
+                                            </td>
+                                            <td className="py-3">
+                                                <div>
+                                                    {order.customer_first_name}{' '}
+                                                    {order.customer_last_name}
+                                                </div>
+                                                <div className="text-xs text-muted-foreground">
+                                                    {order.customer_email}
+                                                </div>
+                                            </td>
+                                            <td className="py-3">
+                                                {order.shipping_city}
+                                            </td>
+                                            <td className="py-3">
+                                                {order.items_count}
+                                            </td>
+                                            <td className="py-3">
+                                                <Badge variant="outline">
+                                                    {titleCase(order.status)}
+                                                </Badge>
+                                            </td>
+                                            <td className="py-3">
+                                                <Badge variant="secondary">
+                                                    {titleCase(
+                                                        order.payment_status,
+                                                    )}
+                                                </Badge>
+                                            </td>
+                                            <td className="py-3 text-right font-medium">
+                                                {formatMoney(
+                                                    order.total_cents,
+                                                    order.currency,
+                                                )}
+                                            </td>
+                                            <td className="py-3">
+                                                <div className="flex justify-end gap-2">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() =>
+                                                            openStatusDialog(
+                                                                order,
+                                                            )
+                                                        }
+                                                    >
+                                                        Edit
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="destructive"
+                                                        onClick={() =>
+                                                            deleteOrder(order)
+                                                        }
+                                                    >
+                                                        <Trash2 />
+                                                        Delete
+                                                    </Button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <AdminPagination
+                            pagination={orders}
+                            onPageChange={setOrdersPageUrl}
+                        />
                     </CardContent>
                 </Card>
             </div>

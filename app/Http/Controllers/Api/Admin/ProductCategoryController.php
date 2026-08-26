@@ -19,7 +19,7 @@ class ProductCategoryController extends Controller
                 'products as active_products_count' => fn ($query) => $query->where('is_active', true),
             ])
             ->orderBy('name')
-            ->get();
+            ->paginate(15);
 
         return response()->json(['data' => ['categories' => $categories]]);
     }

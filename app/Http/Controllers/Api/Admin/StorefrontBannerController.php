@@ -32,7 +32,7 @@ class StorefrontBannerController extends Controller
             ])
             ->orderBy('position')
             ->orderBy('sort_order')
-            ->get();
+            ->paginate(15);
 
         return response()->json([
             'data' => [
