@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "app/Models/ProductVariant.php": {
-    "mtime": 1787159511.3144057,
-    "ast_hash": "9664d30e38ed2922296cf63289a9b53f",
+    "mtime": 1787775303.423272,
+    "ast_hash": "2a950d32da968ebcf9d3126f071f6b88",
     "semantic_hash": ""
   },
   "app/Models/User.php": {
@@ -355,8 +355,8 @@
     "semantic_hash": ""
   },
   "resources/js/components/admin-sidebar.tsx": {
-    "mtime": 1786664748.982762,
-    "ast_hash": "4c68fe765341eb90b99f37a7f708421b",
+    "mtime": 1787778668.887273,
+    "ast_hash": "05294320db6266b4a9107cd076aab1e9",
     "semantic_hash": ""
   },
   "resources/js/components/alert-error.tsx": {
@@ -855,13 +855,13 @@
     "semantic_hash": ""
   },
   "routes/web.php": {
-    "mtime": 1786714749.4373941,
-    "ast_hash": "583f37c7d28421dfd28299d17eef8c37",
+    "mtime": 1787778668.220274,
+    "ast_hash": "b3a7e37f279154c6c01b531df9002cc1",
     "semantic_hash": ""
   },
   "tests/Feature/AdminPanelTest.php": {
-    "mtime": 1787774622.842771,
-    "ast_hash": "3705b996d74d85134e2d6540d6a222ee",
+    "mtime": 1787778670.342903,
+    "ast_hash": "a953b4f7d8a1fa478d69ca72d8209ddd",
     "semantic_hash": ""
   },
   "tests/Feature/Auth/AuthenticationTest.php": {
@@ -1340,8 +1340,8 @@
     "semantic_hash": ""
   },
   "routes/api.php": {
-    "mtime": 1786714749.437327,
-    "ast_hash": "4b4194ecda0e4e03b18a595cae1c3c9c",
+    "mtime": 1787775336.8718784,
+    "ast_hash": "b13c8cf92cb88df70f1911174c16dfaa",
     "semantic_hash": ""
   },
   ".ai/rules/admin.md": {
@@ -1350,8 +1350,8 @@
     "semantic_hash": ""
   },
   ".ai/rules/index.md": {
-    "mtime": 1787159511.31263,
-    "ast_hash": "f45a3467153d5353c9dffdb72698dd50",
+    "mtime": 1787776471.6181679,
+    "ast_hash": "7c4be0b3e658bdcc98274736043a3f0e",
     "semantic_hash": ""
   },
   "RTK.md": {
@@ -1380,8 +1380,8 @@
     "semantic_hash": ""
   },
   "resources/js/components/admin-pagination.tsx": {
-    "mtime": 1787773410.450381,
-    "ast_hash": "1da133e90d6192d0a109346a21e40ceb",
+    "mtime": 1787775380.3753686,
+    "ast_hash": "d2d70497a5bac5b8f4aee54a78fc25c7",
     "semantic_hash": ""
   },
   "app/Http/Middleware/SecurityHeaders.php": {
@@ -1397,6 +1397,71 @@
   "app/Rules/SafeImageUrl.php": {
     "mtime": 1787774581.212014,
     "ast_hash": "49b9c3cd72f74e918fc9806df059c31a",
+    "semantic_hash": ""
+  },
+  "app/Actions/Inventory/RecordInventoryMovement.php": {
+    "mtime": 1787776053.6356614,
+    "ast_hash": "b5b46ddd2b8907d361c6bc977a7f24fb",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Admin/InventoryController.php": {
+    "mtime": 1787775303.9712653,
+    "ast_hash": "e2dd98b06f1a857fbe9797e65d444035",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/Admin/InventoryController.php": {
+    "mtime": 1787778668.5512733,
+    "ast_hash": "41968459dce5d55275104370db67f5c5",
+    "semantic_hash": ""
+  },
+  "app/Http/Requests/Admin/StoreInventoryMovementRequest.php": {
+    "mtime": 1787775303.8272672,
+    "ast_hash": "110611fef3f4e15e2645eaae9785e367",
+    "semantic_hash": ""
+  },
+  "app/InventoryMovementType.php": {
+    "mtime": 1787775252.536873,
+    "ast_hash": "e3fef8a27a5d16ec67d0e6e387f607a3",
+    "semantic_hash": ""
+  },
+  "app/Models/InventoryMovement.php": {
+    "mtime": 1787775252.9348686,
+    "ast_hash": "d60e0e97c6aa77ee992d3f97dfa53f7c",
+    "semantic_hash": ""
+  },
+  "database/factories/InventoryMovementFactory.php": {
+    "mtime": 1787775303.5492704,
+    "ast_hash": "1b2def264517aefebd234341340cef4b",
+    "semantic_hash": ""
+  },
+  "database/migrations/2026_08_26_201215_create_inventory_movements_table.php": {
+    "mtime": 1787775252.7388709,
+    "ast_hash": "b23a6747cffee49ad10454d8d47e07e0",
+    "semantic_hash": ""
+  },
+  "resources/js/pages/admin/inventory/index.tsx": {
+    "mtime": 1787777732.8273644,
+    "ast_hash": "6d1d5a4869030d43ee186b3132291355",
+    "semantic_hash": ""
+  },
+  "tests/Feature/InventoryManagementTest.php": {
+    "mtime": 1787778670.8682795,
+    "ast_hash": "50214a4019e16d135165d3a1debbdafd",
+    "semantic_hash": ""
+  },
+  ".ai/rules/inventory.md": {
+    "mtime": 1787776471.6167078,
+    "ast_hash": "a80e0222148fbb0666d5d8884f3b1e7a",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Admin/SalesController.php": {
+    "mtime": 1787778667.9492743,
+    "ast_hash": "03babac8705c81eacb834e678a63d82c",
+    "semantic_hash": ""
+  },
+  "resources/js/pages/admin/sales/index.tsx": {
+    "mtime": 1787778689.475236,
+    "ast_hash": "44568ab7233b95570824e0b2fde66561",
     "semantic_hash": ""
   }
 }

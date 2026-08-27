@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
     Boxes,
+    CircleDollarSign,
     FolderTree,
     Images,
     LayoutDashboard,
@@ -26,7 +27,7 @@ import {
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { dashboard, home } from '@/routes';
-import { inventory, settings } from '@/routes/dashboard';
+import { inventory, sales, settings } from '@/routes/dashboard';
 import { index as bannersIndex } from '@/routes/dashboard/banners';
 import { index as categoriesIndex } from '@/routes/dashboard/categories';
 import { index as customersIndex } from '@/routes/dashboard/customers';
@@ -72,6 +73,16 @@ const adminNavSections: AdminNavSection[] = [
                 title: 'Inventory',
                 href: inventory(),
                 icon: Boxes,
+            },
+        ],
+    },
+    {
+        title: 'Sales',
+        items: [
+            {
+                title: 'Counter Sales',
+                href: sales(),
+                icon: CircleDollarSign,
             },
         ],
     },

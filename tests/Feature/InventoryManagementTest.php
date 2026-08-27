@@ -25,6 +25,20 @@ test('only admins can access inventory management', function () {
         ->assertInertia(fn (Assert $page) => $page->component('admin/inventory/index'));
 });
 
+test('only admins can access counter sales page', function () {
+    $user = User::factory()->create();
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($user)
+        ->get(route('dashboard.sales'))
+        ->assertForbidden();
+
+    $this->actingAs($admin)
+        ->get(route('dashboard.sales'))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page->component('admin/sales/index'));
+});
+
 test('admins can receive stock and the product catalog reflects the new balance', function () {
     $admin = User::factory()->admin()->create();
     $variant = ProductVariant::factory()->create(['stock_quantity' => 7]);
@@ -174,6 +188,29 @@ test('inventory listing supports stock filters and independent pagination', func
         ->assertJsonCount(1, 'data.movements.data')
         ->assertJsonPath('data.metrics.low_stock_count', 3)
         ->assertJsonPath('data.metrics.out_of_stock_count', 2);
+});
+
+test('inventory movements can be filtered to counter sales', function () {
+    $admin = User::factory()->admin()->create();
+    $variant = ProductVariant::factory()->create(['stock_quantity' => 20]);
+
+    InventoryMovement::factory()->create([
+        'product_variant_id' => $variant->id,
+        'type' => InventoryMovementType::Received,
+        'quantity' => 5,
+    ]);
+    InventoryMovement::factory()->sold()->create([
+        'product_variant_id' => $variant->id,
+        'quantity' => 2,
+        'unit_amount_cents' => 1500,
+    ]);
+
+    $this->actingAs($admin)
+        ->getJson(route('api.admin.inventory.index', ['type' => InventoryMovementType::Sold->value]))
+        ->assertSuccessful()
+        ->assertJsonPath('data.movements.total', 1)
+        ->assertJsonPath('data.movements.data.0.type', InventoryMovementType::Sold->value)
+        ->assertJsonPath('data.movements.data.0.quantity', 2);
 });
 
 test('inventory search matches product names and skus', function () {

@@ -19,6 +19,8 @@ class InventoryController extends Controller
         $search = Str::limit($request->string('search')->trim()->value(), 100, '');
         $status = $request->string('status')->value();
         $status = in_array($status, ['all', 'healthy', 'low', 'out'], true) ? $status : 'all';
+        $type = $request->string('type')->value();
+        $type = in_array($type, array_column(InventoryMovementType::cases(), 'value'), true) ? $type : null;
 
         $variants = ProductVariant::query()
             ->select([
@@ -68,6 +70,7 @@ class InventoryController extends Controller
                 'created_at',
             ])
             ->with('user:id,name')
+            ->when($type !== null, fn ($query) => $query->where('type', $type))
             ->latest()
             ->paginate(10, pageName: 'movement_page')
             ->withQueryString();

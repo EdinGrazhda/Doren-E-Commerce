@@ -355,8 +355,8 @@
     "semantic_hash": ""
   },
   "resources/js/components/admin-sidebar.tsx": {
-    "mtime": 1787775380.526367,
-    "ast_hash": "07501b47bf240d579876c0a61efd1bfa",
+    "mtime": 1787778668.887273,
+    "ast_hash": "05294320db6266b4a9107cd076aab1e9",
     "semantic_hash": ""
   },
   "resources/js/components/alert-error.tsx": {
@@ -855,13 +855,13 @@
     "semantic_hash": ""
   },
   "routes/web.php": {
-    "mtime": 1787775336.7208803,
-    "ast_hash": "2b6ccbb5e3aa59084471472fa2ed678d",
+    "mtime": 1787778668.220274,
+    "ast_hash": "b3a7e37f279154c6c01b531df9002cc1",
     "semantic_hash": ""
   },
   "tests/Feature/AdminPanelTest.php": {
-    "mtime": 1787775665.089076,
-    "ast_hash": "80a999c301897fc7121859015a525898",
+    "mtime": 1787778670.342903,
+    "ast_hash": "a953b4f7d8a1fa478d69ca72d8209ddd",
     "semantic_hash": ""
   },
   "tests/Feature/Auth/AuthenticationTest.php": {
@@ -1410,8 +1410,8 @@
     "semantic_hash": ""
   },
   "app/Http/Controllers/Api/Admin/InventoryController.php": {
-    "mtime": 1787775336.5808818,
-    "ast_hash": "48b9a88f4941f4d08bc8f1e9feb1130c",
+    "mtime": 1787778668.5512733,
+    "ast_hash": "41968459dce5d55275104370db67f5c5",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/StoreInventoryMovementRequest.php": {
@@ -1440,18 +1440,28 @@
     "semantic_hash": ""
   },
   "resources/js/pages/admin/inventory/index.tsx": {
-    "mtime": 1787776124.4803236,
+    "mtime": 1787778825.897637,
     "ast_hash": "57c510a0857352f730b6636c7d60c805",
     "semantic_hash": ""
   },
   "tests/Feature/InventoryManagementTest.php": {
-    "mtime": 1787776053.9926572,
-    "ast_hash": "10c109f72e76d625b72fe9ec50f5f269",
+    "mtime": 1787778670.8682795,
+    "ast_hash": "50214a4019e16d135165d3a1debbdafd",
     "semantic_hash": ""
   },
   ".ai/rules/inventory.md": {
     "mtime": 1787776471.6167078,
     "ast_hash": "a80e0222148fbb0666d5d8884f3b1e7a",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Admin/SalesController.php": {
+    "mtime": 1787778667.9492743,
+    "ast_hash": "03babac8705c81eacb834e678a63d82c",
+    "semantic_hash": ""
+  },
+  "resources/js/pages/admin/sales/index.tsx": {
+    "mtime": 1787778689.475236,
+    "ast_hash": "44568ab7233b95570824e0b2fde66561",
     "semantic_hash": ""
   }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\InventoryController as AdminInventoryController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductCategoryController as AdminProductCategoryController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\SalesController as AdminSalesController;
 use App\Http\Controllers\Admin\StorefrontBannerController;
 use App\Http\Controllers\Admin\StoreSettingController;
 use App\Http\Controllers\CartController;
@@ -34,6 +35,7 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::resource('orders', AdminOrderController::class)->only('index')->names('dashboard.orders');
         Route::resource('products', AdminProductController::class)->only('index')->names('dashboard.products');
         Route::get('/inventory', AdminInventoryController::class)->name('dashboard.inventory');
+        Route::get('/sales', AdminSalesController::class)->name('dashboard.sales');
         Route::resource('categories', AdminProductCategoryController::class)
             ->only('index')
             ->names('dashboard.categories')
