@@ -3,6 +3,7 @@
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductVariant;
+use App\Models\ProductVariantImage;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('storefront product detail renders active product data', function () {
@@ -25,20 +26,30 @@ test('storefront product detail renders active product data', function () {
                 'https://example.com/fit.jpg',
             ],
         ]);
-    ProductVariant::factory()->for($product)->create([
+    $mediumVariant = ProductVariant::factory()->for($product)->create([
         'size' => 'M',
         'color_name' => 'Olive Green',
         'color_hex' => '#4e5738',
         'image_url' => 'https://example.com/olive-polo.jpg',
         'stock_quantity' => 12,
     ]);
-    ProductVariant::factory()->for($product)->create([
+    $largeVariant = ProductVariant::factory()->for($product)->create([
         'size' => 'L',
         'color_name' => 'Olive Green',
         'color_hex' => '#4e5738',
         'image_url' => 'https://example.com/olive-polo.jpg',
         'stock_quantity' => 8,
     ]);
+    collect(range(1, 4))->each(function (int $index) use ($mediumVariant, $largeVariant): void {
+        ProductVariantImage::factory()->for($mediumVariant, 'variant')->create([
+            'image_url' => "https://example.com/olive-polo-{$index}.jpg",
+            'sort_order' => $index - 1,
+        ]);
+        ProductVariantImage::factory()->for($largeVariant, 'variant')->create([
+            'image_url' => "https://example.com/olive-polo-{$index}.jpg",
+            'sort_order' => $index - 1,
+        ]);
+    });
     Product::factory()
         ->for($category, 'category')
         ->create([
@@ -57,8 +68,10 @@ test('storefront product detail renders active product data', function () {
             ->where('product.category.name', 'Polos')
             ->has('product.colors', 1)
             ->where('product.colors.0.name', 'Olive Green')
-            ->where('product.colors.0.image_url', 'https://example.com/olive-polo.jpg')
-            ->where('product.variants.0.image_url', 'https://example.com/olive-polo.jpg')
+            ->where('product.colors.0.image_url', 'https://example.com/olive-polo-1.jpg')
+            ->has('product.colors.0.images', 4)
+            ->where('product.variants.0.image_url', 'https://example.com/olive-polo-1.jpg')
+            ->has('product.variants.0.images', 4)
             ->has('product.images', 4)
             ->has('product.sizes', 2)
             ->has('relatedProducts', 1)

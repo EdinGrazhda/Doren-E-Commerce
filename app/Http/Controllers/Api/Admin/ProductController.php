@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StoreProductRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\ProductVariant;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
@@ -39,6 +40,7 @@ class ProductController extends Controller
             ->with([
                 'category:id,name',
                 'variants:id,product_id,size,color_name,color_hex,image_url,stock_quantity,is_active',
+                'variants.images:id,product_variant_id,image_url,sort_order',
             ])
             ->withCount('variants')
             ->latest('updated_at')
@@ -71,7 +73,7 @@ class ProductController extends Controller
         });
 
         return response()->json([
-            'data' => $product->load(['category:id,name', 'variants']),
+            'data' => $product->load(['category:id,name', 'variants.images']),
             'message' => 'Product created.',
         ], 201);
     }
@@ -86,7 +88,7 @@ class ProductController extends Controller
         });
 
         return response()->json([
-            'data' => $product->fresh()->load(['category:id,name', 'variants']),
+            'data' => $product->fresh()->load(['category:id,name', 'variants.images']),
             'message' => 'Product updated.',
         ]);
     }
@@ -108,17 +110,18 @@ class ProductController extends Controller
     }
 
     /**
-     * @param  array<int, array{size: string, color_name: string, color_hex: string|null, image_url: string|null, color_image_upload_index: int|null, stock_quantity: int}>  $variants
-     * @param  array<int, UploadedFile|null>  $colorImageUploads
+     * @param  array<int, array{size: string, color_name: string, color_hex: string|null, image_url: string|null, image_urls: array<int, string>, color_image_upload_index: int|null, stock_quantity: int}>  $variants
+     * @param  array<int, array<int, UploadedFile>|UploadedFile|null>  $colorImageUploads
      */
     private function syncVariants(Product $product, array $variants, array $colorImageUploads): void
     {
         $existingVariants = $product->variants()
+            ->with('images')
             ->orderBy('sort_order')
             ->get()
             ->keyBy(fn ($variant): string => $this->variantKey($variant->size, $variant->color_name));
         $syncedVariantIds = [];
-        $colorImageUrls = [];
+        $colorImageGalleries = [];
 
         foreach (array_values($variants) as $sortOrder => $variantData) {
             $variantKey = $this->variantKey($variantData['size'], $variantData['color_name']);
@@ -127,8 +130,8 @@ class ProductController extends Controller
                 $variantKey,
             );
 
-            if (! array_key_exists($colorKey, $colorImageUrls)) {
-                $colorImageUrls[$colorKey] = $this->storedVariantImageUrl($variantData, $colorImageUploads);
+            if (! array_key_exists($colorKey, $colorImageGalleries)) {
+                $colorImageGalleries[$colorKey] = $this->storedVariantImageUrls($variantData, $colorImageUploads);
             }
 
             $attributes = [
@@ -136,7 +139,7 @@ class ProductController extends Controller
                 'size' => $variantData['size'],
                 'color_name' => $variantData['color_name'],
                 'color_hex' => $variantData['color_hex'],
-                'image_url' => $colorImageUrls[$colorKey],
+                'image_url' => $colorImageGalleries[$colorKey][0] ?? null,
                 'stock_quantity' => $variantData['stock_quantity'],
                 'reserved_quantity' => $variant?->reserved_quantity ?? 0,
                 'is_active' => true,
@@ -145,12 +148,15 @@ class ProductController extends Controller
 
             if ($variant) {
                 $variant->update($attributes);
+                $this->syncVariantImages($variant, $colorImageGalleries[$colorKey]);
                 $syncedVariantIds[] = $variant->id;
 
                 continue;
             }
 
-            $syncedVariantIds[] = $product->variants()->create($attributes)->id;
+            $variant = $product->variants()->create($attributes);
+            $this->syncVariantImages($variant, $colorImageGalleries[$colorKey]);
+            $syncedVariantIds[] = $variant->id;
         }
 
         $product->variants()->whereNotIn('id', $syncedVariantIds)->delete();
@@ -213,20 +219,49 @@ class ProductController extends Controller
     }
 
     /**
-     * @param  array{image_url: string|null, color_image_upload_index: int|null}  $variantData
-     * @param  array<int, UploadedFile|null>  $colorImageUploads
+     * @param  array<int, string>  $imageUrls
      */
-    private function storedVariantImageUrl(array $variantData, array $colorImageUploads): ?string
+    private function syncVariantImages(ProductVariant $variant, array $imageUrls): void
+    {
+        $variant->images()->delete();
+        $variant->images()->createMany(
+            collect($imageUrls)
+                ->take(4)
+                ->values()
+                ->map(fn (string $imageUrl, int $index): array => [
+                    'image_url' => $imageUrl,
+                    'sort_order' => $index,
+                ])
+                ->all(),
+        );
+    }
+
+    /**
+     * @param  array{image_url: string|null, image_urls: array<int, string>, color_image_upload_index: int|null}  $variantData
+     * @param  array<int, array<int, UploadedFile>|UploadedFile|null>  $colorImageUploads
+     * @return array<int, string>
+     */
+    private function storedVariantImageUrls(array $variantData, array $colorImageUploads): array
     {
         $uploadIndex = $variantData['color_image_upload_index'];
-        $imageUpload = is_int($uploadIndex) ? ($colorImageUploads[$uploadIndex] ?? null) : null;
-
-        if ($imageUpload instanceof UploadedFile) {
-            return Storage::disk('public')->url(
+        $imageUploads = is_int($uploadIndex) ? Arr::wrap($colorImageUploads[$uploadIndex] ?? []) : [];
+        $storedImageUrls = collect($imageUploads)
+            ->filter(fn (mixed $imageUpload): bool => $imageUpload instanceof UploadedFile)
+            ->take(4)
+            ->map(fn (UploadedFile $imageUpload): string => Storage::disk('public')->url(
                 $imageUpload->store('product-variants', 'public'),
-            );
+            ))
+            ->values()
+            ->all();
+
+        if ($storedImageUrls !== []) {
+            return $storedImageUrls;
         }
 
-        return $variantData['image_url'];
+        return collect($variantData['image_urls'] ?? [$variantData['image_url']])
+            ->filter()
+            ->take(4)
+            ->values()
+            ->all();
     }
 }

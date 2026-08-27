@@ -9,7 +9,7 @@ import {
     ShoppingCart,
     TriangleAlert,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { toast } from 'sonner';
 
@@ -128,6 +128,17 @@ const stockFilters = [
     { value: 'out', label: 'Out of stock' },
 ] as const;
 
+const realtimeSearchDelay = 250;
+
+function inventoryListingUrl(search: string, status: string): string {
+    return inventoryApiIndex.url({
+        query: {
+            search: search.trim(),
+            status,
+        },
+    });
+}
+
 function stockLabel(quantity: number): string {
     if (quantity === 0) {
         return 'Out of stock';
@@ -168,15 +179,16 @@ export default function AdminInventoryIndex() {
     const listing = useAdminApi<InventoryData>(listingUrl);
     const form = useHttp<MovementFormData>(emptyMovement);
 
+    useEffect(() => {
+        const timeout = window.setTimeout(() => {
+            setListingUrl(inventoryListingUrl(search, stockFilter));
+        }, realtimeSearchDelay);
+
+        return () => window.clearTimeout(timeout);
+    }, [search, stockFilter]);
+
     const applyFilters = (nextSearch: string, nextStatus: string) => {
-        setListingUrl(
-            inventoryApiIndex.url({
-                query: {
-                    search: nextSearch,
-                    status: nextStatus,
-                },
-            }),
-        );
+        setListingUrl(inventoryListingUrl(nextSearch, nextStatus));
     };
 
     const submitSearch = (event: FormEvent<HTMLFormElement>) => {

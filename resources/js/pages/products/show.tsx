@@ -28,6 +28,7 @@ type ProductColor = {
     name: string;
     hex: string;
     image_url: string | null;
+    images?: string[];
 };
 
 type Product = {
@@ -57,6 +58,7 @@ type ProductVariantOption = {
     color_name: string;
     color_hex: string | null;
     image_url: string | null;
+    images: string[];
     stock_quantity: number;
     price_cents: number | null;
 };
@@ -165,7 +167,14 @@ function ProductTile({
             <div className="mt-3 flex gap-2">
                 {(product.colors.length
                     ? product.colors
-                    : [{ name: 'Stone', hex: '#d9cfbd', image_url: null }]
+                    : [
+                          {
+                              name: 'Stone',
+                              hex: '#d9cfbd',
+                              image_url: null,
+                              images: [],
+                          },
+                      ]
                 ).map((color) => (
                     <span
                         key={`${product.id}-${color.name}-${color.hex}`}
@@ -193,10 +202,17 @@ export default function Show({ product, relatedProducts }: Props) {
         const colors = new Map<string, ProductColor>();
 
         availableVariants.forEach((variant) => {
+            const variantImages = variant.images.length
+                ? variant.images
+                : [variant.image_url].filter(
+                      (imageUrl): imageUrl is string => Boolean(imageUrl),
+                  );
+
             colors.set(variant.color_name, {
                 name: variant.color_name,
                 hex: variant.color_hex || '#d9cfbd',
-                image_url: variant.image_url,
+                image_url: variantImages[0] ?? null,
+                images: variantImages,
             });
         });
 
@@ -234,19 +250,21 @@ export default function Show({ product, relatedProducts }: Props) {
     const selectedColorIndex = colorOptions.findIndex(
         (color) => color.name === selectedColorName,
     );
+    const galleryImages = useMemo(() => {
+        const colorImages = selectedColor?.images ?? [];
+        const activeImages = colorImages.length ? colorImages : images;
+
+        return Array.from(
+            new Set(activeImages.filter(Boolean) as string[]),
+        ).slice(0, 5);
+    }, [images, selectedColor]);
     const selectedImage =
-        selectedGalleryImage ??
-        selectedColor?.image_url ??
-        images[selectedColorIndex >= 0 ? selectedColorIndex : 0] ??
-        images[0];
-    const hasSelectedColorImage = Boolean(selectedColor?.image_url);
-    const galleryImages = useMemo(
-        () =>
-            Array.from(
-                new Set([selectedImage, ...images].filter(Boolean) as string[]),
-            ).slice(0, 5),
-        [images, selectedImage],
-    );
+        selectedGalleryImage && galleryImages.includes(selectedGalleryImage)
+            ? selectedGalleryImage
+            : (galleryImages[0] ??
+              images[selectedColorIndex >= 0 ? selectedColorIndex : 0] ??
+              images[0]);
+    const hasSelectedColorImage = Boolean(selectedColor?.images?.length);
     const form = useForm({
         product_variant_id: selectedVariant?.id ?? 0,
         quantity: 1,

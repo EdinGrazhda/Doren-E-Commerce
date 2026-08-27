@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -27,6 +28,7 @@ class ProductShowController extends Controller
                     'is_active',
                     'sort_order',
                 ])
+                ->with('images:id,product_variant_id,image_url,sort_order')
                 ->where('is_active', true)
                 ->orderBy('sort_order'),
         ]);
@@ -91,7 +93,8 @@ class ProductShowController extends Controller
                 ->map(fn ($variant): array => [
                     'name' => $variant->color_name,
                     'hex' => $variant->color_hex ?: '#d9cfbd',
-                    'image_url' => $variant->image_url,
+                    'image_url' => $this->variantImageUrls($variant)[0] ?? null,
+                    'images' => $this->variantImageUrls($variant),
                 ])
                 ->values(),
             'sizes' => $product->variants
@@ -105,7 +108,8 @@ class ProductShowController extends Controller
                     'size' => $variant->size,
                     'color_name' => $variant->color_name,
                     'color_hex' => $variant->color_hex,
-                    'image_url' => $variant->image_url,
+                    'image_url' => $this->variantImageUrls($variant)[0] ?? null,
+                    'images' => $this->variantImageUrls($variant),
                     'stock_quantity' => $variant->stock_quantity,
                     'price_cents' => $variant->price_cents,
                 ])
@@ -138,5 +142,21 @@ class ProductShowController extends Controller
                 ])
                 ->values(),
         ];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function variantImageUrls(ProductVariant $variant): array
+    {
+        $imageUrls = $variant->relationLoaded('images')
+            ? $variant->images->pluck('image_url')
+            : collect();
+
+        return $imageUrls
+            ->when($imageUrls->isEmpty() && $variant->image_url, fn ($images) => $images->push($variant->image_url))
+            ->filter()
+            ->values()
+            ->all();
     }
 }

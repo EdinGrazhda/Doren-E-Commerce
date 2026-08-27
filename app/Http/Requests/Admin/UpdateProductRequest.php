@@ -5,6 +5,7 @@ namespace App\Http\Requests\Admin;
 use App\Models\Product;
 use App\Rules\SafeImageUrl;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -50,7 +51,8 @@ class UpdateProductRequest extends FormRequest
             'image_uploads' => ['nullable', 'array', 'max:4'],
             'image_uploads.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'mimetypes:image/jpeg,image/png,image/webp', 'extensions:jpg,jpeg,png,webp', 'max:5120'],
             'color_image_uploads' => ['nullable', 'array', 'max:20'],
-            'color_image_uploads.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'mimetypes:image/jpeg,image/png,image/webp', 'extensions:jpg,jpeg,png,webp', 'max:5120'],
+            'color_image_uploads.*' => ['nullable', 'array', 'max:4'],
+            'color_image_uploads.*.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'mimetypes:image/jpeg,image/png,image/webp', 'extensions:jpg,jpeg,png,webp', 'max:5120'],
             'is_active' => ['required', 'boolean'],
             'is_featured' => ['required', 'boolean'],
             'variants' => ['required', 'array', 'min:5', 'max:100'],
@@ -58,6 +60,8 @@ class UpdateProductRequest extends FormRequest
             'variants.*.color_name' => ['required', 'string', 'max:80'],
             'variants.*.color_hex' => ['nullable', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'variants.*.image_url' => ['nullable', 'max:2048', new SafeImageUrl],
+            'variants.*.image_urls' => ['nullable', 'array', 'max:4'],
+            'variants.*.image_urls.*' => ['nullable', 'max:2048', new SafeImageUrl],
             'variants.*.color_image_upload_index' => ['nullable', 'integer', 'min:0', 'max:19'],
             'variants.*.stock_quantity' => ['required', 'integer', 'min:0', 'max:999999'],
         ];
@@ -96,8 +100,21 @@ class UpdateProductRequest extends FormRequest
                             $validator->errors()->add('variants', 'Each color must use one swatch value across every size.');
                         }
 
-                        if ($colorVariants->pluck('image_url')->unique()->count() > 1) {
-                            $validator->errors()->add('variants', 'Each color must use one product image across every size.');
+                        if ($colorVariants->map(fn (array $variant): string => json_encode($variant['image_urls'] ?? []))->unique()->count() > 1) {
+                            $validator->errors()->add('variants', 'Each color must use one image gallery across every size.');
+                        }
+
+                        $firstVariant = $colorVariants->first();
+                        $uploadIndex = $firstVariant['color_image_upload_index'] ?? null;
+                        $uploadedImageCount = is_int($uploadIndex) ? $this->uploadedColorImageCount($uploadIndex) : 0;
+                        $existingImageCount = collect($firstVariant['image_urls'] ?? [])->filter()->count();
+
+                        if ($uploadedImageCount > 0 && $uploadedImageCount < 4) {
+                            $validator->errors()->add("color_image_uploads.{$uploadIndex}", 'Each color must include at least 4 images.');
+                        }
+
+                        if ($uploadedImageCount === 0 && $existingImageCount < 4) {
+                            $validator->errors()->add('variants', 'Each color must include at least 4 uploaded or existing images.');
                         }
                     });
             },
@@ -125,7 +142,10 @@ class UpdateProductRequest extends FormRequest
                     'color_name' => Str::squish((string) ($variant['color_name'] ?? '')),
                     'color_hex' => $this->normalizeColorHex($variant['color_hex'] ?? null),
                     'image_url' => $this->nullableString($variant['image_url'] ?? null),
-                    'color_image_upload_index' => $variant['color_image_upload_index'] ?? null,
+                    'image_urls' => $this->normalizeImageUrls($variant['image_urls'] ?? []),
+                    'color_image_upload_index' => is_numeric($variant['color_image_upload_index'] ?? null)
+                        ? (int) $variant['color_image_upload_index']
+                        : null,
                     'stock_quantity' => $variant['stock_quantity'] ?? 0,
                 ])
                 ->all(),
@@ -167,5 +187,27 @@ class UpdateProductRequest extends FormRequest
         }
 
         return trim($value);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function normalizeImageUrls(mixed $imageUrls): array
+    {
+        return collect(is_array($imageUrls) ? $imageUrls : [])
+            ->map(fn (mixed $imageUrl): ?string => $this->nullableString($imageUrl))
+            ->filter()
+            ->take(4)
+            ->values()
+            ->all();
+    }
+
+    private function uploadedColorImageCount(int $uploadIndex): int
+    {
+        $files = $this->file("color_image_uploads.{$uploadIndex}", []);
+
+        return collect(is_array($files) ? $files : [$files])
+            ->filter(fn (mixed $file): bool => $file instanceof UploadedFile)
+            ->count();
     }
 }

@@ -63,8 +63,15 @@ type ProductVariant = {
     color_name: string;
     color_hex: string | null;
     image_url: string | null;
+    images?: ProductVariantImage[];
     stock_quantity: number;
     is_active: boolean;
+};
+
+type ProductVariantImage = {
+    id: number;
+    image_url: string;
+    sort_order: number;
 };
 
 type CategoryOption = {
@@ -81,8 +88,8 @@ type Props = {
 type ProductColorFormData = {
     name: string;
     hex: string;
-    imageUrl: string;
-    imageUpload: File | null;
+    imageUrls: string[];
+    imageUploads: File[];
     stockBySize: Record<string, string>;
 };
 
@@ -90,7 +97,7 @@ type ProductVariantFormData = {
     size: string;
     color_name: string;
     color_hex: string;
-    image_url: string;
+    image_urls: string[];
     color_image_upload_index: number;
     stock_quantity: string;
 };
@@ -99,7 +106,7 @@ type ProductVariantFormField = keyof Pick<
     ProductVariantFormData,
     | 'color_name'
     | 'color_hex'
-    | 'image_url'
+    | 'image_urls'
     | 'color_image_upload_index'
     | 'stock_quantity'
 >;
@@ -117,7 +124,7 @@ type ProductFormData = {
     currency: string;
     existing_image_urls: string[];
     image_uploads: File[];
-    color_image_uploads: Array<File | null>;
+    color_image_uploads: Array<File[]>;
     is_active: boolean;
     is_featured: boolean;
     colors: ProductColorFormData[];
@@ -130,8 +137,8 @@ const makeEmptyColor = (
 ): ProductColorFormData => ({
     name: colorNumber === 1 ? 'Olive' : `Color ${colorNumber}`,
     hex: colorNumber === 1 ? '#4b4a35' : '#000000',
-    imageUrl: '',
-    imageUpload: null,
+    imageUrls: [],
+    imageUploads: [],
     stockBySize: Object.fromEntries(sizeOptions.map((size) => [size, '0'])),
 });
 
@@ -160,11 +167,20 @@ const colorsFromVariants = (
 
     variants.forEach((variant) => {
         const key = variant.color_name.toLocaleLowerCase();
+        const variantImages = variant.images ?? [];
         const color = colors.get(key) ?? {
             name: variant.color_name,
             hex: variant.color_hex ?? '',
-            imageUrl: variant.image_url ?? '',
-            imageUpload: null,
+            imageUrls:
+                variantImages.length > 0
+                    ? [...variantImages]
+                          .sort((a, b) => a.sort_order - b.sort_order)
+                          .map((image) => image.image_url)
+                    : [variant.image_url].filter(
+                          (imageUrl): imageUrl is string =>
+                              Boolean(imageUrl),
+                      ),
+            imageUploads: [],
             stockBySize: Object.fromEntries(
                 sizeOptions.map((size) => [size, '0']),
             ),
@@ -261,7 +277,13 @@ export default function AdminProductsIndex() {
 
     const colorImageUploads = (
         colors: ProductColorFormData[],
-    ): Array<File | null> => colors.map((color) => color.imageUpload);
+    ): Record<string, Record<string, File>> =>
+        Object.fromEntries(
+            colors.map((color, colorIndex) => [
+                colorIndex.toString(),
+                toIndexedRecord(color.imageUploads),
+            ]),
+        );
 
     const colorVariants = (
         colors: ProductColorFormData[],
@@ -271,7 +293,7 @@ export default function AdminProductsIndex() {
                 size,
                 color_name: color.name,
                 color_hex: color.hex,
-                image_url: color.imageUrl,
+                image_urls: color.imageUrls,
                 color_image_upload_index: colorIndex,
                 stock_quantity: color.stockBySize[size] ?? '0',
             })),
@@ -292,9 +314,7 @@ export default function AdminProductsIndex() {
         if (editingProduct) {
             form.transform((data) => ({
                 ...productSubmitData(data),
-                color_image_uploads: toIndexedRecord(
-                    colorImageUploads(data.colors),
-                ),
+                color_image_uploads: colorImageUploads(data.colors),
                 variants: toIndexedRecord(colorVariants(data.colors)),
                 _method: 'put',
             }));
@@ -305,9 +325,7 @@ export default function AdminProductsIndex() {
 
         form.transform((data) => ({
             ...productSubmitData(data),
-            color_image_uploads: toIndexedRecord(
-                colorImageUploads(data.colors),
-            ),
+            color_image_uploads: colorImageUploads(data.colors),
             variants: toIndexedRecord(colorVariants(data.colors)),
         }));
         void form.post(storeProduct.url(), options);
@@ -335,7 +353,7 @@ export default function AdminProductsIndex() {
 
     const clearColorVariantErrors = (
         colorIndex: number,
-        fields: Array<'color_name' | 'color_hex' | 'image_url'>,
+        fields: Array<'color_name' | 'color_hex' | 'image_urls'>,
     ) => {
         form.clearErrors(
             ...sizeOptions.flatMap((_, sizeIndex) =>
@@ -349,15 +367,11 @@ export default function AdminProductsIndex() {
 
     const updateColor = (
         index: number,
-        field: 'name' | 'hex' | 'imageUrl',
+        field: 'name' | 'hex',
         value: string,
     ) => {
         clearColorVariantErrors(index, [
-            field === 'name'
-                ? 'color_name'
-                : field === 'hex'
-                  ? 'color_hex'
-                  : 'image_url',
+            field === 'name' ? 'color_name' : 'color_hex',
         ]);
 
         form.setData(
@@ -368,9 +382,18 @@ export default function AdminProductsIndex() {
         );
     };
 
-    const updateColorImageUpload = (index: number, file: File | null) => {
-        form.clearErrors(`color_image_uploads.${index}`);
-        clearColorVariantErrors(index, ['image_url']);
+    const updateColorImageUploads = (index: number, files: File[]) => {
+        const colorImageErrorKeys = [
+            `color_image_uploads.${index}`,
+            ...Array.from(
+                { length: 4 },
+                (_, imageIndex) =>
+                    `color_image_uploads.${index}.${imageIndex}` as const,
+            ),
+        ] as const;
+
+        form.clearErrors(...colorImageErrorKeys);
+        clearColorVariantErrors(index, ['image_urls']);
 
         form.setData(
             'colors',
@@ -378,7 +401,7 @@ export default function AdminProductsIndex() {
                 colorIndex === index
                     ? {
                           ...color,
-                          imageUpload: file,
+                          imageUploads: files.slice(0, 4),
                       }
                     : color,
             ),
@@ -439,14 +462,18 @@ export default function AdminProductsIndex() {
         field:
             | 'color_name'
             | 'color_hex'
-            | 'image_url'
+            | 'image_urls'
             | 'color_image_upload_index'
             | 'stock_quantity',
     ): string | undefined =>
         formErrors[variantErrorKey(colorIndex, sizeIndex, field)];
 
     const colorImageUploadError = (colorIndex: number): string | undefined =>
-        formErrors[`color_image_uploads.${colorIndex}`];
+        formErrors[`color_image_uploads.${colorIndex}`] ??
+        formErrors[`color_image_uploads.${colorIndex}.0`] ??
+        formErrors[`color_image_uploads.${colorIndex}.1`] ??
+        formErrors[`color_image_uploads.${colorIndex}.2`] ??
+        formErrors[`color_image_uploads.${colorIndex}.3`];
 
     const productError = formErrors.product;
     const validationErrorMessages = Array.from(
@@ -934,49 +961,84 @@ export default function AdminProductsIndex() {
                                                         <Label
                                                             htmlFor={`product-color-${colorIndex}-image-upload`}
                                                         >
-                                                            Color product image
+                                                            Color images
                                                         </Label>
                                                         <Input
                                                             id={`product-color-${colorIndex}-image-upload`}
                                                             type="file"
                                                             accept="image/jpeg,image/png,image/webp"
+                                                            multiple
                                                             onChange={(event) =>
-                                                                updateColorImageUpload(
+                                                                updateColorImageUploads(
                                                                     colorIndex,
-                                                                    event.target
-                                                                        .files?.[0] ??
-                                                                        null,
+                                                                    Array.from(
+                                                                        event
+                                                                            .target
+                                                                            .files ??
+                                                                            [],
+                                                                    ),
                                                                 )
                                                             }
                                                         />
-                                                        {color.imageUrl &&
-                                                            !color.imageUpload && (
-                                                                <div className="flex items-center gap-3 rounded-md border bg-muted/30 p-2">
-                                                                    <div className="h-14 w-12 overflow-hidden rounded bg-muted">
-                                                                        <img
-                                                                            src={
-                                                                                color.imageUrl
-                                                                            }
-                                                                            alt=""
-                                                                            className="h-full w-full object-cover"
-                                                                        />
-                                                                    </div>
-                                                                    <p className="text-xs text-muted-foreground">
-                                                                        Current
-                                                                        color
-                                                                        image
-                                                                    </p>
+                                                        <p className="text-xs text-muted-foreground">
+                                                            Upload 4 images for
+                                                            this color. These
+                                                            appear when shoppers
+                                                            pick the swatch.
+                                                        </p>
+                                                        {color.imageUrls
+                                                            .length > 0 &&
+                                                            color.imageUploads
+                                                                .length ===
+                                                                0 && (
+                                                                <div className="grid grid-cols-4 gap-2">
+                                                                    {color.imageUrls
+                                                                        .slice(
+                                                                            0,
+                                                                            4,
+                                                                        )
+                                                                        .map(
+                                                                            (
+                                                                                imageUrl,
+                                                                                imageIndex,
+                                                                            ) => (
+                                                                                <div
+                                                                                    key={`${imageUrl}-${imageIndex}`}
+                                                                                    className="aspect-[0.82] overflow-hidden rounded-md bg-muted"
+                                                                                >
+                                                                                    <img
+                                                                                        src={
+                                                                                            imageUrl
+                                                                                        }
+                                                                                        alt=""
+                                                                                        className="h-full w-full object-cover"
+                                                                                    />
+                                                                                </div>
+                                                                            ),
+                                                                        )}
                                                                 </div>
                                                             )}
-                                                        {color.imageUpload && (
-                                                            <p className="text-xs text-muted-foreground">
-                                                                Selected:{' '}
-                                                                {
-                                                                    color
-                                                                        .imageUpload
-                                                                        .name
-                                                                }
-                                                            </p>
+                                                        {color.imageUploads
+                                                            .length > 0 && (
+                                                            <div className="grid gap-1 text-xs text-muted-foreground">
+                                                                {color.imageUploads.map(
+                                                                    (
+                                                                        imageUpload,
+                                                                        imageIndex,
+                                                                    ) => (
+                                                                        <p
+                                                                            key={`${imageUpload.name}-${imageIndex}`}
+                                                                        >
+                                                                            {imageIndex +
+                                                                                1}
+                                                                            .{' '}
+                                                                            {
+                                                                                imageUpload.name
+                                                                            }
+                                                                        </p>
+                                                                    ),
+                                                                )}
+                                                            </div>
                                                         )}
                                                         {colorImageUploadError(
                                                             colorIndex,
@@ -990,13 +1052,13 @@ export default function AdminProductsIndex() {
                                                         {variantError(
                                                             colorIndex,
                                                             0,
-                                                            'image_url',
+                                                            'image_urls',
                                                         ) && (
                                                             <p className="text-sm text-destructive">
                                                                 {variantError(
                                                                     colorIndex,
                                                                     0,
-                                                                    'image_url',
+                                                                    'image_urls',
                                                                 )}
                                                             </p>
                                                         )}
