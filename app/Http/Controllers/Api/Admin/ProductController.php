@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductVariant;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -19,8 +20,10 @@ class ProductController extends Controller
 {
     private const array Sizes = ['S', 'M', 'L', 'XL', 'XXL'];
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $search = Str::limit($request->string('search')->trim()->value(), 100, '');
+
         $products = Product::query()
             ->select([
                 'id',
@@ -43,8 +46,18 @@ class ProductController extends Controller
                 'variants.images:id,product_variant_id,image_url,sort_order',
             ])
             ->withCount('variants')
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('slug', 'like', "%{$search}%")
+                        ->orWhere('sku', 'like', "%{$search}%")
+                        ->orWhereHas('category', fn ($query) => $query->where('name', 'like', "%{$search}%"))
+                        ->orWhereHas('variants', fn ($query) => $query->where('color_name', 'like', "%{$search}%"));
+                });
+            })
             ->latest('updated_at')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         $categories = ProductCategory::query()
             ->select(['id', 'name'])

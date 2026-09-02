@@ -102,9 +102,12 @@ class HomeController extends Controller
             ->orderBy('position')
             ->orderBy('sort_order')
             ->get()
-            ->unique('position')
-            ->mapWithKeys(fn (StorefrontBanner $banner): array => [
-                $banner->position => $this->bannerPayload($banner),
+            ->map(fn (StorefrontBanner $banner): array => $this->bannerPayload($banner))
+            ->groupBy('position');
+
+        $bannerGroups = collect(StorefrontBanner::Positions)
+            ->mapWithKeys(fn (string $position): array => [
+                $position => $banners->get($position, collect())->values(),
             ]);
 
         return Inertia::render('welcome', [
@@ -113,7 +116,11 @@ class HomeController extends Controller
                 'name' => $activeCategory->name,
                 'slug' => $activeCategory->slug,
             ] : null,
-            'banners' => $banners,
+            'banners' => [
+                'top' => $bannerGroups->get('top')->first(),
+                'hero' => $bannerGroups->get('hero'),
+                'bottom' => $bannerGroups->get('bottom')->first(),
+            ],
             'categories' => $categories,
             'newInProducts' => $products,
             'bestSellerProducts' => $bestSellerProducts,

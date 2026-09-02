@@ -16,6 +16,7 @@ import {
     User,
     Youtube,
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import {
     cart as cartRoute,
@@ -82,7 +83,11 @@ type Props = {
         name: string;
         slug: string;
     } | null;
-    banners: Partial<Record<'top' | 'hero' | 'bottom', StorefrontBanner>>;
+    banners: {
+        top: StorefrontBanner | null;
+        hero: StorefrontBanner[];
+        bottom: StorefrontBanner | null;
+    };
     categories: StoreCategory[];
     newInProducts: PaginatedProducts;
     bestSellerProducts: StoreProduct[];
@@ -110,6 +115,8 @@ const heroImage =
 
 const bannerImage =
     'https://images.unsplash.com/photo-1507680434567-5739c80be1ac?auto=format&fit=crop&w=1800&q=90';
+
+const carouselIntervalMs = 6000;
 
 const benefits = [
     {
@@ -217,6 +224,219 @@ function productColorHref(product: StoreProduct, colorName: string): string {
             color: colorName,
         },
     });
+}
+
+function useCarouselIndex(
+    items: StorefrontBanner[],
+): [number, (index: number) => void, () => void, () => void] {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const itemCount = items.length;
+
+    useEffect(() => {
+        if (itemCount <= 1) {
+            return;
+        }
+
+        const interval = window.setInterval(() => {
+            setActiveIndex((current) => (current + 1) % itemCount);
+        }, carouselIntervalMs);
+
+        return () => window.clearInterval(interval);
+    }, [itemCount]);
+
+    const choose = (index: number) => {
+        setActiveIndex(index);
+    };
+
+    const previous = () => {
+        setActiveIndex((current) => (current - 1 + itemCount) % itemCount);
+    };
+
+    const next = () => {
+        setActiveIndex((current) => (current + 1) % itemCount);
+    };
+
+    return [
+        Math.min(activeIndex, Math.max(itemCount - 1, 0)),
+        choose,
+        previous,
+        next,
+    ];
+}
+
+function CarouselDots({
+    items,
+    activeIndex,
+    onSelect,
+    label,
+}: {
+    items: StorefrontBanner[];
+    activeIndex: number;
+    onSelect: (index: number) => void;
+    label: string;
+}) {
+    if (items.length <= 1) {
+        return null;
+    }
+
+    return (
+        <div className="flex items-center gap-2" aria-label={label}>
+            {items.map((item, index) => (
+                <button
+                    key={item.id}
+                    type="button"
+                    className={`h-1.5 rounded-full transition-all ${index === activeIndex ? 'w-6 bg-[#151513]' : 'w-1.5 bg-[#151513]/35 hover:bg-[#151513]/65'}`}
+                    aria-label={`Show slide ${index + 1}`}
+                    aria-current={index === activeIndex ? 'true' : undefined}
+                    onClick={() => onSelect(index)}
+                />
+            ))}
+        </div>
+    );
+}
+
+function TopAnnouncement({ banner }: { banner: StorefrontBanner | null }) {
+    const content =
+        banner?.body ?? 'Complimentary shipping on orders over $150';
+
+    return (
+        <div className="bg-[#12110f] px-4 py-2 text-center text-[12px] leading-none text-[#f6f1e9]">
+            {banner?.primary_action_url ? (
+                <a href={banner.primary_action_url}>{content}</a>
+            ) : (
+                content
+            )}
+        </div>
+    );
+}
+
+function HeroCarousel({ banners }: { banners: StorefrontBanner[] }) {
+    const [activeIndex, choose, previous, next] = useCarouselIndex(banners);
+    const activeBanner = banners[activeIndex];
+    const heroTitleLines = bannerTitleLines(
+        activeBanner?.title ?? '',
+        'Timeless style. Modern man.',
+    );
+
+    return (
+        <section className="relative overflow-hidden bg-[#e8ded2]">
+            <div className="mx-auto grid min-h-[350px] max-w-[1158px] grid-cols-1 lg:min-h-[350px] lg:grid-cols-[0.92fr_1.08fr]">
+                <div
+                    className="relative z-10 flex flex-col justify-center px-10 py-12 lg:px-12"
+                    aria-live="polite"
+                >
+                    <h1 className="[font-family:Georgia,_serif] text-[48px] leading-[0.96] font-medium tracking-normal sm:text-[58px]">
+                        {heroTitleLines.map((line) => (
+                            <span key={line} className="block">
+                                {line}
+                            </span>
+                        ))}
+                    </h1>
+                    <p className="mt-6 max-w-[410px] text-[15px] leading-6 text-[#34312b]">
+                        {activeBanner?.subtitle ??
+                            'Refined essentials, masterfully crafted. For the man who values quality in every detail.'}
+                    </p>
+                    <div className="mt-8 flex flex-wrap gap-4">
+                        <a
+                            href="#new-in"
+                            className="inline-flex h-11 items-center bg-[#11110f] px-6 text-[11px] font-bold tracking-[0.12em] text-white uppercase"
+                        >
+                            Shop Collection
+                        </a>
+                        <a
+                            href="#shop-by-category"
+                            className="inline-flex h-11 items-center border border-[#24221f] px-6 text-[11px] font-bold tracking-[0.12em] uppercase"
+                        >
+                            Explore
+                        </a>
+                    </div>
+                    <div className="mt-8">
+                        <CarouselDots
+                            items={banners}
+                            activeIndex={activeIndex}
+                            onSelect={choose}
+                            label="Hero slides"
+                        />
+                    </div>
+                </div>
+                <div className="relative min-h-[330px]">
+                    <img
+                        key={activeBanner?.id ?? 'hero-fallback'}
+                        src={activeBanner?.image_url ?? heroImage}
+                        alt={activeBanner?.title ?? 'Doren olive polo outfit'}
+                        className="absolute inset-0 h-full w-full object-cover object-center transition duration-500"
+                    />
+                    <div className="absolute inset-0 bg-linear-to-r from-[#e8ded2]/80 via-transparent to-transparent" />
+                    {banners.length > 1 && (
+                        <div className="absolute right-5 bottom-5 flex gap-2">
+                            <button
+                                type="button"
+                                className="grid h-10 w-10 place-items-center bg-[#f8f4ed]/90 text-[#151513] transition hover:bg-[#151513] hover:text-white"
+                                aria-label="Previous hero slide"
+                                onClick={previous}
+                            >
+                                <ArrowLeft className="h-4 w-4" />
+                            </button>
+                            <button
+                                type="button"
+                                className="grid h-10 w-10 place-items-center bg-[#f8f4ed]/90 text-[#151513] transition hover:bg-[#151513] hover:text-white"
+                                aria-label="Next hero slide"
+                                onClick={next}
+                            >
+                                <ArrowRight className="h-4 w-4" />
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </section>
+    );
+}
+
+function BottomCampaign({ banner }: { banner: StorefrontBanner | null }) {
+    const bottomTitleLines = bannerTitleLines(
+        banner?.title ?? '',
+        'Elevated Essentials For Every Day',
+    );
+
+    return (
+        <section className="relative min-h-[195px] overflow-hidden bg-[#d8d3ca]">
+            <img
+                src={banner?.image_url ?? bannerImage}
+                alt={banner?.title ?? 'Doren spring summer tailoring'}
+                className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-linear-to-r from-[#e8e0d4] via-[#e8e0d4]/70 to-transparent" />
+            <div className="relative mx-auto flex min-h-[195px] max-w-[1158px] items-center px-10 py-8">
+                <div className="max-w-[360px]">
+                    <p className="text-[10px] font-bold tracking-[0.18em] text-[#8d6b35] uppercase">
+                        {banner?.eyebrow ?? 'Spring / Summer 2026'}
+                    </p>
+                    <h2 className="mt-3 [font-family:Georgia,_serif] text-[33px] leading-[1.02] font-medium">
+                        {bottomTitleLines.map((line) => (
+                            <span key={line} className="block">
+                                {line}
+                            </span>
+                        ))}
+                    </h2>
+                    <p className="mt-4 text-[12px] leading-5 text-[#3f3a33]">
+                        {banner?.body ??
+                            'Versatile pieces. Timeless appeal. Designed for wherever life takes you.'}
+                    </p>
+                    {(banner?.primary_action_label ??
+                        'Explore The Collection') && (
+                        <a
+                            href={banner?.primary_action_url ?? '#new-in'}
+                            className="mt-4 inline-flex h-9 items-center bg-[#11110f] px-5 text-[10px] font-bold tracking-[0.12em] text-white uppercase"
+                        >
+                            {banner?.primary_action_label ??
+                                'Explore The Collection'}
+                        </a>
+                    )}
+                </div>
+            </div>
+        </section>
+    );
 }
 
 function ProductCard({
@@ -421,27 +641,14 @@ export default function Welcome({
     bestSellerProducts,
 }: Props) {
     const { auth, cart } = usePage().props;
-    const topBanner = banners.top;
-    const heroBanner = banners.hero;
-    const bottomBanner = banners.bottom;
-    const heroTitleLines = bannerTitleLines(
-        heroBanner?.title ?? '',
-        'Timeless style. Modern man.',
-    );
-    const bottomTitleLines = bannerTitleLines(
-        bottomBanner?.title ?? '',
-        'Elevated Essentials For Every Day',
-    );
+    const heroBanners = banners.hero ?? [];
 
     return (
         <>
             <Head title="Doren Menswear" />
 
             <div className="min-h-screen bg-[#f5f1e9] text-[#151513] antialiased">
-                <div className="bg-[#12110f] px-4 py-2 text-center text-[12px] leading-none text-[#f6f1e9]">
-                    {topBanner?.body ??
-                        'Complimentary shipping on orders over $150'}
-                </div>
+                <TopAnnouncement banner={banners.top} />
 
                 <header className="sticky top-0 z-40 border-b border-[#dfd8cc] bg-[#f8f4ed]/95 backdrop-blur">
                     <div className="mx-auto flex h-[68px] max-w-[1158px] items-center justify-between px-6">
@@ -498,56 +705,7 @@ export default function Welcome({
                 </header>
 
                 <main>
-                    <section className="relative overflow-hidden bg-[#e8ded2]">
-                        <div className="mx-auto grid min-h-[350px] max-w-[1158px] grid-cols-1 lg:min-h-[350px] lg:grid-cols-[0.92fr_1.08fr]">
-                            <div className="relative z-10 flex flex-col justify-center px-10 py-12 lg:px-12">
-                                <h1 className="[font-family:Georgia,_serif] text-[48px] leading-[0.96] font-medium tracking-normal sm:text-[58px]">
-                                    {heroTitleLines.map((line) => (
-                                        <span key={line} className="block">
-                                            {line}
-                                        </span>
-                                    ))}
-                                </h1>
-                                <p className="mt-6 max-w-[410px] text-[15px] leading-6 text-[#34312b]">
-                                    {heroBanner?.subtitle ??
-                                        'Refined essentials, masterfully crafted. For the man who values quality in every detail.'}
-                                </p>
-                                <div className="mt-8 flex gap-4">
-                                    <a
-                                        href={
-                                            heroBanner?.primary_action_url ??
-                                            '#new-in'
-                                        }
-                                        className="inline-flex h-11 items-center bg-[#11110f] px-6 text-[11px] font-bold tracking-[0.12em] text-white uppercase"
-                                    >
-                                        {heroBanner?.primary_action_label ??
-                                            'Shop Collection'}
-                                    </a>
-                                    {(heroBanner?.secondary_action_label ??
-                                        'Explore') && (
-                                        <a
-                                            href={
-                                                heroBanner?.secondary_action_url ??
-                                                '#shop-by-category'
-                                            }
-                                            className="inline-flex h-11 items-center border border-[#24221f] px-6 text-[11px] font-bold tracking-[0.12em] uppercase"
-                                        >
-                                            {heroBanner?.secondary_action_label ??
-                                                'Explore'}
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="relative min-h-[330px]">
-                                <img
-                                    src={heroBanner?.image_url ?? heroImage}
-                                    alt="Doren olive polo outfit"
-                                    className="absolute inset-0 h-full w-full object-cover object-center"
-                                />
-                                <div className="absolute inset-0 bg-linear-to-r from-[#e8ded2]/80 via-transparent to-transparent" />
-                            </div>
-                        </div>
-                    </section>
+                    <HeroCarousel banners={heroBanners} />
 
                     <section className="border-y border-[#ddd6ca] bg-[#f8f4ed]">
                         <div className="mx-auto grid max-w-[1158px] grid-cols-1 divide-y divide-[#ddd6ca] px-6 py-5 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
@@ -644,46 +802,7 @@ export default function Welcome({
                         featuredBadges
                     />
 
-                    <section className="relative min-h-[195px] overflow-hidden bg-[#d8d3ca]">
-                        <img
-                            src={bottomBanner?.image_url ?? bannerImage}
-                            alt="Doren spring summer tailoring"
-                            className="absolute inset-0 h-full w-full object-cover object-center"
-                        />
-                        <div className="absolute inset-0 bg-linear-to-r from-[#e8e0d4] via-[#e8e0d4]/70 to-transparent" />
-                        <div className="relative mx-auto flex min-h-[195px] max-w-[1158px] items-center px-10">
-                            <div className="max-w-[360px]">
-                                <p className="text-[10px] font-bold tracking-[0.18em] text-[#8d6b35] uppercase">
-                                    {bottomBanner?.eyebrow ??
-                                        'Spring / Summer 2026'}
-                                </p>
-                                <h2 className="mt-3 [font-family:Georgia,_serif] text-[33px] leading-[1.02] font-medium">
-                                    {bottomTitleLines.map((line) => (
-                                        <span key={line} className="block">
-                                            {line}
-                                        </span>
-                                    ))}
-                                </h2>
-                                <p className="mt-4 text-[12px] leading-5 text-[#3f3a33]">
-                                    {bottomBanner?.body ??
-                                        'Versatile pieces. Timeless appeal. Designed for wherever life takes you.'}
-                                </p>
-                                {(bottomBanner?.primary_action_label ??
-                                    'Explore The Collection') && (
-                                    <a
-                                        href={
-                                            bottomBanner?.primary_action_url ??
-                                            '#new-in'
-                                        }
-                                        className="mt-4 inline-flex h-9 items-center bg-[#11110f] px-5 text-[10px] font-bold tracking-[0.12em] text-white uppercase"
-                                    >
-                                        {bottomBanner?.primary_action_label ??
-                                            'Explore The Collection'}
-                                    </a>
-                                )}
-                            </div>
-                        </div>
-                    </section>
+                    <BottomCampaign banner={banners.bottom} />
 
                     <section className="border-y border-[#ddd6ca] bg-[#f8f4ed]">
                         <div className="mx-auto grid max-w-[1158px] grid-cols-1 divide-y divide-[#ddd6ca] px-6 py-5 md:grid-cols-3 md:divide-x md:divide-y-0">

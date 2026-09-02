@@ -1200,8 +1200,8 @@
     "semantic_hash": ""
   },
   "resources/js/pages/admin/banners/index.tsx": {
-    "mtime": 1788386356.7321959,
-    "ast_hash": "6453d55a8ce43033baf4316b19b28c29",
+    "mtime": 1788386278.0759125,
+    "ast_hash": "4bee8771d1dac2fadd3260600083e2ab",
     "semantic_hash": ""
   },
   "tests/Feature/StorefrontHomeTest.php": {

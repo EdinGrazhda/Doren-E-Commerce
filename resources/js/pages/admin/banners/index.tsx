@@ -1,15 +1,13 @@
 import { Head, useHttp } from '@inertiajs/react';
 import { Edit, Image, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import type { FormEvent } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 
 import { AdminApiState } from '@/components/admin-api-state';
 import { AdminPagination } from '@/components/admin-pagination';
 import type { AdminPaginationMeta } from '@/components/admin-pagination';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
     Dialog,
     DialogContent,
@@ -21,13 +19,6 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useAdminApi } from '@/hooks/use-admin-api';
 import { formatDate } from '@/lib/admin-format';
@@ -42,68 +33,181 @@ import { index as bannersIndex } from '@/routes/dashboard/banners';
 
 type Banner = {
     id: number;
-    position: string;
-    eyebrow: string | null;
     title: string | null;
     subtitle: string | null;
-    body: string | null;
-    primary_action_label: string | null;
-    primary_action_url: string | null;
-    secondary_action_label: string | null;
-    secondary_action_url: string | null;
     image_url: string | null;
-    is_active: boolean;
-    sort_order: number;
     updated_at: string;
 };
 
 type Props = {
     banners: AdminPaginationMeta<Banner>;
-    positions: string[];
 };
 
 type BannerFormData = {
-    position: string;
-    eyebrow: string;
     title: string;
     subtitle: string;
-    body: string;
-    primary_action_label: string;
-    primary_action_url: string;
-    secondary_action_label: string;
-    secondary_action_url: string;
-    image_url: string;
     image_upload: File | null;
-    is_active: boolean;
-    sort_order: string;
 };
 
 const emptyBanner: BannerFormData = {
-    position: 'hero',
-    eyebrow: '',
     title: '',
     subtitle: '',
-    body: '',
-    primary_action_label: '',
-    primary_action_url: '',
-    secondary_action_label: '',
-    secondary_action_url: '',
-    image_url: '',
     image_upload: null,
-    is_active: true,
-    sort_order: '0',
 };
 
-const positionLabels: Record<string, string> = {
-    top: 'Top announcement',
-    hero: 'Main hero',
-    bottom: 'Bottom campaign',
-};
+const bannerUploadMaxBytes = 1.8 * 1024 * 1024;
+const bannerUploadMaxWidth = 2400;
+const bannerUploadMaxHeight = 1200;
+const bannerUploadMinWidth = 1200;
+const bannerUploadMinQuality = 0.72;
+const bannerUploadQualityStep = 0.08;
+const bannerUploadTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+function bannerFileExtension(file: File): string {
+    if (file.type === 'image/png') {
+        return 'png';
+    }
+
+    if (file.type === 'image/webp') {
+        return 'webp';
+    }
+
+    return 'jpg';
+}
+
+function lowerCaseBannerFileName(file: File, extension: string): string {
+    const baseName = file.name
+        .replace(/\.[^.]+$/, '')
+        .replace(/[^a-z0-9]+/gi, '-')
+        .replace(/^-|-$/g, '')
+        .toLowerCase();
+
+    return `${baseName || 'hero-banner'}.${extension}`;
+}
+
+function imageFromFile(file: File): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+        const image = document.createElement('img');
+        const objectUrl = URL.createObjectURL(file);
+
+        image.onload = () => {
+            URL.revokeObjectURL(objectUrl);
+            resolve(image);
+        };
+        image.onerror = () => {
+            URL.revokeObjectURL(objectUrl);
+            reject(new Error('The selected image could not be opened.'));
+        };
+        image.src = objectUrl;
+    });
+}
+
+function canvasBlob(
+    canvas: HTMLCanvasElement,
+    type: string,
+    quality: number,
+): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+        canvas.toBlob(
+            (blob) => {
+                if (!blob) {
+                    reject(
+                        new Error('The selected image could not be prepared.'),
+                    );
+
+                    return;
+                }
+
+                resolve(blob);
+            },
+            type,
+            quality,
+        );
+    });
+}
+
+function drawBannerImage(
+    canvas: HTMLCanvasElement,
+    image: HTMLImageElement,
+    width: number,
+    height: number,
+): CanvasRenderingContext2D | null {
+    const context = canvas.getContext('2d');
+
+    if (!context) {
+        return null;
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+    context.fillStyle = '#ffffff';
+    context.fillRect(0, 0, width, height);
+    context.drawImage(image, 0, 0, width, height);
+
+    return context;
+}
+
+async function preparedBannerUpload(file: File): Promise<File> {
+    if (!bannerUploadTypes.includes(file.type)) {
+        return file;
+    }
+
+    if (file.size <= bannerUploadMaxBytes) {
+        return new File(
+            [file],
+            lowerCaseBannerFileName(file, bannerFileExtension(file)),
+            {
+                type: file.type,
+            },
+        );
+    }
+
+    const image = await imageFromFile(file);
+    const scale = Math.min(
+        1,
+        bannerUploadMaxWidth / image.naturalWidth,
+        bannerUploadMaxHeight / image.naturalHeight,
+    );
+    let width = Math.max(1, Math.round(image.naturalWidth * scale));
+    let height = Math.max(1, Math.round(image.naturalHeight * scale));
+    const canvas = document.createElement('canvas');
+
+    if (!drawBannerImage(canvas, image, width, height)) {
+        return new File([file], lowerCaseBannerFileName(file, 'jpg'), {
+            type: file.type,
+        });
+    }
+
+    let quality = 0.9;
+    let blob = await canvasBlob(canvas, 'image/jpeg', quality);
+
+    while (
+        blob.size > bannerUploadMaxBytes &&
+        quality > bannerUploadMinQuality
+    ) {
+        quality -= bannerUploadQualityStep;
+        blob = await canvasBlob(canvas, 'image/jpeg', quality);
+    }
+
+    while (blob.size > bannerUploadMaxBytes && width > bannerUploadMinWidth) {
+        width = Math.max(bannerUploadMinWidth, Math.round(width * 0.85));
+        height = Math.max(1, Math.round(height * 0.85));
+        quality = 0.86;
+        drawBannerImage(canvas, image, width, height);
+        blob = await canvasBlob(canvas, 'image/jpeg', quality);
+    }
+
+    return new File([blob], lowerCaseBannerFileName(file, 'jpg'), {
+        type: 'image/jpeg',
+    });
+}
 
 export default function AdminBannersIndex() {
     const [open, setOpen] = useState(false);
     const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
     const [bannersPageUrl, setBannersPageUrl] = useState(bannersApiIndex.url());
+    const [imagePreparationError, setImagePreparationError] = useState('');
+    const [isPreparingImage, setIsPreparingImage] = useState(false);
     const listing = useAdminApi<Props>(bannersPageUrl);
     const form = useHttp<BannerFormData>(emptyBanner);
     const deleteRequest = useHttp<Record<string, never>>({});
@@ -117,10 +221,11 @@ export default function AdminBannersIndex() {
         );
     }
 
-    const { banners, positions } = listing.data;
+    const { banners } = listing.data;
 
     const openCreateDialog = () => {
         setEditingBanner(null);
+        setImagePreparationError('');
         form.clearErrors();
         form.setData(emptyBanner);
         setOpen(true);
@@ -128,27 +233,45 @@ export default function AdminBannersIndex() {
 
     const openEditDialog = (banner: Banner) => {
         setEditingBanner(banner);
+        setImagePreparationError('');
         form.clearErrors();
         form.setData({
-            position: banner.position,
-            eyebrow: banner.eyebrow ?? '',
             title: banner.title ?? '',
             subtitle: banner.subtitle ?? '',
-            body: banner.body ?? '',
-            primary_action_label: banner.primary_action_label ?? '',
-            primary_action_url: banner.primary_action_url ?? '',
-            secondary_action_label: banner.secondary_action_label ?? '',
-            secondary_action_url: banner.secondary_action_url ?? '',
-            image_url: banner.image_url ?? '',
             image_upload: null,
-            is_active: banner.is_active,
-            sort_order: banner.sort_order.toString(),
         });
         setOpen(true);
     };
 
+    const changeBannerImage = async (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0] ?? null;
+
+        setImagePreparationError('');
+        form.setData('image_upload', null);
+
+        if (!file) {
+            return;
+        }
+
+        setIsPreparingImage(true);
+
+        try {
+            form.setData('image_upload', await preparedBannerUpload(file));
+        } catch {
+            setImagePreparationError(
+                'That image could not be prepared. Try another JPG, PNG, or WebP file.',
+            );
+        } finally {
+            setIsPreparingImage(false);
+        }
+    };
+
     const submit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        if (isPreparingImage) {
+            return;
+        }
 
         const options = {
             onSuccess: () => {
@@ -160,10 +283,7 @@ export default function AdminBannersIndex() {
         };
 
         if (editingBanner) {
-            form.transform((data) => ({
-                ...data,
-                _method: 'put',
-            }));
+            form.transform((data) => ({ ...data, _method: 'put' }));
             void form.post(updateBanner.url(editingBanner.id), options);
 
             return;
@@ -174,11 +294,7 @@ export default function AdminBannersIndex() {
     };
 
     const deleteBanner = (banner: Banner) => {
-        if (
-            !window.confirm(
-                `Delete ${banner.title || positionLabels[banner.position]}?`,
-            )
-        ) {
+        if (!window.confirm(`Delete ${banner.title ?? 'this slide'}?`)) {
             return;
         }
 
@@ -197,111 +313,34 @@ export default function AdminBannersIndex() {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 className="text-2xl font-semibold tracking-tight">
-                            Banners
+                            Main page carousel
                         </h1>
                         <p className="text-sm text-muted-foreground">
-                            Manage the top announcement, hero, and bottom
-                            storefront campaign.
+                            Change the image, title, and description shown in
+                            the homepage hero.
                         </p>
                     </div>
                     <Dialog open={open} onOpenChange={setOpen}>
                         <DialogTrigger asChild>
                             <Button onClick={openCreateDialog}>
                                 <Plus />
-                                New banner
+                                New slide
                             </Button>
                         </DialogTrigger>
-                        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+                        <DialogContent className="sm:max-w-xl">
                             <DialogHeader>
                                 <DialogTitle>
                                     {editingBanner
-                                        ? 'Edit banner'
-                                        : 'New banner'}
+                                        ? 'Edit carousel slide'
+                                        : 'New carousel slide'}
                                 </DialogTitle>
                                 <DialogDescription>
-                                    Content here appears on the ecommerce
-                                    homepage.
+                                    These are the only details that change in
+                                    the main homepage banner.
                                 </DialogDescription>
                             </DialogHeader>
 
                             <form className="grid gap-4" onSubmit={submit}>
-                                <div className="grid gap-4 sm:grid-cols-2">
-                                    <div className="grid gap-2">
-                                        <Label>Position</Label>
-                                        <Select
-                                            value={form.data.position}
-                                            onValueChange={(value) =>
-                                                form.setData('position', value)
-                                            }
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select position" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {positions.map((position) => (
-                                                    <SelectItem
-                                                        key={position}
-                                                        value={position}
-                                                    >
-                                                        {positionLabels[
-                                                            position
-                                                        ] ?? position}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        {form.errors.position && (
-                                            <p className="text-sm text-destructive">
-                                                {form.errors.position}
-                                            </p>
-                                        )}
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="banner-sort-order">
-                                            Order
-                                        </Label>
-                                        <Input
-                                            id="banner-sort-order"
-                                            type="number"
-                                            min="0"
-                                            value={form.data.sort_order}
-                                            onChange={(event) =>
-                                                form.setData(
-                                                    'sort_order',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-                                        {form.errors.sort_order && (
-                                            <p className="text-sm text-destructive">
-                                                {form.errors.sort_order}
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="grid gap-2">
-                                    <Label htmlFor="banner-eyebrow">
-                                        Eyebrow
-                                    </Label>
-                                    <Input
-                                        id="banner-eyebrow"
-                                        value={form.data.eyebrow}
-                                        onChange={(event) =>
-                                            form.setData(
-                                                'eyebrow',
-                                                event.target.value,
-                                            )
-                                        }
-                                        placeholder="Spring / Summer 2026"
-                                    />
-                                    {form.errors.eyebrow && (
-                                        <p className="text-sm text-destructive">
-                                            {form.errors.eyebrow}
-                                        </p>
-                                    )}
-                                </div>
-
                                 <div className="grid gap-2">
                                     <Label htmlFor="banner-title">Title</Label>
                                     <Input
@@ -324,7 +363,7 @@ export default function AdminBannersIndex() {
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="banner-subtitle">
-                                        Subtitle
+                                        Description
                                     </Label>
                                     <Textarea
                                         id="banner-subtitle"
@@ -335,6 +374,7 @@ export default function AdminBannersIndex() {
                                                 event.target.value,
                                             )
                                         }
+                                        placeholder="Refined essentials, masterfully crafted."
                                     />
                                     {form.errors.subtitle && (
                                         <p className="text-sm text-destructive">
@@ -344,167 +384,39 @@ export default function AdminBannersIndex() {
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="banner-body">Body</Label>
-                                    <Textarea
-                                        id="banner-body"
-                                        value={form.data.body}
-                                        onChange={(event) =>
-                                            form.setData(
-                                                'body',
-                                                event.target.value,
-                                            )
-                                        }
-                                        placeholder="Announcement or campaign body text"
-                                    />
-                                    {form.errors.body && (
-                                        <p className="text-sm text-destructive">
-                                            {form.errors.body}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div className="grid gap-4 sm:grid-cols-2">
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="banner-primary-label">
-                                            Primary button
-                                        </Label>
-                                        <Input
-                                            id="banner-primary-label"
-                                            value={
-                                                form.data.primary_action_label
-                                            }
-                                            onChange={(event) =>
-                                                form.setData(
-                                                    'primary_action_label',
-                                                    event.target.value,
-                                                )
-                                            }
-                                            placeholder="Shop Collection"
-                                        />
-                                        {form.errors.primary_action_label && (
-                                            <p className="text-sm text-destructive">
-                                                {
-                                                    form.errors
-                                                        .primary_action_label
-                                                }
-                                            </p>
-                                        )}
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="banner-primary-url">
-                                            Primary URL
-                                        </Label>
-                                        <Input
-                                            id="banner-primary-url"
-                                            value={form.data.primary_action_url}
-                                            onChange={(event) =>
-                                                form.setData(
-                                                    'primary_action_url',
-                                                    event.target.value,
-                                                )
-                                            }
-                                            placeholder="#new-in"
-                                        />
-                                        {form.errors.primary_action_url && (
-                                            <p className="text-sm text-destructive">
-                                                {form.errors.primary_action_url}
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="grid gap-4 sm:grid-cols-2">
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="banner-secondary-label">
-                                            Secondary button
-                                        </Label>
-                                        <Input
-                                            id="banner-secondary-label"
-                                            value={
-                                                form.data.secondary_action_label
-                                            }
-                                            onChange={(event) =>
-                                                form.setData(
-                                                    'secondary_action_label',
-                                                    event.target.value,
-                                                )
-                                            }
-                                            placeholder="Explore"
-                                        />
-                                        {form.errors.secondary_action_label && (
-                                            <p className="text-sm text-destructive">
-                                                {
-                                                    form.errors
-                                                        .secondary_action_label
-                                                }
-                                            </p>
-                                        )}
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="banner-secondary-url">
-                                            Secondary URL
-                                        </Label>
-                                        <Input
-                                            id="banner-secondary-url"
-                                            value={
-                                                form.data.secondary_action_url
-                                            }
-                                            onChange={(event) =>
-                                                form.setData(
-                                                    'secondary_action_url',
-                                                    event.target.value,
-                                                )
-                                            }
-                                            placeholder="#shop-by-category"
-                                        />
-                                        {form.errors.secondary_action_url && (
-                                            <p className="text-sm text-destructive">
-                                                {
-                                                    form.errors
-                                                        .secondary_action_url
-                                                }
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="grid gap-2">
-                                    <Label htmlFor="banner-image-url">
-                                        Image URL
-                                    </Label>
-                                    <Input
-                                        id="banner-image-url"
-                                        value={form.data.image_url}
-                                        onChange={(event) =>
-                                            form.setData(
-                                                'image_url',
-                                                event.target.value,
-                                            )
-                                        }
-                                        placeholder="https://..."
-                                    />
-                                    {form.errors.image_url && (
-                                        <p className="text-sm text-destructive">
-                                            {form.errors.image_url}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div className="grid gap-2">
                                     <Label htmlFor="banner-image-upload">
-                                        Upload image
+                                        Image
                                     </Label>
+                                    {editingBanner?.image_url && (
+                                        <div className="aspect-[2/1] overflow-hidden rounded-md border bg-muted">
+                                            <img
+                                                src={editingBanner.image_url}
+                                                alt={
+                                                    editingBanner.title ??
+                                                    'Carousel slide'
+                                                }
+                                                className="h-full w-full object-cover"
+                                            />
+                                        </div>
+                                    )}
                                     <Input
                                         id="banner-image-upload"
                                         type="file"
                                         accept="image/jpeg,image/png,image/webp"
-                                        onChange={(event) =>
-                                            form.setData(
-                                                'image_upload',
-                                                event.target.files?.[0] ?? null,
-                                            )
-                                        }
+                                        required={!editingBanner}
+                                        onChange={changeBannerImage}
                                     />
+                                    {isPreparingImage && (
+                                        <p className="text-xs text-muted-foreground">
+                                            Preparing image for upload...
+                                        </p>
+                                    )}
+                                    {editingBanner && (
+                                        <p className="text-xs text-muted-foreground">
+                                            Leave this empty to keep the current
+                                            image.
+                                        </p>
+                                    )}
                                     {form.progress && (
                                         <div className="h-2 overflow-hidden rounded-full bg-muted">
                                             <div
@@ -520,20 +432,12 @@ export default function AdminBannersIndex() {
                                             {form.errors.image_upload}
                                         </p>
                                     )}
+                                    {imagePreparationError && (
+                                        <p className="text-sm text-destructive">
+                                            {imagePreparationError}
+                                        </p>
+                                    )}
                                 </div>
-
-                                <label className="flex items-center gap-2 text-sm font-medium">
-                                    <Checkbox
-                                        checked={form.data.is_active}
-                                        onCheckedChange={(checked) =>
-                                            form.setData(
-                                                'is_active',
-                                                checked === true,
-                                            )
-                                        }
-                                    />
-                                    Active on storefront
-                                </label>
 
                                 <DialogFooter>
                                     <Button
@@ -545,9 +449,13 @@ export default function AdminBannersIndex() {
                                     </Button>
                                     <Button
                                         type="submit"
-                                        disabled={form.processing}
+                                        disabled={
+                                            form.processing || isPreparingImage
+                                        }
                                     >
-                                        {editingBanner ? 'Save' : 'Create'}
+                                        {editingBanner
+                                            ? 'Save changes'
+                                            : 'Add slide'}
                                     </Button>
                                 </DialogFooter>
                             </form>
@@ -558,10 +466,15 @@ export default function AdminBannersIndex() {
                 <Card className="rounded-lg">
                     <CardHeader>
                         <CardTitle>
-                            {banners.total.toLocaleString()} banners
+                            {banners.total.toLocaleString()} carousel slides
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-4">
+                        {banners.data.length === 0 && (
+                            <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
+                                Add a slide to start the homepage carousel.
+                            </div>
+                        )}
                         {banners.data.map((banner) => (
                             <div
                                 key={banner.id}
@@ -572,11 +485,7 @@ export default function AdminBannersIndex() {
                                         <img
                                             src={banner.image_url}
                                             alt={
-                                                banner.title ||
-                                                positionLabels[
-                                                    banner.position
-                                                ] ||
-                                                'Banner'
+                                                banner.title ?? 'Carousel slide'
                                             }
                                             className="h-full w-full object-cover"
                                         />
@@ -588,35 +497,11 @@ export default function AdminBannersIndex() {
                                 </div>
 
                                 <div className="min-w-0">
-                                    <div className="flex flex-wrap items-center gap-2">
-                                        <Badge variant="secondary">
-                                            {positionLabels[banner.position] ??
-                                                banner.position}
-                                        </Badge>
-                                        <Badge
-                                            variant={
-                                                banner.is_active
-                                                    ? 'default'
-                                                    : 'outline'
-                                            }
-                                        >
-                                            {banner.is_active
-                                                ? 'Active'
-                                                : 'Inactive'}
-                                        </Badge>
-                                        <span className="text-xs text-muted-foreground">
-                                            Order {banner.sort_order}
-                                        </span>
-                                    </div>
-                                    <h2 className="mt-3 truncate text-base font-semibold">
-                                        {banner.title ||
-                                            banner.body ||
-                                            'Untitled banner'}
+                                    <h2 className="truncate text-base font-semibold">
+                                        {banner.title ?? 'Untitled slide'}
                                     </h2>
                                     <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                                        {banner.subtitle ||
-                                            banner.body ||
-                                            'No supporting copy'}
+                                        {banner.subtitle ?? 'No description'}
                                     </p>
                                     <p className="mt-3 text-xs text-muted-foreground">
                                         Updated {formatDate(banner.updated_at)}

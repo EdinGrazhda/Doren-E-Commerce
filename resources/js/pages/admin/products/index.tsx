@@ -1,6 +1,6 @@
 import { Head, useHttp } from '@inertiajs/react';
-import { Edit, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { Edit, Plus, Search, Trash2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 
 import { AdminApiState } from '@/components/admin-api-state';
@@ -200,12 +200,26 @@ const centsToPrice = (cents: number): string => (cents / 100).toFixed(2);
 const toIndexedRecord = <Value,>(values: Value[]): Record<string, Value> =>
     Object.fromEntries(values.map((value, index) => [index.toString(), value]));
 
+const realtimeSearchDelay = 250;
+
+function productsListingUrl(search: string, page?: string): string {
+    const trimmedSearch = search.trim();
+
+    return productsApiIndex.url({
+        query: {
+            ...(trimmedSearch !== '' ? { search: trimmedSearch } : {}),
+            ...(page ? { page } : {}),
+        },
+    });
+}
+
 export default function AdminProductsIndex() {
     const [open, setOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
     const [productsPageUrl, setProductsPageUrl] = useState(
         productsApiIndex.url(),
     );
+    const [search, setSearch] = useState('');
     const listing = useAdminApi<Props>(productsPageUrl);
     const sizeOptions = listing.data?.sizeOptions ?? [
         'S',
@@ -217,6 +231,27 @@ export default function AdminProductsIndex() {
     const form = useHttp<ProductFormData>(makeEmptyProduct(sizeOptions));
     const deleteRequest = useHttp<Record<string, never>>({});
     const formErrors = form.errors as Record<string, string>;
+
+    useEffect(() => {
+        const timeout = window.setTimeout(() => {
+            setProductsPageUrl(productsListingUrl(search));
+        }, realtimeSearchDelay);
+
+        return () => window.clearTimeout(timeout);
+    }, [search]);
+
+    const submitSearch = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setProductsPageUrl(productsListingUrl(search));
+    };
+
+    const changeProductsPage = (url: string) => {
+        const pageUrl = new URL(url, window.location.origin);
+
+        setProductsPageUrl(
+            productsListingUrl(search, pageUrl.searchParams.get('page') ?? '1'),
+        );
+    };
 
     if (!listing.data) {
         return (
@@ -496,10 +531,28 @@ export default function AdminProductsIndex() {
                         </p>
                     </div>
                     <div className="flex gap-2">
-                        <Input
-                            className="max-w-xs"
-                            placeholder="Search products"
-                        />
+                        <form
+                            className="flex w-full max-w-xs gap-2"
+                            onSubmit={submitSearch}
+                        >
+                            <div className="relative flex-1">
+                                <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                                <Input
+                                    value={search}
+                                    onChange={(event) =>
+                                        setSearch(event.target.value)
+                                    }
+                                    className="pl-9"
+                                    placeholder="Search products"
+                                />
+                            </div>
+                            <Button type="submit" variant="outline" size="icon">
+                                <Search />
+                                <span className="sr-only">
+                                    Search products
+                                </span>
+                            </Button>
+                        </form>
                         <Dialog open={open} onOpenChange={setOpen}>
                             <DialogTrigger asChild>
                                 <Button onClick={openCreateDialog}>
@@ -1377,7 +1430,7 @@ export default function AdminProductsIndex() {
                         </div>
                         <AdminPagination
                             pagination={products}
-                            onPageChange={setProductsPageUrl}
+                            onPageChange={changeProductsPage}
                         />
                     </CardContent>
                 </Card>

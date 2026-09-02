@@ -168,7 +168,7 @@ test('admin list APIs return paginated data', function (string $routeName, strin
         'orders' => Order::factory()->count(16)->create(),
         'products' => Product::factory()->count(16)->create(),
         'categories' => ProductCategory::factory()->count(16)->create(),
-        'banners' => StorefrontBanner::factory()->count(16)->create(),
+        'banners' => StorefrontBanner::factory()->count(16)->create(['position' => 'hero']),
         'customers' => collect(range(1, 16))->each(fn (int $index) => Order::factory()->create([
             'customer_email' => "customer{$index}@example.com",
         ])),
@@ -196,6 +196,36 @@ test('admin list APIs return paginated data', function (string $routeName, strin
     'banners' => ['api.admin.banners.index', 'banners', 'banners'],
     'customers' => ['api.admin.customers.index', 'customers', 'customers'],
 ]);
+
+test('admins can search products', function () {
+    $admin = User::factory()->admin()->create();
+    $matchingCategory = ProductCategory::factory()->create(['name' => 'Tailored Knitwear']);
+
+    collect(range(1, 16))->each(fn (int $index) => Product::factory()
+        ->for($matchingCategory, 'category')
+        ->has(ProductVariant::factory()->state(['color_name' => 'Oxblood']), 'variants')
+        ->create([
+            'name' => "Merino Rib Cardigan {$index}",
+            'slug' => "merino-rib-cardigan-{$index}",
+            'sku' => "DRN-KNIT-{$index}",
+        ]));
+
+    Product::factory()
+        ->has(ProductVariant::factory()->state(['color_name' => 'Navy']), 'variants')
+        ->create([
+            'name' => 'Cotton Twill Trouser',
+            'slug' => 'cotton-twill-trouser',
+            'sku' => 'DRN-TROUSER-001',
+        ]);
+
+    $this->actingAs($admin)
+        ->getJson(route('api.admin.products.index', ['search' => 'knit']))
+        ->assertSuccessful()
+        ->assertJsonPath('data.products.total', 16)
+        ->assertJsonCount(15, 'data.products.data')
+        ->assertJsonPath('data.products.next_page_url', fn (?string $url): bool => is_string($url) && str_contains($url, 'search=knit'))
+        ->assertJsonMissing(['name' => 'Cotton Twill Trouser']);
+});
 
 test('admin dashboard API returns compact order and product summaries', function () {
     $admin = User::factory()->admin()->create();
@@ -317,19 +347,12 @@ test('admins can create update and delete storefront banners', function () {
 
     $this->actingAs($admin)
         ->post(route('api.admin.banners.store'), [
-            'position' => 'hero',
-            'eyebrow' => 'New season',
             'title' => 'Quiet luxury essentials',
             'subtitle' => 'Refined pieces for every day.',
-            'body' => null,
-            'primary_action_label' => 'Shop Now',
-            'primary_action_url' => '#new-in',
-            'secondary_action_label' => 'Explore',
-            'secondary_action_url' => '#shop-by-category',
-            'image_url' => 'https://example.com/hero.jpg',
-            'image_upload' => UploadedFile::fake()->image('hero.jpg', 1600, 700),
-            'is_active' => true,
-            'sort_order' => 15,
+            'image_upload' => UploadedFile::fake()->image('hero.JPG', 1600, 700),
+            'position' => 'bottom',
+            'is_active' => false,
+            'sort_order' => 500,
         ], ['Accept' => 'application/json'])
         ->assertCreated()
         ->assertJsonPath('data.title', 'Quiet luxury essentials');
@@ -338,7 +361,7 @@ test('admins can create update and delete storefront banners', function () {
 
     expect($banner->position)->toBe('hero')
         ->and($banner->is_active)->toBeTrue()
-        ->and($banner->sort_order)->toBe(15)
+        ->and($banner->sort_order)->toBe(10)
         ->and($banner->image_url)->toContain('/storage/storefront-banners/');
 
     Storage::disk('public')->assertExists(Str::after($banner->image_url, '/storage/'));
@@ -346,29 +369,23 @@ test('admins can create update and delete storefront banners', function () {
     $this->actingAs($admin)
         ->post(route('api.admin.banners.update', $banner), [
             '_method' => 'put',
-            'position' => 'bottom',
-            'eyebrow' => 'Spring / Summer',
             'title' => 'Elevated Essentials',
-            'subtitle' => null,
-            'body' => 'Designed for wherever life takes you.',
-            'primary_action_label' => 'Explore',
-            'primary_action_url' => '#best-sellers',
-            'secondary_action_label' => null,
-            'secondary_action_url' => null,
-            'image_url' => null,
+            'subtitle' => 'Designed for wherever life takes you.',
             'image_upload' => UploadedFile::fake()->image('bottom.webp', 1600, 700),
+            'position' => 'bottom',
             'is_active' => false,
-            'sort_order' => 20,
+            'sort_order' => 500,
         ], ['Accept' => 'application/json'])
         ->assertSuccessful()
         ->assertJsonPath('data.title', 'Elevated Essentials');
 
     $banner->refresh();
 
-    expect($banner->position)->toBe('bottom')
+    expect($banner->position)->toBe('hero')
         ->and($banner->title)->toBe('Elevated Essentials')
-        ->and($banner->is_active)->toBeFalse()
-        ->and($banner->sort_order)->toBe(20)
+        ->and($banner->subtitle)->toBe('Designed for wherever life takes you.')
+        ->and($banner->is_active)->toBeTrue()
+        ->and($banner->sort_order)->toBe(10)
         ->and($banner->image_url)->toContain('/storage/storefront-banners/');
 
     Storage::disk('public')->assertExists(Str::after($banner->image_url, '/storage/'));
@@ -380,29 +397,43 @@ test('admins can create update and delete storefront banners', function () {
     $this->assertModelMissing($banner);
 });
 
-test('admins cannot store unsafe banner urls', function () {
+test('admin banners only lists main hero carousel slides', function () {
+    $admin = User::factory()->admin()->create();
+    $heroBanner = StorefrontBanner::factory()->create([
+        'position' => 'hero',
+        'title' => 'Main page slide',
+    ]);
+    StorefrontBanner::factory()->create([
+        'position' => 'top',
+        'title' => 'Top announcement',
+    ]);
+    StorefrontBanner::factory()->create([
+        'position' => 'bottom',
+        'title' => 'Bottom campaign',
+    ]);
+
+    $this->actingAs($admin)
+        ->getJson(route('api.admin.banners.index'))
+        ->assertSuccessful()
+        ->assertJsonPath('data.banners.total', 1)
+        ->assertJsonPath('data.banners.data.0.id', $heroBanner->id)
+        ->assertJsonMissingPath('data.positions');
+});
+
+test('admins must provide the carousel image and text', function () {
     $admin = User::factory()->admin()->create();
 
     $this->actingAs($admin)
-        ->postJson(route('api.admin.banners.store'), [
-            'position' => 'hero',
-            'eyebrow' => 'New season',
-            'title' => 'Quiet luxury essentials',
-            'subtitle' => 'Refined pieces for every day.',
-            'body' => null,
-            'primary_action_label' => 'Shop Now',
-            'primary_action_url' => 'javascript:alert(1)',
-            'secondary_action_label' => 'Explore',
-            'secondary_action_url' => 'data:text/html,<script>alert(1)</script>',
-            'image_url' => 'javascript:alert(1)',
-            'is_active' => true,
-            'sort_order' => 15,
-        ])
+        ->post(route('api.admin.banners.store'), [
+            'title' => '',
+            'subtitle' => '',
+            'image_upload' => UploadedFile::fake()->create('hero.svg', 10, 'image/svg+xml'),
+        ], ['Accept' => 'application/json'])
         ->assertUnprocessable()
         ->assertJsonValidationErrors([
-            'primary_action_url',
-            'secondary_action_url',
-            'image_url',
+            'title',
+            'subtitle',
+            'image_upload',
         ]);
 });
 

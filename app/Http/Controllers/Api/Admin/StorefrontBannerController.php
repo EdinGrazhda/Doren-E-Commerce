@@ -16,35 +16,39 @@ class StorefrontBannerController extends Controller
         $banners = StorefrontBanner::query()
             ->select([
                 'id',
-                'position',
-                'eyebrow',
                 'title',
                 'subtitle',
-                'body',
-                'primary_action_label',
-                'primary_action_url',
-                'secondary_action_label',
-                'secondary_action_url',
                 'image_url',
-                'is_active',
-                'sort_order',
                 'updated_at',
             ])
-            ->orderBy('position')
+            ->where('position', 'hero')
+            ->where('is_active', true)
             ->orderBy('sort_order')
             ->paginate(15);
 
         return response()->json([
             'data' => [
                 'banners' => $banners,
-                'positions' => StorefrontBanner::Positions,
             ],
         ]);
     }
 
     public function store(StoreStorefrontBannerRequest $request): JsonResponse
     {
-        $banner = StorefrontBanner::create($this->bannerAttributes($request));
+        $validated = $request->validated();
+        $path = $request->file('image_upload')->store('storefront-banners', 'public');
+        $lastSortOrder = StorefrontBanner::query()
+            ->where('position', 'hero')
+            ->max('sort_order');
+
+        $banner = StorefrontBanner::create([
+            'position' => 'hero',
+            'title' => $validated['title'],
+            'subtitle' => $validated['subtitle'],
+            'image_url' => Storage::disk('public')->url($path),
+            'is_active' => true,
+            'sort_order' => ((int) $lastSortOrder) + 10,
+        ]);
 
         return response()->json([
             'data' => $banner,
@@ -54,6 +58,8 @@ class StorefrontBannerController extends Controller
 
     public function update(UpdateStorefrontBannerRequest $request, StorefrontBanner $banner): JsonResponse
     {
+        abort_unless($banner->position === 'hero', 404);
+
         $banner->update($this->bannerAttributes($request));
 
         return response()->json([
@@ -64,6 +70,8 @@ class StorefrontBannerController extends Controller
 
     public function destroy(StorefrontBanner $banner): JsonResponse
     {
+        abort_unless($banner->position === 'hero', 404);
+
         $banner->delete();
 
         return response()->json(['message' => 'Banner deleted.']);
@@ -72,9 +80,10 @@ class StorefrontBannerController extends Controller
     /**
      * @return array<string, mixed>
      */
-    private function bannerAttributes(StoreStorefrontBannerRequest|UpdateStorefrontBannerRequest $request): array
+    private function bannerAttributes(UpdateStorefrontBannerRequest $request): array
     {
         $attributes = $request->validated();
+        $attributes['is_active'] = true;
 
         if ($request->hasFile('image_upload')) {
             $path = $request->file('image_upload')->store('storefront-banners', 'public');

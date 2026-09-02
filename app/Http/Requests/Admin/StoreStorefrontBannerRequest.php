@@ -2,12 +2,8 @@
 
 namespace App\Http\Requests\Admin;
 
-use App\Models\StorefrontBanner;
-use App\Rules\SafeActionUrl;
-use App\Rules\SafeImageUrl;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreStorefrontBannerRequest extends FormRequest
 {
@@ -27,31 +23,9 @@ class StoreStorefrontBannerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'position' => ['required', 'string', Rule::in(StorefrontBanner::Positions)],
-            'eyebrow' => ['nullable', 'string', 'max:255'],
-            'title' => ['nullable', 'string', 'max:255'],
-            'subtitle' => ['nullable', 'string', 'max:1000'],
-            'body' => ['nullable', 'string', 'max:1000'],
-            'primary_action_label' => ['nullable', 'string', 'max:255'],
-            'primary_action_url' => ['nullable', 'string', 'max:255', new SafeActionUrl],
-            'secondary_action_label' => ['nullable', 'string', 'max:255'],
-            'secondary_action_url' => ['nullable', 'string', 'max:255', new SafeActionUrl],
-            'image_url' => ['nullable', 'max:2048', new SafeImageUrl],
-            'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'mimetypes:image/jpeg,image/png,image/webp', 'extensions:jpg,jpeg,png,webp', 'max:5120'],
-            'is_active' => ['required', 'boolean'],
-            'sort_order' => ['nullable', 'integer', 'min:0', 'max:65535'],
+            'title' => ['required', 'string', 'max:255'],
+            'subtitle' => ['required', 'string', 'max:1000'],
+            'image_upload' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'mimetypes:image/jpeg,image/png,image/webp', 'extensions:jpg,jpeg,png,webp', 'max:5120'],
         ];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function validated($key = null, $default = null): array
-    {
-        $validated = parent::validated($key, $default);
-        $validated['is_active'] = $this->boolean('is_active');
-        $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
-
-        return $validated;
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\StorefrontBanner;
 use Database\Seeders\ProductCatalogSeeder;
 use Database\Seeders\StorefrontBannerSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -20,7 +21,7 @@ test('storefront home renders real catalog data', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('welcome')
             ->where('banners.top.body', 'Complimentary shipping on orders over $150')
-            ->where('banners.hero.title', 'Timeless style. Modern man.')
+            ->where('banners.hero.0.title', 'Timeless style. Modern man.')
             ->where('banners.bottom.title', 'Elevated Essentials For Every Day')
             ->has('categories', 4)
             ->has('categories.0', fn (Assert $page) => $page
@@ -44,6 +45,59 @@ test('storefront home renders real catalog data', function () {
             )
             ->has('bestSellerProducts', 6)
             ->where('bestSellerProducts.0.is_featured', true)
+        );
+});
+
+test('storefront home sends every active hero carousel slide and one fixed campaign per other position', function () {
+    StorefrontBanner::factory()->create([
+        'position' => 'hero',
+        'title' => 'First Hero',
+        'image_url' => '/storage/storefront-banners/first-hero.jpg',
+        'sort_order' => 10,
+    ]);
+
+    StorefrontBanner::factory()->create([
+        'position' => 'hero',
+        'title' => 'Second Hero',
+        'image_url' => '/storage/storefront-banners/second-hero.jpg',
+        'sort_order' => 20,
+    ]);
+
+    StorefrontBanner::factory()->create([
+        'position' => 'top',
+        'body' => 'Primary announcement',
+        'sort_order' => 10,
+    ]);
+
+    StorefrontBanner::factory()->create([
+        'position' => 'top',
+        'body' => 'Secondary announcement',
+        'sort_order' => 20,
+    ]);
+
+    StorefrontBanner::factory()->create([
+        'position' => 'bottom',
+        'title' => 'Inactive Campaign',
+        'is_active' => false,
+        'sort_order' => 5,
+    ]);
+
+    StorefrontBanner::factory()->create([
+        'position' => 'bottom',
+        'title' => 'Active Campaign',
+        'image_url' => '/storage/storefront-banners/active-campaign.jpg',
+        'sort_order' => 10,
+    ]);
+
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('welcome')
+            ->has('banners.hero', 2)
+            ->where('banners.hero.0.title', 'First Hero')
+            ->where('banners.hero.1.title', 'Second Hero')
+            ->where('banners.top.body', 'Primary announcement')
+            ->where('banners.bottom.title', 'Active Campaign')
         );
 });
 
