@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Actions\Images\StoreOptimizedImage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreStorefrontBannerRequest;
 use App\Http\Requests\Admin\UpdateStorefrontBannerRequest;
 use App\Models\StorefrontBanner;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Storage;
 
 class StorefrontBannerController extends Controller
 {
+    public function __construct(private StoreOptimizedImage $storeOptimizedImage) {}
+
     public function index(): JsonResponse
     {
         $banners = StorefrontBanner::query()
@@ -36,7 +38,6 @@ class StorefrontBannerController extends Controller
     public function store(StoreStorefrontBannerRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $path = $request->file('image_upload')->store('storefront-banners', 'public');
         $lastSortOrder = StorefrontBanner::query()
             ->where('position', 'hero')
             ->max('sort_order');
@@ -45,7 +46,7 @@ class StorefrontBannerController extends Controller
             'position' => 'hero',
             'title' => $validated['title'],
             'subtitle' => $validated['subtitle'],
-            'image_url' => Storage::disk('public')->url($path),
+            'image_url' => $this->storeOptimizedImage->handle($request->file('image_upload'), 'storefront-banners'),
             'is_active' => true,
             'sort_order' => ((int) $lastSortOrder) + 10,
         ]);
@@ -86,8 +87,10 @@ class StorefrontBannerController extends Controller
         $attributes['is_active'] = true;
 
         if ($request->hasFile('image_upload')) {
-            $path = $request->file('image_upload')->store('storefront-banners', 'public');
-            $attributes['image_url'] = Storage::disk('public')->url($path);
+            $attributes['image_url'] = $this->storeOptimizedImage->handle(
+                $request->file('image_upload'),
+                'storefront-banners',
+            );
         }
 
         unset($attributes['image_upload']);

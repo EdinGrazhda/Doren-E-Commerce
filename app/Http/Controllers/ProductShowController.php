@@ -4,17 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Services\ProductCampaignPrice;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ProductShowController extends Controller
 {
+    public function __construct(private readonly ProductCampaignPrice $campaignPrice) {}
+
     public function __invoke(Product $product): Response
     {
         abort_unless($product->is_active, 404);
 
         $product->load([
             'category:id,name,slug',
+            'activeCampaigns:id,name,discount_type,discount_value,starts_at,ends_at,is_active',
             'variants' => fn ($query) => $query
                 ->select([
                     'id',
@@ -46,6 +50,7 @@ class ProductShowController extends Controller
                 'sort_order',
             ])
             ->with('variants:id,product_id,color_name,color_hex,image_url,stock_quantity,is_active,sort_order')
+            ->with('activeCampaigns:id,name,discount_type,discount_value,starts_at,ends_at,is_active')
             ->where('is_active', true)
             ->whereKeyNot($product->id)
             ->when($product->category, fn ($query) => $query->whereBelongsTo($product->category, 'category'))
@@ -65,6 +70,7 @@ class ProductShowController extends Controller
      */
     private function productPayload(Product $product): array
     {
+        $pricing = $this->campaignPrice->calculate($product);
         $images = collect([
             $product->primary_image_url,
             ...($product->gallery_image_urls ?? []),
@@ -76,8 +82,9 @@ class ProductShowController extends Controller
             'slug' => $product->slug,
             'sku' => $product->sku,
             'description' => $product->description,
-            'price_cents' => $product->price_cents,
-            'compare_at_price_cents' => $product->compare_at_price_cents,
+            'price_cents' => $pricing['price_cents'],
+            'compare_at_price_cents' => $pricing['compare_at_price_cents'] ?? $product->compare_at_price_cents,
+            'campaign' => $pricing['campaign'],
             'currency' => $product->currency,
             'image_url' => $product->primary_image_url,
             'images' => $images,
@@ -111,7 +118,7 @@ class ProductShowController extends Controller
                     'image_url' => $this->variantImageUrls($variant)[0] ?? null,
                     'images' => $this->variantImageUrls($variant),
                     'stock_quantity' => $variant->stock_quantity,
-                    'price_cents' => $variant->price_cents,
+                    'price_cents' => $this->campaignPrice->calculate($product, $variant->price_cents ?? $product->price_cents)['price_cents'],
                 ])
                 ->values(),
         ];
@@ -122,11 +129,15 @@ class ProductShowController extends Controller
      */
     private function relatedProductPayload(Product $product): array
     {
+        $pricing = $this->campaignPrice->calculate($product);
+
         return [
             'id' => $product->id,
             'name' => $product->name,
             'slug' => $product->slug,
-            'price_cents' => $product->price_cents,
+            'price_cents' => $pricing['price_cents'],
+            'compare_at_price_cents' => $pricing['compare_at_price_cents'],
+            'campaign' => $pricing['campaign'],
             'currency' => $product->currency,
             'image_url' => $product->primary_image_url,
             'is_featured' => $product->is_featured,

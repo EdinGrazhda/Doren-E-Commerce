@@ -227,6 +227,41 @@ test('admins can search products', function () {
         ->assertJsonMissing(['name' => 'Cotton Twill Trouser']);
 });
 
+test('admin product listings stay compact and load edit data on demand', function () {
+    $admin = User::factory()->admin()->create();
+    $product = Product::factory()
+        ->has(ProductVariant::factory()->count(5)->state([
+            'color_name' => 'Oxblood',
+            'color_hex' => '#4a1018',
+            'stock_quantity' => 8,
+        ])->sequence(
+            ['size' => 'S'],
+            ['size' => 'M'],
+            ['size' => 'L'],
+            ['size' => 'XL'],
+            ['size' => 'XXL'],
+        ), 'variants')
+        ->create();
+
+    $this->actingAs($admin)
+        ->getJson(route('api.admin.products.index'))
+        ->assertSuccessful()
+        ->assertJsonPath('data.products.data.0.id', $product->id)
+        ->assertJsonPath('data.products.data.0.variants_count', 5)
+        ->assertJsonPath('data.products.data.0.stock_quantity', 40)
+        ->assertJsonCount(1, 'data.products.data.0.colors')
+        ->assertJsonMissingPath('data.products.data.0.variants')
+        ->assertJsonMissingPath('data.products.data.0.gallery_image_urls')
+        ->assertJsonMissingPath('data.products.data.0.description');
+
+    $this->actingAs($admin)
+        ->getJson(route('api.admin.products.show', $product))
+        ->assertSuccessful()
+        ->assertJsonPath('data.id', $product->id)
+        ->assertJsonCount(5, 'data.variants')
+        ->assertJsonStructure(['data' => ['description', 'gallery_image_urls', 'variants']]);
+});
+
 test('admin dashboard API returns compact order and product summaries', function () {
     $admin = User::factory()->admin()->create();
 
@@ -362,7 +397,8 @@ test('admins can create update and delete storefront banners', function () {
     expect($banner->position)->toBe('hero')
         ->and($banner->is_active)->toBeTrue()
         ->and($banner->sort_order)->toBe(10)
-        ->and($banner->image_url)->toContain('/storage/storefront-banners/');
+        ->and($banner->image_url)->toContain('/storage/storefront-banners/')
+        ->and($banner->image_url)->toEndWith('.webp');
 
     Storage::disk('public')->assertExists(Str::after($banner->image_url, '/storage/'));
 
@@ -453,7 +489,7 @@ test('admins can create update and delete products without order history', funct
             'price' => '129.00',
             'currency' => 'usd',
             'image_uploads' => [
-                UploadedFile::fake()->image('overshirt-front.jpg', 900, 1100),
+                UploadedFile::fake()->image('overshirt-front.jpg', 2400, 1200),
                 UploadedFile::fake()->image('overshirt-back.jpg', 900, 1100),
                 UploadedFile::fake()->image('overshirt-detail.jpg', 900, 1100),
                 UploadedFile::fake()->image('overshirt-fit.jpg', 900, 1100),
@@ -475,20 +511,27 @@ test('admins can create update and delete products without order history', funct
     $product = Product::query()->where('slug', 'cotton-overshirt')->firstOrFail();
 
     $oliveMediumVariant = $product->variants()->where('color_name', 'Olive')->where('size', 'M')->firstOrFail();
+    $primaryImagePath = Str::after($product->primary_image_url, '/storage/');
+    $primaryImageInfo = getimagesize(Storage::disk('public')->path($primaryImagePath));
 
     expect($product->sku)->toBe('DRN-100')
         ->and($product->currency)->toBe('USD')
         ->and($product->price_cents)->toBe(12900)
         ->and($product->category?->is($category))->toBeTrue()
         ->and($product->primary_image_url)->toContain('/storage/products/')
+        ->and($product->primary_image_url)->toEndWith('.webp')
+        ->and($primaryImageInfo['mime'] ?? null)->toBe('image/webp')
+        ->and(max($primaryImageInfo[0] ?? 0, $primaryImageInfo[1] ?? 0))->toBe(2000)
         ->and($product->gallery_image_urls)->toHaveCount(3)
+        ->and($product->gallery_image_urls[0])->toEndWith('.webp')
         ->and($product->variants()->count())->toBe(10)
         ->and($oliveMediumVariant->stock_quantity)->toBe(4)
         ->and($oliveMediumVariant->image_url)->toContain('/storage/product-variants/')
+        ->and($oliveMediumVariant->image_url)->toEndWith('.webp')
         ->and($oliveMediumVariant->images()->count())->toBe(4)
         ->and($product->variants()->where('color_name', 'Sand')->where('size', 'XL')->first()?->stock_quantity)->toBe(4);
 
-    Storage::disk('public')->assertExists(Str::after($product->primary_image_url, '/storage/'));
+    Storage::disk('public')->assertExists($primaryImagePath);
     Storage::disk('public')->assertExists(Str::after($product->gallery_image_urls[0], '/storage/'));
     Storage::disk('public')->assertExists(Str::after(
         $oliveMediumVariant->images()->orderBy('sort_order')->firstOrFail()->image_url,

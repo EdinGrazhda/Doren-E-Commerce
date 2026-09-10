@@ -41,7 +41,11 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user() ? [
+                    ...$request->user()->toArray(),
+                    'roles' => $request->user()->getRoleNames()->values(),
+                    'permissions' => $request->user()->getAllPermissions()->pluck('name')->values(),
+                ] : null,
             ],
             'cart' => [
                 'count' => collect($request->session()->get('cart.items', []))->sum('quantity'),
@@ -57,7 +61,7 @@ class HandleInertiaRequests extends Middleware
 
     private function pendingOrdersCount(Request $request): int
     {
-        if (! $request->user()?->is_admin) {
+        if (! $request->user()?->can('orders.view')) {
             return 0;
         }
 

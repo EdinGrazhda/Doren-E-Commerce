@@ -5,16 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\StorefrontBanner;
+use App\Services\ProductCampaignPrice;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class HomeController extends Controller
 {
+    public function __construct(private readonly ProductCampaignPrice $campaignPrice) {}
+
     public function __invoke(Request $request): Response
     {
         $activeCategory = null;
         $categorySlug = $request->string('category')->toString();
+        $search = $request->string('search')->squish()->limit(100)->toString();
 
         if ($categorySlug !== '') {
             $activeCategory = ProductCategory::query()
@@ -51,7 +56,6 @@ class HomeController extends Controller
                 'product_category_id',
                 'name',
                 'slug',
-                'description',
                 'price_cents',
                 'currency',
                 'primary_image_url',
@@ -60,11 +64,23 @@ class HomeController extends Controller
             ])
             ->with([
                 'category:id,name,slug',
-                'variants:id,product_id,color_name,color_hex,stock_quantity,is_active,sort_order',
+                'activeCampaigns:id,name,discount_type,discount_value,starts_at,ends_at,is_active',
+                'variants' => fn ($query) => $query
+                    ->select(['id', 'product_id', 'color_name', 'color_hex', 'stock_quantity', 'reserved_quantity', 'sort_order'])
+                    ->where('is_active', true)
+                    ->whereColumn('stock_quantity', '>', 'reserved_quantity')
+                    ->orderBy('sort_order'),
             ])
             ->where('is_active', true)
             ->when($activeCategory, fn ($query) => $query->whereBelongsTo($activeCategory, 'category'))
-            ->orderBy('sort_order');
+            ->when($search !== '', fn (Builder $query) => $query->where(
+                fn (Builder $query) => $query
+                    ->whereLike('name', "%{$search}%")
+                    ->orWhereLike('sku', "%{$search}%")
+                    ->orWhereLike('description', "%{$search}%")
+            ))
+            ->orderBy('sort_order')
+            ->orderBy('id');
 
         $products = (clone $productQuery)
             ->paginate(20)
@@ -111,6 +127,7 @@ class HomeController extends Controller
             ]);
 
         return Inertia::render('welcome', [
+            'search' => $search,
             'activeCategory' => $activeCategory ? [
                 'id' => $activeCategory->id,
                 'name' => $activeCategory->name,
@@ -132,12 +149,15 @@ class HomeController extends Controller
      */
     private function productPayload(Product $product): array
     {
+        $pricing = $this->campaignPrice->calculate($product);
+
         return [
             'id' => $product->id,
             'name' => $product->name,
             'slug' => $product->slug,
-            'description' => $product->description,
-            'price_cents' => $product->price_cents,
+            'price_cents' => $pricing['price_cents'],
+            'compare_at_price_cents' => $pricing['compare_at_price_cents'],
+            'campaign' => $pricing['campaign'],
             'currency' => $product->currency,
             'image_url' => $product->primary_image_url,
             'is_featured' => $product->is_featured,
@@ -147,8 +167,6 @@ class HomeController extends Controller
                 'slug' => $product->category->slug,
             ] : null,
             'colors' => $product->variants
-                ->where('is_active', true)
-                ->where('stock_quantity', '>', 0)
                 ->unique('color_hex')
                 ->take(4)
                 ->map(fn ($variant): array => [

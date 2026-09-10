@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCartItemRequest;
 use App\Models\ProductVariant;
+use App\Services\ProductCampaignPrice;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 
 class CartItemController extends Controller
 {
-    public function store(StoreCartItemRequest $request): RedirectResponse
+    public function store(StoreCartItemRequest $request, ProductCampaignPrice $campaignPrice): RedirectResponse
     {
         $validated = $request->validated();
         $variant = ProductVariant::query()
-            ->with('product:id,name,slug,price_cents,currency,primary_image_url')
+            ->with('product.activeCampaigns:id,name,discount_type,discount_value,starts_at,ends_at,is_active')
             ->findOrFail($validated['product_variant_id']);
+        $pricing = $campaignPrice->calculate($variant->product, $variant->price_cents ?? $variant->product->price_cents);
 
         $items = session('cart.items', []);
         $key = (string) $variant->id;
@@ -31,7 +33,9 @@ class CartItemController extends Controller
             'color_name' => $variant->color_name,
             'color_hex' => $variant->color_hex,
             'quantity' => $existingQuantity + $quantity,
-            'unit_price_cents' => $variant->price_cents ?? $variant->product->price_cents,
+            'unit_price_cents' => $pricing['price_cents'],
+            'compare_at_price_cents' => $pricing['compare_at_price_cents'],
+            'campaign' => $pricing['campaign'],
             'currency' => $variant->product->currency,
         ];
 

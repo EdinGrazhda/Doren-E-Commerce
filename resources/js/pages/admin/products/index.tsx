@@ -34,26 +34,32 @@ import { dashboard } from '@/routes';
 import {
     destroy as destroyProduct,
     index as productsApiIndex,
+    show as showProduct,
     store as storeProduct,
     update as updateProduct,
 } from '@/routes/api/admin/products';
 import { index as productsIndex } from '@/routes/dashboard/products';
 
-type Product = {
+type ProductSummary = {
     id: number;
     name: string;
     slug: string;
     sku: string | null;
-    description: string | null;
     price_cents: number;
     currency: string;
     is_active: boolean;
     is_featured: boolean;
     primary_image_url: string | null;
-    gallery_image_urls: string[] | null;
     updated_at: string;
     variants_count: number;
+    stock_quantity: number;
     category: { id: number; name: string } | null;
+    colors: { name: string; hex: string | null }[];
+};
+
+type Product = ProductSummary & {
+    description: string | null;
+    gallery_image_urls: string[] | null;
     variants: ProductVariant[];
 };
 
@@ -80,7 +86,7 @@ type CategoryOption = {
 };
 
 type Props = {
-    products: AdminPaginationMeta<Product>;
+    products: AdminPaginationMeta<ProductSummary>;
     categories: CategoryOption[];
     sizeOptions: string[];
 };
@@ -177,8 +183,7 @@ const colorsFromVariants = (
                           .sort((a, b) => a.sort_order - b.sort_order)
                           .map((image) => image.image_url)
                     : [variant.image_url].filter(
-                          (imageUrl): imageUrl is string =>
-                              Boolean(imageUrl),
+                          (imageUrl): imageUrl is string => Boolean(imageUrl),
                       ),
             imageUploads: [],
             stockBySize: Object.fromEntries(
@@ -230,6 +235,7 @@ export default function AdminProductsIndex() {
     ];
     const form = useHttp<ProductFormData>(makeEmptyProduct(sizeOptions));
     const deleteRequest = useHttp<Record<string, never>>({});
+    const editRequest = useHttp<Record<string, never>, { data: Product }>({});
     const formErrors = form.errors as Record<string, string>;
 
     useEffect(() => {
@@ -271,29 +277,35 @@ export default function AdminProductsIndex() {
         setOpen(true);
     };
 
-    const openEditDialog = (product: Product) => {
-        setEditingProduct(product);
-        form.clearErrors();
-        form.setData({
-            product_category_id: product.category?.id.toString() ?? '0',
-            name: product.name,
-            slug: product.slug,
-            sku: product.sku ?? '',
-            description: product.description ?? '',
-            price: centsToPrice(product.price_cents),
-            currency: product.currency,
-            existing_image_urls: [
-                product.primary_image_url,
-                ...(product.gallery_image_urls ?? []),
-            ].filter((imageUrl): imageUrl is string => Boolean(imageUrl)),
-            image_uploads: [],
-            color_image_uploads: [],
-            is_active: product.is_active,
-            is_featured: product.is_featured,
-            colors: colorsFromVariants(product.variants, sizeOptions),
-            variants: [],
+    const openEditDialog = async (product: ProductSummary) => {
+        await editRequest.get(showProduct.url(product.id), {
+            onSuccess: ({ data }) => {
+                setEditingProduct(data);
+                form.clearErrors();
+                form.setData({
+                    product_category_id: data.category?.id.toString() ?? '0',
+                    name: data.name,
+                    slug: data.slug,
+                    sku: data.sku ?? '',
+                    description: data.description ?? '',
+                    price: centsToPrice(data.price_cents),
+                    currency: data.currency,
+                    existing_image_urls: [
+                        data.primary_image_url,
+                        ...(data.gallery_image_urls ?? []),
+                    ].filter((imageUrl): imageUrl is string =>
+                        Boolean(imageUrl),
+                    ),
+                    image_uploads: [],
+                    color_image_uploads: [],
+                    is_active: data.is_active,
+                    is_featured: data.is_featured,
+                    colors: colorsFromVariants(data.variants, sizeOptions),
+                    variants: [],
+                });
+                setOpen(true);
+            },
         });
-        setOpen(true);
     };
 
     const productSubmitData = (data: ProductFormData) => ({
@@ -366,7 +378,7 @@ export default function AdminProductsIndex() {
         void form.post(storeProduct.url(), options);
     };
 
-    const deleteProduct = (product: Product) => {
+    const deleteProduct = (product: ProductSummary) => {
         if (!window.confirm(`Delete ${product.name}?`)) {
             return;
         }
@@ -548,9 +560,7 @@ export default function AdminProductsIndex() {
                             </div>
                             <Button type="submit" variant="outline" size="icon">
                                 <Search />
-                                <span className="sr-only">
-                                    Search products
-                                </span>
+                                <span className="sr-only">Search products</span>
                             </Button>
                         </form>
                         <Dialog open={open} onOpenChange={setOpen}>
@@ -801,6 +811,8 @@ export default function AdminProductsIndex() {
                                                                             imageUrl
                                                                         }
                                                                         alt=""
+                                                                        loading="lazy"
+                                                                        decoding="async"
                                                                         className="h-full w-full object-cover"
                                                                     />
                                                                 </div>
@@ -1064,6 +1076,8 @@ export default function AdminProductsIndex() {
                                                                                             imageUrl
                                                                                         }
                                                                                         alt=""
+                                                                                        loading="lazy"
+                                                                                        decoding="async"
                                                                                         className="h-full w-full object-cover"
                                                                                     />
                                                                                 </div>
@@ -1295,6 +1309,8 @@ export default function AdminProductsIndex() {
                                                     <div className="h-12 w-10 overflow-hidden rounded-md bg-muted">
                                                         {product.primary_image_url && (
                                                             <img
+                                                                loading="lazy"
+                                                                decoding="async"
                                                                 src={
                                                                     product.primary_image_url
                                                                 }
@@ -1326,42 +1342,33 @@ export default function AdminProductsIndex() {
                                                 {product.variants_count}
                                             </td>
                                             <td className="py-3">
-                                                {product.variants
-                                                    .reduce(
-                                                        (total, variant) =>
-                                                            total +
-                                                            Number(
-                                                                variant.stock_quantity,
-                                                            ),
-                                                        0,
-                                                    )
-                                                    .toLocaleString()}
+                                                {product.stock_quantity.toLocaleString()}
                                             </td>
                                             <td className="py-3">
                                                 <div className="flex flex-wrap gap-2">
                                                     {Array.from(
                                                         new Map(
-                                                            product.variants.map(
-                                                                (variant) => [
-                                                                    `${variant.color_name}-${variant.color_hex}`,
-                                                                    variant,
+                                                            product.colors.map(
+                                                                (color) => [
+                                                                    `${color.name}-${color.hex}`,
+                                                                    color,
                                                                 ],
                                                             ),
                                                         ).values(),
                                                     ).map((variant) => (
                                                         <span
-                                                            key={`${variant.color_name}-${variant.color_hex}`}
+                                                            key={`${variant.name}-${variant.hex}`}
                                                             className="inline-flex items-center gap-1.5 text-xs"
                                                         >
                                                             <span
                                                                 className="size-3 rounded-full border"
                                                                 style={{
                                                                     backgroundColor:
-                                                                        variant.color_hex ??
+                                                                        variant.hex ??
                                                                         'transparent',
                                                                 }}
                                                             />
-                                                            {variant.color_name}
+                                                            {variant.name}
                                                         </span>
                                                     ))}
                                                 </div>
@@ -1401,9 +1408,12 @@ export default function AdminProductsIndex() {
                                                         size="sm"
                                                         variant="outline"
                                                         onClick={() =>
-                                                            openEditDialog(
+                                                            void openEditDialog(
                                                                 product,
                                                             )
+                                                        }
+                                                        disabled={
+                                                            editRequest.processing
                                                         }
                                                     >
                                                         <Edit />

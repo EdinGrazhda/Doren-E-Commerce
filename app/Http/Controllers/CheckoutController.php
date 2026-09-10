@@ -4,14 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Actions\Checkout\CreateCheckoutOrder;
 use App\Http\Requests\StoreCheckoutRequest;
+use App\Mail\OrderConfirmation;
 use App\Models\Order;
+use App\Services\PriceCartItems;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
 use RuntimeException;
 
 class CheckoutController extends Controller
 {
+    public function __construct(private readonly PriceCartItems $priceCartItems) {}
+
     public function index(): Response
     {
         return Inertia::render('checkout', $this->cartPayload());
@@ -26,6 +31,7 @@ class CheckoutController extends Controller
         }
 
         $request->session()->forget('cart.items');
+        Mail::to($order->customer_email)->queue(new OrderConfirmation($order));
 
         return to_route('checkout.thank-you', ['order' => $order->order_number]);
     }
@@ -47,7 +53,7 @@ class CheckoutController extends Controller
      */
     private function cartPayload(): array
     {
-        $items = collect(session('cart.items', []))
+        $items = $this->priceCartItems->execute(session('cart.items', []))
             ->values()
             ->map(fn (array $item): array => [
                 'product_id' => $item['product_id'],
@@ -60,7 +66,9 @@ class CheckoutController extends Controller
                 'color_hex' => $item['color_hex'],
                 'quantity' => $item['quantity'],
                 'unit_price_cents' => $item['unit_price_cents'],
-                'line_total_cents' => $item['unit_price_cents'] * $item['quantity'],
+                'compare_at_price_cents' => $item['compare_at_price_cents'] ?? null,
+                'campaign' => $item['campaign'] ?? null,
+                'line_total_cents' => $item['line_total_cents'],
                 'currency' => $item['currency'],
             ]);
 

@@ -1,10 +1,12 @@
 <?php
 
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\ProductVariant;
 use App\Models\StorefrontBanner;
 use Database\Seeders\ProductCatalogSeeder;
 use Database\Seeders\StorefrontBannerSeeder;
+use Illuminate\Support\Facades\DB;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('storefront home renders real catalog data', function () {
@@ -120,6 +122,31 @@ test('storefront home paginates the catalog after twenty products', function () 
         );
 });
 
+test('storefront catalog queries and payload stay bounded with one thousand products', function () {
+    $category = ProductCategory::factory()->create();
+
+    Product::factory()
+        ->count(1000)
+        ->for($category, 'category')
+        ->create(['is_featured' => false]);
+
+    $queryCount = 0;
+    DB::listen(function () use (&$queryCount): void {
+        $queryCount++;
+    });
+
+    $this->get(route('home'))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('newInProducts.total', 1000)
+            ->where('newInProducts.last_page', 50)
+            ->has('newInProducts.data', 20)
+            ->missing('newInProducts.data.0.description')
+        );
+
+    expect($queryCount)->toBeLessThanOrEqual(9);
+});
+
 test('storefront home filters products by category', function () {
     $this->seed([
         StorefrontBannerSeeder::class,
@@ -139,5 +166,38 @@ test('storefront home filters products by category', function () {
             ->where('newInProducts.data.0.category.slug', 'shirts')
             ->has('bestSellerProducts', 3)
             ->where('bestSellerProducts.0.name', 'Cotton Poplin Shirt')
+        );
+});
+
+test('storefront home searches active products by catalog text', function () {
+    $category = ProductCategory::factory()->create();
+
+    $matchingProduct = Product::factory()
+        ->for($category, 'category')
+        ->create([
+            'name' => 'Midnight Merino Sweater',
+            'sku' => 'DRN-MERINO-01',
+            'description' => 'A finely knitted wardrobe essential.',
+        ]);
+
+    Product::factory()->for($category, 'category')->create([
+        'name' => 'Cotton Oxford Shirt',
+        'description' => 'A crisp everyday shirt.',
+    ]);
+
+    Product::factory()->for($category, 'category')->create([
+        'name' => 'Archived Merino Cardigan',
+        'is_active' => false,
+    ]);
+
+    $this->get(route('home', ['search' => '  merino  ']))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('welcome')
+            ->where('search', 'merino')
+            ->where('newInProducts.total', 1)
+            ->has('newInProducts.data', 1)
+            ->where('newInProducts.data.0.id', $matchingProduct->id)
+            ->where('newInProducts.data.0.name', 'Midnight Merino Sweater')
         );
 });

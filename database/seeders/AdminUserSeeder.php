@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use RuntimeException;
+use Spatie\Permission\Models\Role;
 
 class AdminUserSeeder extends Seeder
 {
@@ -32,5 +33,7 @@ class AdminUserSeeder extends Seeder
             'email_verified_at' => now(),
             'is_admin' => true,
         ])->save();
+
+        $user->syncRoles([Role::findOrCreate('admin')]);
     }
 }

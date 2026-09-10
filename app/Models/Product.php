@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
@@ -28,6 +29,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $published_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read int $variants_count
+ * @property-read int|null $stock_quantity
  */
 #[Fillable([
     'product_category_id',
@@ -79,6 +82,21 @@ class Product extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /** @return BelongsToMany<Campaign, $this> */
+    public function campaigns(): BelongsToMany
+    {
+        return $this->belongsToMany(Campaign::class)->withTimestamps();
+    }
+
+    /** @return BelongsToMany<Campaign, $this> */
+    public function activeCampaigns(): BelongsToMany
+    {
+        return $this->campaigns()
+            ->where('campaigns.is_active', true)
+            ->where(fn ($query) => $query->whereNull('campaigns.starts_at')->orWhere('campaigns.starts_at', '<=', now()))
+            ->where(fn ($query) => $query->whereNull('campaigns.ends_at')->orWhere('campaigns.ends_at', '>=', now()));
     }
 
     /**

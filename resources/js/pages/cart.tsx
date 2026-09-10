@@ -27,6 +27,8 @@ type CartItem = {
     color_hex: string | null;
     quantity: number;
     unit_price_cents: number;
+    compare_at_price_cents: number | null;
+    campaign: { id: number; name: string } | null;
     line_total_cents: number;
     currency: string;
 };
@@ -162,6 +164,8 @@ export default function Cart({ items, subtotal_cents, currency }: Props) {
                                                     fallbackImage
                                                 }
                                                 alt={item.name}
+                                                loading="lazy"
+                                                decoding="async"
                                                 className="h-full w-full object-cover"
                                             />
                                         </Link>
@@ -214,6 +218,20 @@ export default function Cart({ items, subtotal_cents, currency }: Props) {
                                                 )}{' '}
                                                 each
                                             </p>
+                                            {item.compare_at_price_cents && (
+                                                <p className="mt-1 text-[11px] text-[#756e62] line-through">
+                                                    {formatPrice(
+                                                        item.compare_at_price_cents,
+                                                        item.currency,
+                                                    )}{' '}
+                                                    each
+                                                </p>
+                                            )}
+                                            {item.campaign && (
+                                                <p className="mt-1 text-[10px] font-bold text-red-700 uppercase">
+                                                    {item.campaign.name}
+                                                </p>
+                                            )}
                                         </div>
                                     </article>
                                 ))}

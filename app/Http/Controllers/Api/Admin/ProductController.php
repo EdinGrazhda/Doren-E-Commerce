@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Actions\Images\StoreOptimizedImage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProductRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
@@ -13,12 +14,13 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
     private const array Sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+
+    public function __construct(private StoreOptimizedImage $storeOptimizedImage) {}
 
     public function index(Request $request): JsonResponse
     {
@@ -36,16 +38,14 @@ class ProductController extends Controller
                 'is_active',
                 'is_featured',
                 'primary_image_url',
-                'gallery_image_urls',
-                'description',
                 'updated_at',
             ])
             ->with([
                 'category:id,name',
-                'variants:id,product_id,size,color_name,color_hex,image_url,stock_quantity,is_active',
-                'variants.images:id,product_variant_id,image_url,sort_order',
+                'variants:id,product_id,color_name,color_hex',
             ])
             ->withCount('variants')
+            ->withSum('variants as stock_quantity', 'stock_quantity')
             ->when($search !== '', function ($query) use ($search): void {
                 $query->where(function ($query) use ($search): void {
                     $query->where('name', 'like', "%{$search}%")
@@ -56,8 +56,31 @@ class ProductController extends Controller
                 });
             })
             ->latest('updated_at')
+            ->latest('id')
             ->paginate(15)
-            ->withQueryString();
+            ->withQueryString()
+            ->through(fn (Product $product): array => [
+                'id' => $product->id,
+                'name' => $product->name,
+                'slug' => $product->slug,
+                'sku' => $product->sku,
+                'price_cents' => $product->price_cents,
+                'currency' => $product->currency,
+                'is_active' => $product->is_active,
+                'is_featured' => $product->is_featured,
+                'primary_image_url' => $product->primary_image_url,
+                'updated_at' => $product->updated_at,
+                'variants_count' => $product->variants_count,
+                'stock_quantity' => (int) $product->stock_quantity,
+                'category' => $product->category,
+                'colors' => $product->variants
+                    ->unique(fn (ProductVariant $variant): string => $variant->color_name.'|'.$variant->color_hex)
+                    ->map(fn (ProductVariant $variant): array => [
+                        'name' => $variant->color_name,
+                        'hex' => $variant->color_hex,
+                    ])
+                    ->values(),
+            ]);
 
         $categories = ProductCategory::query()
             ->select(['id', 'name'])
@@ -71,6 +94,17 @@ class ProductController extends Controller
                 'categories' => $categories,
                 'sizeOptions' => self::Sizes,
             ],
+        ]);
+    }
+
+    public function show(Product $product): JsonResponse
+    {
+        return response()->json([
+            'data' => $product->load([
+                'category:id,name',
+                'variants:id,product_id,size,color_name,color_hex,image_url,stock_quantity,is_active,sort_order',
+                'variants.images:id,product_variant_id,image_url,sort_order',
+            ]),
         ]);
     }
 
@@ -203,9 +237,7 @@ class ProductController extends Controller
         if ($request->hasFile('image_uploads')) {
             $uploadedImageUrls = collect($request->file('image_uploads'))
                 ->take(4)
-                ->map(fn (UploadedFile $image): string => Storage::disk('public')->url(
-                    $image->store('products', 'public'),
-                ))
+                ->map(fn (UploadedFile $image): string => $this->storeOptimizedImage->handle($image, 'products'))
                 ->values();
 
             $attributes['primary_image_url'] = $uploadedImageUrls->first();
@@ -221,8 +253,10 @@ class ProductController extends Controller
         }
 
         if ($request->hasFile('primary_image_upload')) {
-            $path = $request->file('primary_image_upload')->store('products', 'public');
-            $attributes['primary_image_url'] = Storage::disk('public')->url($path);
+            $attributes['primary_image_url'] = $this->storeOptimizedImage->handle(
+                $request->file('primary_image_upload'),
+                'products',
+            );
         }
 
         unset($attributes['existing_image_urls'], $attributes['image_uploads']);
@@ -261,8 +295,9 @@ class ProductController extends Controller
         $storedImageUrls = collect($imageUploads)
             ->filter(fn (mixed $imageUpload): bool => $imageUpload instanceof UploadedFile)
             ->take(4)
-            ->map(fn (UploadedFile $imageUpload): string => Storage::disk('public')->url(
-                $imageUpload->store('product-variants', 'public'),
+            ->map(fn (UploadedFile $imageUpload): string => $this->storeOptimizedImage->handle(
+                $imageUpload,
+                'product-variants',
             ))
             ->values()
             ->all();

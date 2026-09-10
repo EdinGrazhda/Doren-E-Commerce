@@ -6,8 +6,10 @@ import {
     Images,
     LayoutDashboard,
     Package,
+    Tags,
     Settings,
     ShoppingBag,
+    ShieldCheck,
     Store,
     Users,
 } from 'lucide-react';
@@ -27,8 +29,9 @@ import {
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { dashboard, home } from '@/routes';
-import { inventory, sales, settings } from '@/routes/dashboard';
+import { accessControl, inventory, sales, settings } from '@/routes/dashboard';
 import { index as bannersIndex } from '@/routes/dashboard/banners';
+import { index as campaignsIndex } from '@/routes/dashboard/campaigns';
 import { index as categoriesIndex } from '@/routes/dashboard/categories';
 import { index as customersIndex } from '@/routes/dashboard/customers';
 import { index as ordersIndex } from '@/routes/dashboard/orders';
@@ -37,7 +40,7 @@ import type { NavItem } from '@/types';
 
 type AdminNavSection = {
     title: string;
-    items: NavItem[];
+    items: Array<NavItem & { permission: string }>;
 };
 
 const adminNavSections: AdminNavSection[] = [
@@ -46,6 +49,7 @@ const adminNavSections: AdminNavSection[] = [
         items: [
             {
                 title: 'Dashboard',
+                permission: 'dashboard.view',
                 href: dashboard(),
                 icon: LayoutDashboard,
             },
@@ -56,21 +60,25 @@ const adminNavSections: AdminNavSection[] = [
         items: [
             {
                 title: 'Orders',
+                permission: 'orders.view',
                 href: ordersIndex(),
                 icon: ShoppingBag,
             },
             {
                 title: 'Products',
+                permission: 'products.view',
                 href: productsIndex(),
                 icon: Package,
             },
             {
                 title: 'Categories',
+                permission: 'categories.view',
                 href: categoriesIndex(),
                 icon: FolderTree,
             },
             {
                 title: 'Inventory',
+                permission: 'inventory.view',
                 href: inventory(),
                 icon: Boxes,
             },
@@ -80,7 +88,14 @@ const adminNavSections: AdminNavSection[] = [
         title: 'Sales',
         items: [
             {
+                title: 'Product Campaigns',
+                permission: 'campaigns.view',
+                href: campaignsIndex(),
+                icon: Tags,
+            },
+            {
                 title: 'Counter Sales',
+                permission: 'sales.view',
                 href: sales(),
                 icon: CircleDollarSign,
             },
@@ -91,6 +106,7 @@ const adminNavSections: AdminNavSection[] = [
         items: [
             {
                 title: 'Customers',
+                permission: 'customers.view',
                 href: customersIndex(),
                 icon: Users,
             },
@@ -101,18 +117,32 @@ const adminNavSections: AdminNavSection[] = [
         items: [
             {
                 title: 'Banners',
+                permission: 'banners.view',
                 href: bannersIndex(),
                 icon: Images,
             },
             {
                 title: 'Store Settings',
+                permission: 'settings.view',
                 href: settings(),
                 icon: Settings,
             },
             {
                 title: 'Storefront',
+                permission: 'storefront.view',
                 href: home(),
                 icon: Store,
+            },
+        ],
+    },
+    {
+        title: 'Access Control',
+        items: [
+            {
+                title: 'Roles & Permissions',
+                permission: 'roles.manage',
+                href: accessControl(),
+                icon: ShieldCheck,
             },
         ],
     },
@@ -120,8 +150,17 @@ const adminNavSections: AdminNavSection[] = [
 
 export function AdminSidebar() {
     const { isCurrentOrParentUrl } = useCurrentUrl();
-    const { dashboard: dashboardStats } = usePage().props;
+    const { auth, dashboard: dashboardStats } = usePage().props;
     const pendingOrdersCount = dashboardStats.orders.pending_count;
+    const permissions = auth.user.permissions ?? [];
+    const visibleSections = adminNavSections
+        .map((section) => ({
+            ...section,
+            items: section.items.filter((item) =>
+                permissions.includes(item.permission),
+            ),
+        }))
+        .filter((section) => section.items.length > 0);
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -138,7 +177,7 @@ export function AdminSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                {adminNavSections.map((section) => (
+                {visibleSections.map((section) => (
                     <SidebarGroup key={section.title} className="px-2 py-0">
                         <SidebarGroupLabel>{section.title}</SidebarGroupLabel>
                         <SidebarMenu>

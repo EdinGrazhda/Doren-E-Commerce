@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AccessControlController;
+use App\Http\Controllers\Admin\CampaignController as AdminCampaignController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\InventoryController as AdminInventoryController;
@@ -28,23 +30,24 @@ Route::get('/checkout/thank-you/{order:order_number}', [CheckoutController::clas
     ->name('checkout.thank-you');
 Route::get('/products/{product:slug}', ProductShowController::class)->name('products.show');
 
-Route::middleware(['auth', 'verified', 'admin'])
+Route::middleware(['auth', 'verified', 'role:admin|employee'])
     ->prefix('dashboard')
     ->group(function (): void {
         Route::get('/', AdminDashboardController::class)->name('dashboard');
-        Route::resource('orders', AdminOrderController::class)->only('index')->names('dashboard.orders');
-        Route::resource('products', AdminProductController::class)->only('index')->names('dashboard.products');
-        Route::get('/inventory', AdminInventoryController::class)->name('dashboard.inventory');
-        Route::get('/sales', AdminSalesController::class)->name('dashboard.sales');
+
+        Route::resource('orders', AdminOrderController::class)->only('index')->middleware('permission:orders.view')->names('dashboard.orders');
+        Route::resource('products', AdminProductController::class)->only('index')->middleware('permission:products.view')->names('dashboard.products');
+        Route::get('/inventory', AdminInventoryController::class)->middleware('permission:inventory.view')->name('dashboard.inventory');
         Route::resource('categories', AdminProductCategoryController::class)
-            ->only('index')
-            ->names('dashboard.categories')
+            ->only('index')->middleware('permission:categories.view')->names('dashboard.categories')
             ->parameters(['categories' => 'productCategory']);
-        Route::resource('banners', StorefrontBannerController::class)
-            ->only('index')
-            ->names('dashboard.banners');
-        Route::get('/customers', [CustomerController::class, 'index'])->name('dashboard.customers.index');
-        Route::get('/settings', StoreSettingController::class)->name('dashboard.settings');
+
+        Route::get('/campaigns', AdminCampaignController::class)->middleware('permission:campaigns.view')->name('dashboard.campaigns.index');
+        Route::get('/sales', AdminSalesController::class)->middleware('permission:sales.view')->name('dashboard.sales');
+        Route::get('/customers', [CustomerController::class, 'index'])->middleware('permission:customers.view')->name('dashboard.customers.index');
+        Route::resource('banners', StorefrontBannerController::class)->only('index')->middleware('permission:banners.view')->names('dashboard.banners');
+        Route::get('/settings', StoreSettingController::class)->middleware('permission:settings.view')->name('dashboard.settings');
+        Route::get('/access-control', AccessControlController::class)->middleware('permission:roles.manage|permissions.manage')->name('dashboard.access-control');
     });
 
 require __DIR__.'/settings.php';

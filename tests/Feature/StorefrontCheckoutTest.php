@@ -1,8 +1,10 @@
 <?php
 
+use App\Mail\OrderConfirmation;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use Illuminate\Support\Facades\Mail;
 
 test('storefront checkout renders cart and form', function () {
     $this->withSession([
@@ -22,11 +24,14 @@ test('storefront checkout renders cart and form', function () {
 });
 
 test('storefront checkout creates pending order from cart', function () {
+    Mail::fake();
+
     $product = Product::factory()->create([
         'name' => 'Organic Cotton Polo',
         'slug' => 'organic-cotton-polo',
         'price_cents' => 8800,
         'currency' => 'USD',
+        'primary_image_url' => 'https://example.com/polo.jpg',
         'is_active' => true,
     ]);
     $variant = ProductVariant::factory()->for($product)->create([
@@ -57,9 +62,25 @@ test('storefront checkout creates pending order from cart', function () {
         ->and($order->customer_email)->toBe('ada@example.com')
         ->and($order->total_cents)->toBe(8800)
         ->and($order->items)->toHaveCount(1)
-        ->and($order->items->first()->sku)->toBe('DRN-POLO-OLV-M');
+        ->and($order->items->first()->sku)->toBe('DRN-POLO-OLV-M')
+        ->and($order->items->first()->product_options['image_url'])->toBe('https://example.com/polo.jpg');
 
     expect($variant->fresh()->stock_quantity)->toBe(2);
+
+    Mail::assertQueued(
+        OrderConfirmation::class,
+        fn (OrderConfirmation $mail): bool => $mail->hasTo('ada@example.com') && $mail->order->is($order),
+    );
+
+    $renderedEmail = (new OrderConfirmation($order))->render();
+
+    expect($renderedEmail)
+        ->toContain($order->order_number)
+        ->toContain('Organic Cotton Polo')
+        ->toContain('Olive Green / M')
+        ->toContain('https://example.com/polo.jpg')
+        ->toContain('10 Computing Lane')
+        ->toContain('Leave at reception.');
 });
 
 test('storefront checkout requires a cart', function () {

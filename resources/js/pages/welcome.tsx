@@ -1,4 +1,4 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import {
     ArrowLeft,
     ArrowRight,
@@ -14,9 +14,10 @@ import {
     ShoppingBag,
     SlidersHorizontal,
     User,
+    X,
     Youtube,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { type FormEvent, useEffect, useRef, useState } from 'react';
 
 import {
     cart as cartRoute,
@@ -38,8 +39,9 @@ type StoreProduct = {
     id: number;
     name: string;
     slug: string;
-    description: string | null;
     price_cents: number;
+    compare_at_price_cents: number | null;
+    campaign: { id: number; name: string } | null;
     currency: string;
     image_url: string | null;
     is_featured: boolean;
@@ -78,6 +80,7 @@ type PaginatedProducts = {
 };
 
 type Props = {
+    search: string;
     activeCategory: {
         id: number;
         name: string;
@@ -183,6 +186,32 @@ function formatPrice(product: StoreProduct): string {
     }).format(product.price_cents / 100);
 }
 
+function paginationPages(currentPage: number, lastPage: number): number[] {
+    if (lastPage <= 7) {
+        return Array.from({ length: lastPage }, (_, index) => index + 1);
+    }
+
+    const start = Math.max(2, currentPage - 1);
+    const end = Math.min(lastPage - 1, currentPage + 1);
+    const pages = [1];
+
+    if (start > 2) {
+        pages.push(-1);
+    }
+
+    for (let page = start; page <= end; page += 1) {
+        pages.push(page);
+    }
+
+    if (end < lastPage - 1) {
+        pages.push(-2);
+    }
+
+    pages.push(lastPage);
+
+    return pages;
+}
+
 function sectionId(label: string): string {
     return label.toLowerCase().replace(/\s+/g, '-');
 }
@@ -209,11 +238,16 @@ function categoryHref(categorySlug: string) {
     });
 }
 
-function productPageHref(page: number, categorySlug?: string): string {
+function productPageHref(
+    page: number,
+    categorySlug?: string,
+    search?: string,
+): string {
     return `${home.url({
         query: {
             page,
             ...(categorySlug ? { category: categorySlug } : {}),
+            ...(search ? { search } : {}),
         },
     })}#new-in`;
 }
@@ -320,7 +354,7 @@ function HeroCarousel({ banners }: { banners: StorefrontBanner[] }) {
 
     return (
         <section className="relative overflow-hidden bg-[#e8ded2]">
-            <div className="mx-auto grid min-h-[350px] max-w-[1158px] grid-cols-1 lg:min-h-[350px] lg:grid-cols-[0.92fr_1.08fr]">
+            <div className="mx-auto grid h-[760px] max-w-[1158px] grid-cols-1 grid-rows-[430px_330px] sm:h-[720px] sm:grid-rows-[390px_330px] lg:h-[430px] lg:grid-cols-[0.92fr_1.08fr] lg:grid-rows-1">
                 <div
                     className="relative z-10 flex flex-col justify-center px-10 py-12 lg:px-12"
                     aria-live="polite"
@@ -364,6 +398,8 @@ function HeroCarousel({ banners }: { banners: StorefrontBanner[] }) {
                         key={activeBanner?.id ?? 'hero-fallback'}
                         src={activeBanner?.image_url ?? heroImage}
                         alt={activeBanner?.title ?? 'Doren olive polo outfit'}
+                        fetchPriority="high"
+                        decoding="async"
                         className="absolute inset-0 h-full w-full object-cover object-center transition duration-500"
                     />
                     <div className="absolute inset-0 bg-linear-to-r from-[#e8ded2]/80 via-transparent to-transparent" />
@@ -404,6 +440,8 @@ function BottomCampaign({ banner }: { banner: StorefrontBanner | null }) {
             <img
                 src={banner?.image_url ?? bannerImage}
                 alt={banner?.title ?? 'Doren spring summer tailoring'}
+                loading="lazy"
+                decoding="async"
                 className="absolute inset-0 h-full w-full object-cover object-center"
             />
             <div className="absolute inset-0 bg-linear-to-r from-[#e8e0d4] via-[#e8e0d4]/70 to-transparent" />
@@ -459,6 +497,8 @@ function ProductCard({
                     <img
                         src={imageFor(product.image_url, index)}
                         alt={product.name}
+                        loading="lazy"
+                        decoding="async"
                         className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.035]"
                     />
                     {badge && (
@@ -482,9 +522,22 @@ function ProductCard({
                 >
                     {product.name}
                 </Link>
-                <p className="mt-1 text-[12px] leading-tight font-semibold">
-                    {formatPrice(product)}
-                </p>
+                <div className="mt-1 flex items-center gap-2 text-[12px] leading-tight font-semibold">
+                    <span>{formatPrice(product)}</span>
+                    {product.compare_at_price_cents && (
+                        <span className="font-normal text-[#756e62] line-through">
+                            {new Intl.NumberFormat('en-US', {
+                                style: 'currency',
+                                currency: product.currency || 'USD',
+                            }).format(product.compare_at_price_cents / 100)}
+                        </span>
+                    )}
+                    {product.campaign && (
+                        <span className="text-red-700">
+                            {product.campaign.name}
+                        </span>
+                    )}
+                </div>
                 <div className="mt-3 flex gap-2">
                     {(product.colors.length
                         ? product.colors
@@ -558,17 +611,19 @@ function ProductRail({
 function ProductPagination({
     pagination,
     categorySlug,
+    search,
 }: {
     pagination: PaginatedProducts;
     categorySlug?: string;
+    search?: string;
 }) {
     if (pagination.last_page <= 1) {
         return null;
     }
 
-    const pages = Array.from(
-        { length: pagination.last_page },
-        (_, index) => index + 1,
+    const pages = paginationPages(
+        pagination.current_page,
+        pagination.last_page,
     );
 
     return (
@@ -581,6 +636,7 @@ function ProductPagination({
                     href={productPageHref(
                         pagination.current_page - 1,
                         categorySlug,
+                        search,
                     )}
                     className="grid h-9 w-9 place-items-center border border-[#cfc6b8] transition hover:bg-[#151513] hover:text-white"
                     aria-label="Previous product page"
@@ -596,25 +652,38 @@ function ProductPagination({
                 </span>
             )}
 
-            {pages.map((page) => (
-                <Link
-                    key={page}
-                    href={productPageHref(page, categorySlug)}
-                    className={`grid h-9 min-w-9 place-items-center border px-2 text-[11px] font-bold ${page === pagination.current_page ? 'border-[#151513] bg-[#151513] text-white' : 'border-[#cfc6b8] transition hover:bg-[#151513] hover:text-white'}`}
-                    aria-label={`Product page ${page}`}
-                    aria-current={
-                        page === pagination.current_page ? 'page' : undefined
-                    }
-                >
-                    {page}
-                </Link>
-            ))}
+            {pages.map((page) =>
+                page < 0 ? (
+                    <span
+                        key={page}
+                        className="grid h-9 min-w-9 place-items-center text-[11px]"
+                        aria-hidden="true"
+                    >
+                        …
+                    </span>
+                ) : (
+                    <Link
+                        key={page}
+                        href={productPageHref(page, categorySlug, search)}
+                        className={`grid h-9 min-w-9 place-items-center border px-2 text-[11px] font-bold ${page === pagination.current_page ? 'border-[#151513] bg-[#151513] text-white' : 'border-[#cfc6b8] transition hover:bg-[#151513] hover:text-white'}`}
+                        aria-label={`Product page ${page}`}
+                        aria-current={
+                            page === pagination.current_page
+                                ? 'page'
+                                : undefined
+                        }
+                    >
+                        {page}
+                    </Link>
+                ),
+            )}
 
             {pagination.current_page < pagination.last_page ? (
                 <Link
                     href={productPageHref(
                         pagination.current_page + 1,
                         categorySlug,
+                        search,
                     )}
                     className="grid h-9 w-9 place-items-center border border-[#cfc6b8] transition hover:bg-[#151513] hover:text-white"
                     aria-label="Next product page"
@@ -634,6 +703,7 @@ function ProductPagination({
 }
 
 export default function Welcome({
+    search,
     activeCategory,
     banners,
     categories,
@@ -642,6 +712,60 @@ export default function Welcome({
 }: Props) {
     const { auth, cart } = usePage().props;
     const heroBanners = banners.hero ?? [];
+    const [isSearchOpen, setIsSearchOpen] = useState(search !== '');
+    const [searchValue, setSearchValue] = useState(search);
+    const searchInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (!isSearchOpen) {
+            return;
+        }
+
+        searchInputRef.current?.focus();
+
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setIsSearchOpen(false);
+            }
+        };
+
+        window.addEventListener('keydown', closeOnEscape);
+
+        return () => window.removeEventListener('keydown', closeOnEscape);
+    }, [isSearchOpen]);
+
+    const submitSearch = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const normalizedSearch = searchValue.trim();
+
+        router.get(
+            home.url(),
+            {
+                ...(normalizedSearch ? { search: normalizedSearch } : {}),
+                ...(activeCategory ? { category: activeCategory.slug } : {}),
+            },
+            {
+                preserveState: true,
+                replace: true,
+                onSuccess: () => {
+                    document
+                        .getElementById('new-in')
+                        ?.scrollIntoView({ behavior: 'smooth' });
+                },
+            },
+        );
+    };
+
+    const clearSearch = () => {
+        setSearchValue('');
+
+        router.get(
+            home.url(),
+            activeCategory ? { category: activeCategory.slug } : {},
+            { preserveState: true, replace: true },
+        );
+    };
 
     return (
         <>
@@ -678,10 +802,21 @@ export default function Welcome({
                         <div className="flex items-center gap-3">
                             <button
                                 type="button"
-                                className="hidden h-9 w-9 place-items-center sm:grid"
-                                aria-label="Search"
+                                className="grid h-9 w-9 place-items-center"
+                                aria-label={
+                                    isSearchOpen
+                                        ? 'Close search'
+                                        : 'Open search'
+                                }
+                                aria-expanded={isSearchOpen}
+                                aria-controls="storefront-search"
+                                onClick={() => setIsSearchOpen((open) => !open)}
                             >
-                                <Search className="h-5 w-5 stroke-[1.6]" />
+                                {isSearchOpen ? (
+                                    <X className="h-5 w-5 stroke-[1.6]" />
+                                ) : (
+                                    <Search className="h-5 w-5 stroke-[1.6]" />
+                                )}
                             </button>
                             <Link
                                 href={auth.user ? adminDashboard() : login()}
@@ -701,6 +836,48 @@ export default function Welcome({
                                 </span>
                             </Link>
                         </div>
+                    </div>
+                    <div
+                        id="storefront-search"
+                        className={`absolute inset-x-0 top-full border-b border-[#dfd8cc] bg-[#f8f4ed] shadow-sm transition duration-200 ease-out ${isSearchOpen ? 'visible translate-y-0 opacity-100' : 'invisible -translate-y-2 opacity-0'}`}
+                    >
+                        <form
+                            className="mx-auto flex max-w-[760px] items-center gap-3 px-6 py-4"
+                            role="search"
+                            onSubmit={submitSearch}
+                        >
+                            <Search
+                                className="h-5 w-5 shrink-0 stroke-[1.5] text-[#655f55]"
+                                aria-hidden="true"
+                            />
+                            <input
+                                ref={searchInputRef}
+                                type="search"
+                                name="search"
+                                value={searchValue}
+                                onChange={(event) =>
+                                    setSearchValue(event.target.value)
+                                }
+                                placeholder="Search products"
+                                autoComplete="off"
+                                className="h-10 min-w-0 flex-1 border-0 border-b border-[#bdb4a7] bg-transparent px-1 text-sm transition outline-none focus:border-[#151513]"
+                            />
+                            {searchValue && (
+                                <button
+                                    type="button"
+                                    className="text-[10px] font-bold tracking-[0.1em] uppercase"
+                                    onClick={clearSearch}
+                                >
+                                    Clear
+                                </button>
+                            )}
+                            <button
+                                type="submit"
+                                className="inline-flex h-10 items-center bg-[#151513] px-5 text-[10px] font-bold tracking-[0.1em] text-white uppercase transition hover:bg-[#34312b]"
+                            >
+                                Search
+                            </button>
+                        </form>
                     </div>
                 </header>
 
@@ -764,6 +941,8 @@ export default function Welcome({
                                                 index,
                                             )}
                                             alt={`${category.name} collection`}
+                                            loading="lazy"
+                                            decoding="async"
                                             className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.035]"
                                         />
                                         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent" />
@@ -785,22 +964,40 @@ export default function Welcome({
                     <ProductRail
                         id="new-in"
                         title={
-                            activeCategory
-                                ? `${activeCategory.name} Products`
-                                : 'New In'
+                            search
+                                ? `Search results for “${search}”`
+                                : activeCategory
+                                  ? `${activeCategory.name} Products`
+                                  : 'New In'
                         }
                         products={newInProducts.data}
                     />
+                    {search && newInProducts.data.length === 0 && (
+                        <section
+                            id="new-in"
+                            className="mx-auto max-w-[1158px] border-t border-[#ddd6ca] px-6 py-14 text-center"
+                        >
+                            <h2 className="text-[14px] font-bold tracking-[0.08em] uppercase">
+                                No products found
+                            </h2>
+                            <p className="mt-2 text-sm text-[#655f55]">
+                                Try another name, description, or product code.
+                            </p>
+                        </section>
+                    )}
                     <ProductPagination
                         pagination={newInProducts}
                         categorySlug={activeCategory?.slug}
+                        search={search}
                     />
-                    <ProductRail
-                        id="best-sellers"
-                        title="Best Sellers"
-                        products={bestSellerProducts}
-                        featuredBadges
-                    />
+                    {!search && (
+                        <ProductRail
+                            id="best-sellers"
+                            title="Best Sellers"
+                            products={bestSellerProducts}
+                            featuredBadges
+                        />
+                    )}
 
                     <BottomCampaign banner={banners.bottom} />
 

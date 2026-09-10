@@ -68,7 +68,30 @@ test('admins can receive stock and the product catalog reflects the new balance'
     $this->actingAs($admin)
         ->getJson(route('api.admin.products.index'))
         ->assertSuccessful()
-        ->assertJsonPath('data.products.data.0.variants.0.stock_quantity', 19);
+        ->assertJsonPath('data.products.data.0.stock_quantity', 19);
+});
+
+test('received variants keep a stable position in the inventory listing', function () {
+    $admin = User::factory()->admin()->create();
+    $variants = ProductVariant::factory()
+        ->count(16)
+        ->create(['stock_quantity' => 10]);
+    $receivedVariant = $variants->first();
+
+    $this->actingAs($admin)
+        ->postJson(route('api.admin.inventory.store'), [
+            'product_variant_id' => $receivedVariant->id,
+            'type' => InventoryMovementType::Received->value,
+            'quantity' => 5,
+        ])
+        ->assertCreated()
+        ->assertJsonPath('data.balance_after', 15);
+
+    $this->actingAs($admin)
+        ->getJson(route('api.admin.inventory.index'))
+        ->assertSuccessful()
+        ->assertJsonPath('data.variants.data.0.id', $receivedVariant->id)
+        ->assertJsonPath('data.variants.data.0.stock_quantity', 15);
 });
 
 test('admins can record a sale with revenue and decrement stock', function () {

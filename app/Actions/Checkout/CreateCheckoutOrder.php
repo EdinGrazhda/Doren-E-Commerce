@@ -6,12 +6,15 @@ use App\Models\Order;
 use App\Models\ProductVariant;
 use App\OrderStatus;
 use App\PaymentStatus;
+use App\Services\ProductCampaignPrice;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use RuntimeException;
 
 class CreateCheckoutOrder
 {
+    public function __construct(private readonly ProductCampaignPrice $campaignPrice) {}
+
     /**
      * @param  array<string, mixed>  $customerData
      * @param  array<string, array<string, mixed>>  $cartItems
@@ -21,33 +24,15 @@ class CreateCheckoutOrder
         return DB::transaction(function () use ($customerData, $cartItems): Order {
             $variantIds = collect($cartItems)->pluck('variant_id')->values();
             $variants = ProductVariant::query()
-                ->with('product:id,name,slug,is_active,price_cents,currency')
+                ->with('product.activeCampaigns:id,name,discount_type,discount_value,starts_at,ends_at,is_active')
                 ->whereIn('id', $variantIds)
                 ->lockForUpdate()
                 ->get()
                 ->keyBy('id');
 
-            $subtotalCents = collect($cartItems)->sum(
-                fn (array $item): int => (int) $item['unit_price_cents'] * (int) $item['quantity'],
-            );
             $currency = collect($cartItems)->first()['currency'] ?? 'USD';
 
-            $order = Order::query()->create([
-                ...$customerData,
-                'shipping_country_code' => Str::upper((string) $customerData['shipping_country_code']),
-                'order_number' => $this->orderNumber(),
-                'status' => OrderStatus::Pending,
-                'payment_status' => PaymentStatus::Pending,
-                'subtotal_cents' => $subtotalCents,
-                'shipping_cents' => 0,
-                'tax_cents' => 0,
-                'discount_cents' => 0,
-                'total_cents' => $subtotalCents,
-                'currency' => $currency,
-                'placed_at' => now(),
-            ]);
-
-            foreach ($cartItems as $item) {
+            $pricedItems = collect($cartItems)->map(function (array $item) use ($variants): array {
                 $variant = $variants->get((int) $item['variant_id']);
 
                 if (! $variant || ! $variant->is_active || ! $variant->product?->is_active) {
@@ -58,7 +43,32 @@ class CreateCheckoutOrder
                     throw new RuntimeException(__('One of your cart items is out of stock.'));
                 }
 
-                $unitPriceCents = (int) ($variant->price_cents ?? $variant->product->price_cents);
+                $basePriceCents = (int) ($variant->price_cents ?? $variant->product->price_cents);
+                $pricing = $this->campaignPrice->calculate($variant->product, $basePriceCents);
+
+                return [...$item, 'variant' => $variant, 'base_price_cents' => $basePriceCents, 'unit_price_cents' => $pricing['price_cents']];
+            });
+            $subtotalCents = $pricedItems->sum(fn (array $item): int => $item['base_price_cents'] * (int) $item['quantity']);
+            $totalCents = $pricedItems->sum(fn (array $item): int => $item['unit_price_cents'] * (int) $item['quantity']);
+
+            $order = Order::query()->create([
+                ...$customerData,
+                'shipping_country_code' => Str::upper((string) $customerData['shipping_country_code']),
+                'order_number' => $this->orderNumber(),
+                'status' => OrderStatus::Pending,
+                'payment_status' => PaymentStatus::Pending,
+                'subtotal_cents' => $subtotalCents,
+                'shipping_cents' => 0,
+                'tax_cents' => 0,
+                'discount_cents' => $subtotalCents - $totalCents,
+                'total_cents' => $totalCents,
+                'currency' => $currency,
+                'placed_at' => now(),
+            ]);
+
+            foreach ($pricedItems as $item) {
+                $variant = $item['variant'];
+                $unitPriceCents = $item['unit_price_cents'];
                 $quantity = (int) $item['quantity'];
 
                 $order->items()->create([
@@ -75,6 +85,7 @@ class CreateCheckoutOrder
                         'size' => $variant->size,
                         'color' => $variant->color_name,
                         'color_hex' => $variant->color_hex,
+                        'image_url' => $variant->image_url ?: $variant->product->primary_image_url,
                     ],
                 ]);
 

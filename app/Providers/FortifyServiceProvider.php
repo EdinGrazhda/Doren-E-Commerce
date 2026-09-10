@@ -47,7 +47,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::authenticateUsing(function (Request $request): ?User {
             $user = User::where('email', $request->email)->first();
 
-            if (! $user || ! $user->is_admin) {
+            if (! $user || ! $user->hasAnyRole(['admin', 'employee'])) {
                 return null;
             }
 

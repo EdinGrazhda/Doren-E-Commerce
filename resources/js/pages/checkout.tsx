@@ -367,6 +367,8 @@ export default function Checkout({ items, subtotal_cents, currency }: Props) {
                                                         fallbackImage
                                                     }
                                                     alt={item.name}
+                                                    loading="lazy"
+                                                    decoding="async"
                                                     className="h-full w-full object-cover"
                                                 />
                                             </Link>

@@ -395,6 +395,7 @@ export default function AdminBannersIndex() {
                                                     editingBanner.title ??
                                                     'Carousel slide'
                                                 }
+                                                decoding="async"
                                                 className="h-full w-full object-cover"
                                             />
                                         </div>
@@ -487,6 +488,8 @@ export default function AdminBannersIndex() {
                                             alt={
                                                 banner.title ?? 'Carousel slide'
                                             }
+                                            loading="lazy"
+                                            decoding="async"
                                             className="h-full w-full object-cover"
                                         />
                                     ) : (

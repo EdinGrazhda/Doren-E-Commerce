@@ -39,6 +39,7 @@ type Product = {
     description: string | null;
     price_cents: number;
     compare_at_price_cents: number | null;
+    campaign: { id: number; name: string } | null;
     currency: string;
     image_url: string | null;
     images: string[];
@@ -144,6 +145,8 @@ function ProductTile({
                     <img
                         src={imageFor(product.image_url, index)}
                         alt={product.name}
+                        loading="lazy"
+                        decoding="async"
                         className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.035]"
                     />
                 </Link>
@@ -204,8 +207,8 @@ export default function Show({ product, relatedProducts }: Props) {
         availableVariants.forEach((variant) => {
             const variantImages = variant.images.length
                 ? variant.images
-                : [variant.image_url].filter(
-                      (imageUrl): imageUrl is string => Boolean(imageUrl),
+                : [variant.image_url].filter((imageUrl): imageUrl is string =>
+                      Boolean(imageUrl),
                   );
 
             colors.set(variant.color_name, {
@@ -402,6 +405,7 @@ export default function Show({ product, relatedProducts }: Props) {
                                             <img
                                                 src={imageFor(image, index)}
                                                 alt=""
+                                                decoding="async"
                                                 className="h-full w-full object-cover"
                                             />
                                         </button>
@@ -422,6 +426,8 @@ export default function Show({ product, relatedProducts }: Props) {
                                                 : 0,
                                         )}
                                         alt={product.name}
+                                        fetchPriority="high"
+                                        decoding="async"
                                         className="h-full w-full object-cover"
                                     />
                                     {selectedColor &&
@@ -470,6 +476,8 @@ export default function Show({ product, relatedProducts }: Props) {
                                                             index,
                                                         )}
                                                         alt=""
+                                                        loading="lazy"
+                                                        decoding="async"
                                                         className="h-full w-full object-cover"
                                                     />
                                                 </button>
@@ -501,12 +509,27 @@ export default function Show({ product, relatedProducts }: Props) {
                             <h1 className="[font-family:Georgia,_serif] text-[38px] leading-[1.05] font-medium tracking-normal sm:text-[44px]">
                                 {product.name}
                             </h1>
-                            <p className="mt-3 text-[18px] font-semibold">
-                                {formatPrice(
-                                    product.price_cents,
-                                    product.currency,
+                            <div className="mt-3 flex items-center gap-3 text-[18px] font-semibold">
+                                <span>
+                                    {formatPrice(
+                                        product.price_cents,
+                                        product.currency,
+                                    )}
+                                </span>
+                                {product.compare_at_price_cents && (
+                                    <span className="text-sm font-normal text-[#756e62] line-through">
+                                        {formatPrice(
+                                            product.compare_at_price_cents,
+                                            product.currency,
+                                        )}
+                                    </span>
                                 )}
-                            </p>
+                                {product.campaign && (
+                                    <span className="bg-red-700 px-2 py-1 text-[10px] tracking-wide text-white uppercase">
+                                        {product.campaign.name}
+                                    </span>
+                                )}
+                            </div>
                             {product.description && (
                                 <p className="mt-5 max-w-[430px] border-b border-[#d6cec0] pb-6 text-[14px] leading-6 text-[#494238]">
                                     {product.description}
@@ -688,6 +711,8 @@ export default function Show({ product, relatedProducts }: Props) {
                                 <img
                                     src={imageFor(images[1] ?? images[0], 1)}
                                     alt={`${product.name} detail`}
+                                    loading="lazy"
+                                    decoding="async"
                                     className="h-full w-full object-cover"
                                 />
                             </div>

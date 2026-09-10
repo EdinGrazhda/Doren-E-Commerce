@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 /**
  * @extends Factory<User>
@@ -64,8 +66,29 @@ class UserFactory extends Factory
      */
     public function admin(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'is_admin' => true,
-        ]);
+        return $this
+            ->state(fn (array $attributes) => [
+                'is_admin' => true,
+            ])
+            ->afterCreating(function (User $user): void {
+                $user->assignRole(Role::findOrCreate('admin'));
+            });
+    }
+
+    /**
+     * Indicate that the model is an employee panel user.
+     */
+    public function employee(): static
+    {
+        return $this->afterCreating(function (User $user): void {
+            $role = Role::findOrCreate('employee');
+            $role->givePermissionTo(collect([
+                'orders.view', 'orders.manage',
+                'products.view', 'products.manage',
+                'categories.view', 'categories.manage',
+                'inventory.view', 'inventory.manage',
+            ])->map(fn (string $permission): Permission => Permission::findOrCreate($permission)));
+            $user->assignRole($role);
+        });
     }
 }

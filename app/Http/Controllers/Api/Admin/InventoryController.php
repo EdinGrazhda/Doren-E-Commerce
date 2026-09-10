@@ -48,7 +48,7 @@ class InventoryController extends Controller
             ->when($status === 'healthy', fn ($query) => $query->where('stock_quantity', '>', 5))
             ->when($status === 'low', fn ($query) => $query->whereBetween('stock_quantity', [1, 5]))
             ->when($status === 'out', fn ($query) => $query->where('stock_quantity', 0))
-            ->orderBy('stock_quantity')
+            ->orderBy('product_id')
             ->orderBy('id')
             ->paginate(15, pageName: 'variant_page')
             ->withQueryString();
