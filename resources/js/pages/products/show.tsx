@@ -21,6 +21,7 @@ import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 
 import BrandLogo from '@/components/brand-logo';
+import { VirtualTryOn } from '@/components/virtual-try-on';
 import { cart as cartRoute, home, login } from '@/routes';
 import { store as storeCartItem } from '@/routes/cart-items';
 import { show as showProduct } from '@/routes/products';
@@ -79,6 +80,11 @@ type RelatedProduct = {
 type Props = {
     product: Product;
     relatedProducts: RelatedProduct[];
+    tryOn: {
+        enabled: boolean;
+        category: string | null;
+        requiresGarmentImage: boolean;
+    };
 };
 
 const navigationItems = [
@@ -193,7 +199,7 @@ function ProductTile({
     );
 }
 
-export default function Show({ product, relatedProducts }: Props) {
+export default function Show({ product, relatedProducts, tryOn }: Props) {
     const { cart } = usePage().props;
     const images = useMemo(
         () => (product.images.length ? product.images : [product.image_url]),
@@ -642,6 +648,18 @@ export default function Show({ product, relatedProducts }: Props) {
                                     </button>
                                 </div>
                             </form>
+
+                            {tryOn.category && (
+                                <VirtualTryOn
+                                    productSlug={product.slug}
+                                    productName={product.name}
+                                    variant={selectedVariant}
+                                    enabled={tryOn.enabled}
+                                    requiresGarmentImage={
+                                        tryOn.requiresGarmentImage
+                                    }
+                                />
+                            )}
 
                             <div className="mt-6 divide-y divide-[#d6cec0] border border-[#d6cec0] bg-[#f8f4ed]">
                                 {[

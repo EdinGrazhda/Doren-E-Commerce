@@ -1,3 +1,11 @@
+# Required workflow: RTK and Graphify
+
+- Read [RTK.md](RTK.md) and [GRAPHIFY.md](GRAPHIFY.md) before repository work.
+- Route every terminal command through RTK: use its supported compact wrapper, or `rtk proxy <command> <args>` for unsupported commands and exact output. This includes Graphify, file reads, scripts, generators, and mutations. RTK itself needs no extra wrapper. Native MCP tools and patch tools are not terminal commands.
+- For every prompt that changes website source, configuration, tests, assets, dependencies, or project instructions, automatically run `rtk proxy graphify update .` from the repository root after the final edits and checks, before the final reply. No reminder or confirmation is needed. Wait for completion and verify success; if it fails, diagnose and report the unresolved failure rather than claiming the graph is current.
+- Refresh once per completed change batch, not after every file edit. Read-only prompts do not need a refresh. Later source edits require another refresh.
+- These RTK wrappers also apply to the canonical shell examples in the Laravel guidelines below.
+
 <laravel-boost-guidelines>
 === foundation rules ===
 

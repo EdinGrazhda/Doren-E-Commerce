@@ -1,69 +1,17 @@
-# RTK - Rust Token Killer
+# RTK terminal policy
 
-RTK is installed for this project environment and provides token-optimized wrappers around common shell commands. It is useful when command output would otherwise be large or repetitive.
+Use RTK for every terminal command in this project, without waiting for the user to request it.
 
-The user should not need to request RTK by name. Agents should choose RTK automatically for noisy shell commands and use native commands when exact output matters.
+- Prefer supported compact wrappers for noisy output: `rtk git status`, `rtk git diff`, `rtk rg "pattern" app`, `rtk php artisan route:list --except-vendor`, and `rtk test php artisan test --compact tests/Feature/ExampleTest.php`.
+- Use `rtk proxy <command> <args>` for unsupported commands, exact file reads, machine-readable output, scripts, and mutations. Examples: `rtk proxy cat AGENTS.md`, `rtk proxy php artisan make:test --pest ExampleTest --no-interaction`, and `rtk proxy graphify update .`.
+- `rtk proxy` preserves raw output and tracks usage; it does not compress output. Use focused searches and small file ranges to keep it concise.
+- Preserve the original command arguments, exit status, working directory, environment, and required approvals. Never repeat a mutation just to obtain different output.
+- Prefer separate calls for dependent commands. Wrap each executable in a pipeline or command sequence; do not hide unwrapped commands inside a shell script merely to satisfy the prefix rule.
+- When filtering obscures an error, obtain exact diagnostics through `rtk proxy`. Do not silently bypass RTK. If RTK is missing or broken, report it and use native commands only as a necessary recovery fallback.
+- Native tools such as Boost MCP and apply_patch do not need RTK. RTK commands themselves do not need another wrapper.
 
-RTK is a wrapper around the canonical command, not a new Laravel command syntax. Keep Laravel commands written as `php artisan ...`, and prepend `rtk` when the output is expected to be noisy or repetitive. Use `rtk test php artisan test ...` for test runs so Pest/Laravel output is compact while the command remains a real Artisan command.
+Keep Laravel syntax canonical: RTK wraps `php artisan ...`; it does not replace Artisan. For Node tools, use the project's compatible Node runtime; a wrapper does not fix an incorrect Node version.
 
-## How RTK Fits With Graphify
+Use `rtk gain` when savings are requested. Do not dump savings reports after every command. No global shell hook is assumed: agents must explicitly follow this policy.
 
-Graphify is the project map. Use it first for codebase understanding, locating implementation areas, architectural questions, and source-change planning.
-
-RTK is the output filter. Use it after Graphify when shell commands are still needed and their output is expected to be noisy.
-
-If a task involves both codebase understanding and shell output, run Graphify first, then use RTK for follow-up commands such as status, diff, search, Artisan discovery, route lists, tests, logs, build, and lint.
-
-## RTK With Laravel Commands
-
-Default to RTK for noisy Artisan commands, especially commands that list, scan, test, or dump application state. Keep short exact commands native when their full output matters.
-
-```bash
-rtk php artisan list
-rtk php artisan route:list --except-vendor
-rtk php artisan config:show app
-rtk php artisan about
-rtk test php artisan test --compact
-rtk test php artisan test --compact tests/Feature/AdminPanelTest.php
-rtk php artisan pail --timeout=10
-```
-
-Use native `php artisan ...` when creating files, running migrations, generating code, or when exact interactive output is important. Examples: `php artisan make:test --pest SomeFeatureTest --no-interaction`, `php artisan wayfinder:generate --no-interaction`, `php artisan migrate --pretend`.
-
-## Good RTK Uses
-
-```bash
-rtk git status
-rtk git diff
-rtk rg "pattern" .
-rtk find "*.tsx" web/src
-rtk ls -la
-rtk php artisan route:list --except-vendor
-rtk php artisan list
-rtk php artisan config:show database
-rtk npm run build
-rtk test npm test
-rtk test php artisan test --compact
-rtk docker ps
-rtk docker logs <container>
-```
-
-## Avoid RTK For
-
-- `graphify query`, `graphify path`, `graphify explain`, and `graphify update`
-- exact full file reads
-- exact diagnostics where truncated output could hide relevant lines
-- Artisan commands that create or mutate files or database state, unless the user specifically asks for compact output
-- commands where the user explicitly asks to see raw output
-- short deterministic commands where filtering adds no value
-
-Use the native command for exact output. Use `rtk proxy <cmd>` only when raw passthrough plus RTK tracking is useful.
-
-## Useful Checks
-
-```bash
-rtk --version
-rtk gain
-rtk discover
-rtk rewrite "git status"
-```
+See [GRAPHIFY.md](GRAPHIFY.md) for the mandatory refresh after changes.

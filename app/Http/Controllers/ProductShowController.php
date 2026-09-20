@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Services\ProductCampaignPrice;
+use App\Services\VirtualTryOnCatalog;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ProductShowController extends Controller
 {
-    public function __construct(private readonly ProductCampaignPrice $campaignPrice) {}
+    public function __construct(
+        private readonly ProductCampaignPrice $campaignPrice,
+        private readonly VirtualTryOnCatalog $tryOnCatalog,
+    ) {}
 
     public function __invoke(Product $product): Response
     {
@@ -62,6 +66,11 @@ class ProductShowController extends Controller
         return Inertia::render('products/show', [
             'product' => $this->productPayload($product),
             'relatedProducts' => $relatedProducts,
+            'tryOn' => [
+                'enabled' => $this->tryOnCatalog->enabled(),
+                'category' => $this->tryOnCatalog->category($product),
+                'requiresGarmentImage' => true,
+            ],
         ]);
     }
 

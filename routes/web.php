@@ -15,6 +15,7 @@ use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductShowController;
+use App\Http\Controllers\VirtualTryOnController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -28,6 +29,12 @@ Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.s
 Route::get('/checkout/thank-you/{order:order_number}', [CheckoutController::class, 'thankYou'])
     ->name('checkout.thank-you');
 Route::get('/products/{product:slug}', ProductShowController::class)->name('products.show');
+Route::post('/products/{product:slug}/try-ons', [VirtualTryOnController::class, 'store'])
+    ->middleware('throttle:6,60')->block(10, 10)->name('products.try-ons.store');
+Route::get('/try-ons/{tryOn}', [VirtualTryOnController::class, 'show'])
+    ->middleware('throttle:60,1')->name('try-ons.show');
+Route::get('/try-ons/{tryOn}/image', [VirtualTryOnController::class, 'image'])->name('try-ons.image');
+Route::delete('/try-ons/{tryOn}', [VirtualTryOnController::class, 'destroy'])->name('try-ons.destroy');
 
 Route::middleware(['auth', 'verified', 'role:admin|employee'])
     ->prefix('dashboard')

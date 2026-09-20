@@ -1,0 +1,5 @@
+# Transport tests deliberately do not download Torch or model weights.
+fastapi==0.141.1
+python-multipart==0.0.32
+pillow==12.3.0
+httpx==0.28.1

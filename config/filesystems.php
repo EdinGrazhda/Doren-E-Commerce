@@ -30,6 +30,13 @@ return [
 
     'disks' => [
 
+        'try-ons' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/try-ons'),
+            'visibility' => 'private',
+            'throw' => true,
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
