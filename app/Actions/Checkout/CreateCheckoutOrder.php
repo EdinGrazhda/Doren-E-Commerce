@@ -30,7 +30,7 @@ class CreateCheckoutOrder
                 ->get()
                 ->keyBy('id');
 
-            $currency = collect($cartItems)->first()['currency'] ?? 'USD';
+            $currency = collect($cartItems)->first()['currency'] ?? 'EUR';
 
             $pricedItems = collect($cartItems)->map(function (array $item) use ($variants): array {
                 $variant = $variants->get((int) $item['variant_id']);

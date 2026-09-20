@@ -3,11 +3,10 @@ import {
     AlertTriangle,
     ArrowRight,
     Boxes,
+    CalendarDays,
     CircleDollarSign,
     Package,
     ShoppingBag,
-    Tags,
-    TrendingUp,
     Wallet,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -31,6 +30,8 @@ import { index as productsIndex } from '@/routes/dashboard/products';
 
 type Metrics = {
     orders_count: number;
+    sales_count: number;
+    counter_sales_count: number;
     pending_orders_count: number;
     products_count: number;
     categories_count: number;
@@ -65,9 +66,27 @@ type LowStockProduct = {
 };
 
 type SalesPoint = {
+    date: string;
     label: string;
     revenue_cents: number;
     orders_count: number;
+};
+
+type DailySalesDay = {
+    date: string;
+    label: string;
+    revenue_cents: number;
+    orders_count: number;
+    online_orders_count: number;
+    counter_sales_count: number;
+    units_sold_count: number;
+};
+
+type DailySales = {
+    today: DailySalesDay & {
+        average_order_cents: number;
+    };
+    days: DailySalesDay[];
 };
 
 type StatusBreakdown = {
@@ -89,86 +108,167 @@ type Props = {
     recentOrders: RecentOrder[];
     lowStockProducts: LowStockProduct[];
     salesSeries: Record<SalesRange, SalesPoint[]>;
+    dailySales: DailySales;
     statusBreakdown: StatusBreakdown[];
     topProducts: TopProduct[];
 };
 
 const salesRanges: Array<{ value: SalesRange; label: string }> = [
-    { value: 'week', label: 'Week' },
-    { value: 'month', label: 'Month' },
-    { value: 'year', label: 'Year' },
+    { value: 'week', label: '7 days' },
+    { value: 'month', label: '6 months' },
+    { value: 'year', label: '5 years' },
 ];
 
 function totalRevenue(points: SalesPoint[]): number {
     return points.reduce((total, point) => total + point.revenue_cents, 0);
 }
 
-function totalOrders(points: SalesPoint[]): number {
+function totalSales(points: SalesPoint[]): number {
     return points.reduce((total, point) => total + point.orders_count, 0);
 }
 
 function SalesChart({ points }: { points: SalesPoint[] }) {
-    const chartWidth = 720;
-    const chartHeight = 220;
-    const padding = 28;
-    const innerWidth = chartWidth - padding * 2;
-    const innerHeight = chartHeight - padding * 2;
-    const maxRevenue = Math.max(
+    const chartWidth = 800;
+    const paddingLeft = 76;
+    const paddingRight = 16;
+    const revenueBaseline = 206;
+    const revenueHeight = 166;
+    const salesBaseline = 310;
+    const salesHeight = 48;
+    const peakRevenue = Math.max(
         ...points.map((point) => point.revenue_cents),
-        1,
+        100,
     );
+    const magnitude = 10 ** Math.floor(Math.log10(peakRevenue));
+    const maxRevenue = Math.ceil(peakRevenue / magnitude) * magnitude;
     const maxOrders = Math.max(...points.map((point) => point.orders_count), 1);
-    const barWidth = innerWidth / points.length - 14;
+    const slotWidth =
+        (chartWidth - paddingLeft - paddingRight) / Math.max(points.length, 1);
+    const barWidth = Math.min(54, slotWidth * 0.52);
+    const pointX = (index: number) => paddingLeft + slotWidth * (index + 0.5);
+    const salesY = (count: number) =>
+        salesBaseline - (count / maxOrders) * salesHeight;
     const linePoints = points
-        .map((point, index) => {
-            const x =
-                padding + index * (innerWidth / Math.max(points.length - 1, 1));
-            const y =
-                padding +
-                innerHeight -
-                (point.orders_count / maxOrders) * innerHeight;
-
-            return `${x},${y}`;
-        })
+        .map((point, index) => `${pointX(index)},${salesY(point.orders_count)}`)
         .join(' ');
 
     return (
-        <div className="overflow-hidden rounded-md border bg-muted/20">
+        <div className="overflow-x-auto">
             <svg
-                className="h-[260px] w-full"
-                viewBox={`0 0 ${chartWidth} ${chartHeight + 38}`}
+                className="block w-full min-w-[560px]"
+                viewBox={`0 0 ${chartWidth} 354`}
                 role="img"
-                aria-label="Sales and order trend chart"
+                aria-label="Revenue in euros and sale counts, aligned by period. Exact values are in the table below."
             >
-                <line
-                    x1={padding}
-                    x2={chartWidth - padding}
-                    y1={chartHeight - padding}
-                    y2={chartHeight - padding}
-                    className="stroke-border"
-                />
-                {points.map((point, index) => {
-                    const x =
-                        padding +
-                        index * (innerWidth / points.length) +
-                        (innerWidth / points.length - barWidth) / 2;
-                    const height =
-                        (point.revenue_cents / maxRevenue) * innerHeight;
-                    const y = padding + innerHeight - height;
+                <text
+                    x={paddingLeft}
+                    y={18}
+                    className="fill-emerald-700 text-[12px] font-medium dark:fill-emerald-400"
+                >
+                    Revenue (EUR)
+                </text>
+                {[0, 0.25, 0.5, 0.75, 1].map((fraction) => {
+                    const y = revenueBaseline - revenueHeight * fraction;
 
                     return (
-                        <g key={point.label}>
-                            <rect
-                                x={x}
-                                y={y}
-                                width={barWidth}
-                                height={Math.max(height, 2)}
-                                rx={4}
-                                className="fill-emerald-500/70"
+                        <g key={fraction}>
+                            <line
+                                x1={paddingLeft}
+                                x2={chartWidth - paddingRight}
+                                y1={y}
+                                y2={y}
+                                className="stroke-border"
+                                strokeDasharray={
+                                    fraction === 0 ? undefined : '3 5'
+                                }
                             />
                             <text
-                                x={x + barWidth / 2}
-                                y={chartHeight + 12}
+                                x={paddingLeft - 12}
+                                y={y + 4}
+                                textAnchor="end"
+                                className="fill-muted-foreground text-[11px]"
+                            >
+                                {new Intl.NumberFormat('en', {
+                                    maximumFractionDigits: 2,
+                                    notation: 'compact',
+                                }).format((maxRevenue * fraction) / 100)}
+                            </text>
+                        </g>
+                    );
+                })}
+                <text
+                    x={paddingLeft}
+                    y={244}
+                    className="fill-sky-700 text-[12px] font-medium dark:fill-sky-400"
+                >
+                    Sales (count)
+                </text>
+                {[0, maxOrders].map((count) => (
+                    <g key={count}>
+                        <line
+                            x1={paddingLeft}
+                            x2={chartWidth - paddingRight}
+                            y1={salesY(count)}
+                            y2={salesY(count)}
+                            className="stroke-border"
+                            strokeDasharray={count === 0 ? undefined : '3 5'}
+                        />
+                        <text
+                            x={paddingLeft - 12}
+                            y={salesY(count) + 4}
+                            textAnchor="end"
+                            className="fill-muted-foreground text-[11px]"
+                        >
+                            {count}
+                        </text>
+                    </g>
+                ))}
+                <polyline
+                    points={linePoints}
+                    fill="none"
+                    strokeWidth={2}
+                    strokeLinejoin="round"
+                    className="stroke-sky-500"
+                />
+                {points.map((point, index) => {
+                    const x = pointX(index);
+                    const height =
+                        (point.revenue_cents / maxRevenue) * revenueHeight;
+                    const description = `${point.label}: ${formatMoney(point.revenue_cents)}, ${point.orders_count} sales`;
+
+                    return (
+                        <g
+                            key={point.date}
+                            tabIndex={0}
+                            aria-label={description}
+                            className="group outline-none"
+                        >
+                            <title>{description}</title>
+                            <rect
+                                x={x - slotWidth / 2}
+                                y={28}
+                                width={slotWidth}
+                                height={290}
+                                className="fill-transparent group-hover:fill-muted/40 group-focus:fill-muted/40"
+                            />
+                            <rect
+                                x={x - barWidth / 2}
+                                y={revenueBaseline - height}
+                                width={barWidth}
+                                height={height}
+                                rx={2}
+                                className="fill-emerald-500"
+                            />
+                            <circle
+                                cx={x}
+                                cy={salesY(point.orders_count)}
+                                r={4}
+                                className="fill-background stroke-sky-500"
+                                strokeWidth={2}
+                            />
+                            <text
+                                x={x}
+                                y={338}
                                 textAnchor="middle"
                                 className="fill-muted-foreground text-[11px]"
                             >
@@ -177,45 +277,7 @@ function SalesChart({ points }: { points: SalesPoint[] }) {
                         </g>
                     );
                 })}
-                <polyline
-                    points={linePoints}
-                    fill="none"
-                    strokeWidth={3}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="stroke-sky-500"
-                />
-                {points.map((point, index) => {
-                    const x =
-                        padding +
-                        index * (innerWidth / Math.max(points.length - 1, 1));
-                    const y =
-                        padding +
-                        innerHeight -
-                        (point.orders_count / maxOrders) * innerHeight;
-
-                    return (
-                        <circle
-                            key={`${point.label}-orders`}
-                            cx={x}
-                            cy={y}
-                            r={4}
-                            className="fill-background stroke-sky-500"
-                            strokeWidth={2}
-                        />
-                    );
-                })}
             </svg>
-            <div className="flex flex-wrap gap-4 border-t px-4 py-3 text-xs text-muted-foreground">
-                <span className="inline-flex items-center gap-2">
-                    <span className="size-2 rounded-sm bg-emerald-500/70" />
-                    Revenue
-                </span>
-                <span className="inline-flex items-center gap-2">
-                    <span className="h-0.5 w-5 rounded-full bg-sky-500" />
-                    Orders
-                </span>
-            </div>
         </div>
     );
 }
@@ -277,31 +339,32 @@ export default function AdminDashboard() {
         recentOrders,
         lowStockProducts,
         salesSeries,
+        dailySales,
         statusBreakdown,
         topProducts,
     } = data;
     const activeSeries = salesSeries[salesRange];
     const rangeRevenue = totalRevenue(activeSeries);
-    const rangeOrders = totalOrders(activeSeries);
+    const rangeSales = totalSales(activeSeries);
     const topProductMax = Math.max(
         ...topProducts.map((product) => product.revenue_cents),
         1,
     );
     const metricCards = [
         {
-            title: 'Revenue',
+            title: 'Sales revenue',
             value: formatMoney(metrics.revenue_cents),
             detail: `${formatMoney(metrics.pending_revenue_cents)} pending`,
             icon: Wallet,
         },
         {
-            title: 'Orders',
-            value: metrics.orders_count.toLocaleString(),
-            detail: `${metrics.pending_orders_count.toLocaleString()} pending`,
+            title: 'Sales',
+            value: metrics.sales_count.toLocaleString(),
+            detail: `${metrics.orders_count.toLocaleString()} online · ${metrics.counter_sales_count.toLocaleString()} counter`,
             icon: ShoppingBag,
         },
         {
-            title: 'Avg order',
+            title: 'Average sale',
             value: formatMoney(metrics.average_order_cents),
             detail: `${metrics.units_sold_count.toLocaleString()} units sold`,
             icon: CircleDollarSign,
@@ -358,76 +421,292 @@ export default function AdminDashboard() {
                     ))}
                 </div>
 
-                <div className="grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(360px,0.75fr)]">
-                    <Card className="rounded-lg">
-                        <CardHeader className="gap-4">
-                            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.75fr)]">
+                    <div className="grid min-w-0 gap-4">
+                        <Card className="min-w-0 rounded-lg">
+                            <CardHeader className="gap-4">
+                                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                    <div>
+                                        <CardTitle>Sales trend</CardTitle>
+                                        <CardDescription>
+                                            Online orders and counter sales,
+                                            including pending orders
+                                        </CardDescription>
+                                    </div>
+                                    <div className="flex gap-1 rounded-md border bg-muted/30 p-1">
+                                        {salesRanges.map((range) => (
+                                            <Button
+                                                key={range.value}
+                                                type="button"
+                                                size="sm"
+                                                aria-pressed={
+                                                    salesRange === range.value
+                                                }
+                                                variant={
+                                                    salesRange === range.value
+                                                        ? 'secondary'
+                                                        : 'ghost'
+                                                }
+                                                onClick={() =>
+                                                    setSalesRange(range.value)
+                                                }
+                                            >
+                                                {range.label}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="grid gap-3 sm:grid-cols-3">
+                                    <div>
+                                        <p className="text-xs text-muted-foreground">
+                                            Range revenue
+                                        </p>
+                                        <p className="text-lg font-semibold">
+                                            {formatMoney(rangeRevenue)}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-muted-foreground">
+                                            Range sales
+                                        </p>
+                                        <p className="text-lg font-semibold">
+                                            {rangeSales.toLocaleString()}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-muted-foreground">
+                                            Average sale
+                                        </p>
+                                        <p className="text-lg font-semibold">
+                                            {formatMoney(
+                                                rangeSales > 0
+                                                    ? Math.round(
+                                                          rangeRevenue /
+                                                              rangeSales,
+                                                      )
+                                                    : 0,
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                                <SalesChart points={activeSeries} />
+                                <div className="mt-4 overflow-x-auto border-t">
+                                    <table className="w-full text-sm tabular-nums">
+                                        <caption className="sr-only">
+                                            Exact sales totals for the selected
+                                            period
+                                        </caption>
+                                        <thead>
+                                            <tr className="border-b text-xs text-muted-foreground">
+                                                <th
+                                                    scope="col"
+                                                    className="py-3 text-left font-medium"
+                                                >
+                                                    Period
+                                                </th>
+                                                <th
+                                                    scope="col"
+                                                    className="py-3 text-right font-medium"
+                                                >
+                                                    Revenue
+                                                </th>
+                                                <th
+                                                    scope="col"
+                                                    className="py-3 text-right font-medium"
+                                                >
+                                                    Sales
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {activeSeries.map((point) => (
+                                                <tr
+                                                    key={point.date}
+                                                    className="border-b last:border-0 hover:bg-muted/40"
+                                                >
+                                                    <th
+                                                        scope="row"
+                                                        className="py-2.5 text-left font-normal whitespace-nowrap"
+                                                    >
+                                                        {point.label}
+                                                    </th>
+                                                    <td className="py-2.5 text-right">
+                                                        {formatMoney(
+                                                            point.revenue_cents,
+                                                        )}
+                                                    </td>
+                                                    <td className="py-2.5 text-right">
+                                                        {point.orders_count.toLocaleString()}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr className="border-t font-semibold">
+                                                <th
+                                                    scope="row"
+                                                    className="pt-3 text-left"
+                                                >
+                                                    Total
+                                                </th>
+                                                <td className="pt-3 text-right">
+                                                    {formatMoney(rangeRevenue)}
+                                                </td>
+                                                <td className="pt-3 text-right">
+                                                    {rangeSales.toLocaleString()}
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Card className="rounded-lg">
+                            <CardHeader className="flex flex-row items-center justify-between gap-3">
                                 <div>
-                                    <CardTitle>Sales trend</CardTitle>
+                                    <CardTitle>Recent Orders</CardTitle>
                                     <CardDescription>
-                                        Revenue bars with order volume overlaid
+                                        Fresh activity from the storefront
                                     </CardDescription>
                                 </div>
-                                <div className="flex gap-1 rounded-md border bg-muted/30 p-1">
-                                    {salesRanges.map((range) => (
-                                        <Button
-                                            key={range.value}
-                                            type="button"
-                                            size="sm"
-                                            variant={
-                                                salesRange === range.value
-                                                    ? 'secondary'
-                                                    : 'ghost'
-                                            }
-                                            onClick={() =>
-                                                setSalesRange(range.value)
-                                            }
-                                        >
-                                            {range.label}
-                                        </Button>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="grid gap-3 sm:grid-cols-3">
+                                <Badge variant="secondary">
+                                    {metrics.pending_orders_count} pending
+                                </Badge>
+                            </CardHeader>
+                            <CardContent className="overflow-x-auto">
+                                <table className="w-full min-w-[720px] text-sm">
+                                    <thead>
+                                        <tr className="border-b text-left text-xs text-muted-foreground">
+                                            <th className="py-3 font-medium">
+                                                Order
+                                            </th>
+                                            <th className="py-3 font-medium">
+                                                Customer
+                                            </th>
+                                            <th className="py-3 font-medium">
+                                                Items
+                                            </th>
+                                            <th className="py-3 font-medium">
+                                                Status
+                                            </th>
+                                            <th className="py-3 text-right font-medium">
+                                                Total
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {recentOrders.map((order) => (
+                                            <tr
+                                                key={order.id}
+                                                className="border-b last:border-0"
+                                            >
+                                                <td className="py-3">
+                                                    <div className="font-medium">
+                                                        {order.order_number}
+                                                    </div>
+                                                    <div className="text-xs text-muted-foreground">
+                                                        {formatDate(
+                                                            order.created_at,
+                                                        )}
+                                                    </div>
+                                                </td>
+                                                <td className="py-3">
+                                                    <div>
+                                                        {
+                                                            order.customer_first_name
+                                                        }{' '}
+                                                        {
+                                                            order.customer_last_name
+                                                        }
+                                                    </div>
+                                                    <div className="text-xs text-muted-foreground">
+                                                        {order.customer_email}
+                                                    </div>
+                                                </td>
+                                                <td className="py-3">
+                                                    {order.items_count}
+                                                </td>
+                                                <td className="py-3">
+                                                    <Badge variant="outline">
+                                                        {titleCase(
+                                                            order.status,
+                                                        )}
+                                                    </Badge>
+                                                </td>
+                                                <td className="py-3 text-right font-medium">
+                                                    {formatMoney(
+                                                        order.total_cents,
+                                                        order.currency,
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </CardContent>
+                        </Card>
+                    </div>
+                    <div className="grid min-w-0 gap-4">
+                        <Card className="rounded-lg">
+                            <CardHeader className="flex flex-row items-center justify-between gap-3">
                                 <div>
-                                    <p className="text-xs text-muted-foreground">
-                                        Range revenue
-                                    </p>
-                                    <p className="text-lg font-semibold">
-                                        {formatMoney(rangeRevenue)}
-                                    </p>
+                                    <CardTitle>Daily sales</CardTitle>
+                                    <CardDescription>
+                                        {dailySales.today.label}
+                                    </CardDescription>
                                 </div>
-                                <div>
-                                    <p className="text-xs text-muted-foreground">
-                                        Range orders
-                                    </p>
-                                    <p className="text-lg font-semibold">
-                                        {rangeOrders.toLocaleString()}
-                                    </p>
+                                <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                            </CardHeader>
+                            <CardContent className="grid gap-5">
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="min-w-0 py-2">
+                                        <p className="text-xs text-muted-foreground">
+                                            Today revenue
+                                        </p>
+                                        <p className="mt-1 text-lg font-semibold">
+                                            {formatMoney(
+                                                dailySales.today.revenue_cents,
+                                            )}
+                                        </p>
+                                    </div>
+                                    <div className="min-w-0 py-2">
+                                        <p className="text-xs text-muted-foreground">
+                                            Today sales
+                                        </p>
+                                        <p className="mt-1 text-lg font-semibold">
+                                            {dailySales.today.orders_count.toLocaleString()}
+                                        </p>
+                                        <p className="mt-1 text-xs text-muted-foreground">
+                                            {dailySales.today.online_orders_count.toLocaleString()}{' '}
+                                            online ·{' '}
+                                            {dailySales.today.counter_sales_count.toLocaleString()}{' '}
+                                            counter
+                                        </p>
+                                    </div>
+                                    <div className="min-w-0 py-2">
+                                        <p className="text-xs text-muted-foreground">
+                                            Units sold
+                                        </p>
+                                        <p className="mt-1 text-lg font-semibold">
+                                            {dailySales.today.units_sold_count.toLocaleString()}
+                                        </p>
+                                    </div>
+                                    <div className="min-w-0 py-2">
+                                        <p className="text-xs text-muted-foreground">
+                                            Average sale
+                                        </p>
+                                        <p className="mt-1 text-lg font-semibold">
+                                            {formatMoney(
+                                                dailySales.today
+                                                    .average_order_cents,
+                                            )}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-xs text-muted-foreground">
-                                        Range AOV
-                                    </p>
-                                    <p className="text-lg font-semibold">
-                                        {formatMoney(
-                                            rangeOrders > 0
-                                                ? Math.round(
-                                                      rangeRevenue /
-                                                          rangeOrders,
-                                                  )
-                                                : 0,
-                                        )}
-                                    </p>
-                                </div>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            <SalesChart points={activeSeries} />
-                        </CardContent>
-                    </Card>
-
-                    <div className="grid gap-4">
+                            </CardContent>
+                        </Card>
                         <Card className="rounded-lg">
                             <CardHeader>
                                 <CardTitle>Order status</CardTitle>
@@ -447,7 +726,6 @@ export default function AdminDashboard() {
                                 ))}
                             </CardContent>
                         </Card>
-
                         <Card className="rounded-lg">
                             <CardHeader>
                                 <CardTitle>Top products</CardTitle>
@@ -474,190 +752,58 @@ export default function AdminDashboard() {
                                 )}
                             </CardContent>
                         </Card>
+                        <Card className="rounded-lg">
+                            <CardHeader className="flex flex-row items-center justify-between gap-3">
+                                <div>
+                                    <CardTitle>Inventory Watch</CardTitle>
+                                    <CardDescription>
+                                        Active products with variants running
+                                        low
+                                    </CardDescription>
+                                </div>
+                                <AlertTriangle className="h-4 w-4 text-amber-600" />
+                            </CardHeader>
+                            <CardContent className="grid gap-4">
+                                {lowStockProducts.length === 0 ? (
+                                    <div className="grid gap-2 rounded-md border border-dashed p-4 text-sm text-muted-foreground">
+                                        <Boxes className="h-4 w-4" />
+                                        No low-stock variants.
+                                    </div>
+                                ) : (
+                                    lowStockProducts.map((product) => (
+                                        <div
+                                            key={product.id}
+                                            className="flex items-center justify-between gap-4 border-b pb-4 last:border-0 last:pb-0"
+                                        >
+                                            <div>
+                                                <div className="font-medium">
+                                                    {product.name}
+                                                </div>
+                                                <div className="text-xs text-muted-foreground">
+                                                    {product.category?.name ??
+                                                        'Uncategorized'}{' '}
+                                                    · {product.variants_count}{' '}
+                                                    variants
+                                                </div>
+                                            </div>
+                                            <Badge variant="destructive">
+                                                {
+                                                    product.low_stock_variants_count
+                                                }{' '}
+                                                low
+                                            </Badge>
+                                        </div>
+                                    ))
+                                )}
+                                <Button variant="outline" asChild>
+                                    <Link href={productsIndex()}>
+                                        Review products
+                                    </Link>
+                                </Button>
+                            </CardContent>
+                        </Card>
                     </div>
                 </div>
-
-                <div className="grid gap-4 xl:grid-cols-[1.45fr_0.9fr]">
-                    <Card className="rounded-lg">
-                        <CardHeader className="flex flex-row items-center justify-between gap-3">
-                            <div>
-                                <CardTitle>Recent Orders</CardTitle>
-                                <CardDescription>
-                                    Fresh activity from the storefront
-                                </CardDescription>
-                            </div>
-                            <Badge variant="secondary">
-                                {metrics.pending_orders_count} pending
-                            </Badge>
-                        </CardHeader>
-                        <CardContent className="overflow-x-auto">
-                            <table className="w-full min-w-[720px] text-sm">
-                                <thead>
-                                    <tr className="border-b text-left text-xs text-muted-foreground">
-                                        <th className="py-3 font-medium">
-                                            Order
-                                        </th>
-                                        <th className="py-3 font-medium">
-                                            Customer
-                                        </th>
-                                        <th className="py-3 font-medium">
-                                            Items
-                                        </th>
-                                        <th className="py-3 font-medium">
-                                            Status
-                                        </th>
-                                        <th className="py-3 text-right font-medium">
-                                            Total
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {recentOrders.map((order) => (
-                                        <tr
-                                            key={order.id}
-                                            className="border-b last:border-0"
-                                        >
-                                            <td className="py-3">
-                                                <div className="font-medium">
-                                                    {order.order_number}
-                                                </div>
-                                                <div className="text-xs text-muted-foreground">
-                                                    {formatDate(
-                                                        order.created_at,
-                                                    )}
-                                                </div>
-                                            </td>
-                                            <td className="py-3">
-                                                <div>
-                                                    {order.customer_first_name}{' '}
-                                                    {order.customer_last_name}
-                                                </div>
-                                                <div className="text-xs text-muted-foreground">
-                                                    {order.customer_email}
-                                                </div>
-                                            </td>
-                                            <td className="py-3">
-                                                {order.items_count}
-                                            </td>
-                                            <td className="py-3">
-                                                <Badge variant="outline">
-                                                    {titleCase(order.status)}
-                                                </Badge>
-                                            </td>
-                                            <td className="py-3 text-right font-medium">
-                                                {formatMoney(
-                                                    order.total_cents,
-                                                    order.currency,
-                                                )}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="rounded-lg">
-                        <CardHeader className="flex flex-row items-center justify-between gap-3">
-                            <div>
-                                <CardTitle>Inventory Watch</CardTitle>
-                                <CardDescription>
-                                    Active products with variants running low
-                                </CardDescription>
-                            </div>
-                            <AlertTriangle className="h-4 w-4 text-amber-600" />
-                        </CardHeader>
-                        <CardContent className="grid gap-4">
-                            {lowStockProducts.length === 0 ? (
-                                <div className="grid gap-2 rounded-md border border-dashed p-4 text-sm text-muted-foreground">
-                                    <Boxes className="h-4 w-4" />
-                                    No low-stock variants.
-                                </div>
-                            ) : (
-                                lowStockProducts.map((product) => (
-                                    <div
-                                        key={product.id}
-                                        className="flex items-center justify-between gap-4 border-b pb-4 last:border-0 last:pb-0"
-                                    >
-                                        <div>
-                                            <div className="font-medium">
-                                                {product.name}
-                                            </div>
-                                            <div className="text-xs text-muted-foreground">
-                                                {product.category?.name ??
-                                                    'Uncategorized'}{' '}
-                                                · {product.variants_count}{' '}
-                                                variants
-                                            </div>
-                                        </div>
-                                        <Badge variant="destructive">
-                                            {product.low_stock_variants_count}{' '}
-                                            low
-                                        </Badge>
-                                    </div>
-                                ))
-                            )}
-                            <Button variant="outline" asChild>
-                                <Link href={productsIndex()}>
-                                    Review products
-                                </Link>
-                            </Button>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                <Card className="rounded-lg">
-                    <CardContent className="grid gap-4 py-5 sm:grid-cols-3">
-                        <div className="flex items-center gap-3">
-                            <div className="grid size-10 place-items-center rounded-md bg-emerald-500/10 text-emerald-700">
-                                <TrendingUp className="h-4 w-4" />
-                            </div>
-                            <div>
-                                <p className="text-sm font-medium">
-                                    Active range
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                    {salesRanges.find(
-                                        (range) => range.value === salesRange,
-                                    )?.label ?? 'Week'}{' '}
-                                    is selected for the trend view.
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="grid size-10 place-items-center rounded-md bg-sky-500/10 text-sky-700">
-                                <ShoppingBag className="h-4 w-4" />
-                            </div>
-                            <div>
-                                <p className="text-sm font-medium">
-                                    Orders to clear
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                    {metrics.pending_orders_count.toLocaleString()}{' '}
-                                    pending orders worth{' '}
-                                    {formatMoney(metrics.pending_revenue_cents)}
-                                    .
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="grid size-10 place-items-center rounded-md bg-amber-500/10 text-amber-700">
-                                <Tags className="h-4 w-4" />
-                            </div>
-                            <div>
-                                <p className="text-sm font-medium">
-                                    Catalog coverage
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                    {metrics.products_count.toLocaleString()}{' '}
-                                    active products across{' '}
-                                    {metrics.categories_count.toLocaleString()}{' '}
-                                    categories.
-                                </p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
             </div>
         </>
     );

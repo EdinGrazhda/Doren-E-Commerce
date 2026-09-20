@@ -69,7 +69,7 @@ class Order extends Model
         'shipping_cents' => 0,
         'tax_cents' => 0,
         'discount_cents' => 0,
-        'currency' => 'USD',
+        'currency' => 'EUR',
         'shipping_country_code' => 'US',
     ];
 

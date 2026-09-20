@@ -96,7 +96,7 @@ test('checkout recalculates campaign prices and records the discount', function 
     $product = Product::factory()->create([
         'name' => 'Campaign Jacket',
         'price_cents' => 10000,
-        'currency' => 'USD',
+        'currency' => 'EUR',
     ]);
     $variant = ProductVariant::factory()->for($product)->create([
         'stock_quantity' => 5,
@@ -117,7 +117,7 @@ test('checkout recalculates campaign prices and records the discount', function 
             'color_hex' => $variant->color_hex,
             'quantity' => 2,
             'unit_price_cents' => 1,
-            'currency' => 'USD',
+            'currency' => 'EUR',
         ],
     ]]);
 

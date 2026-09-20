@@ -34,7 +34,7 @@ class OrderItemFactory extends Factory
             'unit_price_cents' => $unitPriceCents,
             'quantity' => $quantity,
             'line_total_cents' => $unitPriceCents * $quantity,
-            'currency' => 'USD',
+            'currency' => 'EUR',
             'product_options' => [
                 'size' => fake()->randomElement(['S', 'M', 'L', 'XL']),
                 'color' => fake()->randomElement(['Olive', 'Navy', 'Stone']),

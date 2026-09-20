@@ -10,7 +10,6 @@ use App\Http\Controllers\Api\Admin\ProductCategoryController;
 use App\Http\Controllers\Api\Admin\ProductController;
 use App\Http\Controllers\Api\Admin\RoleController;
 use App\Http\Controllers\Api\Admin\StorefrontBannerController;
-use App\Http\Controllers\Api\Admin\StoreSettingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,27 +23,45 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin|employee', 'throttle:
     ->prefix('admin')
     ->name('api.admin.')
     ->group(function (): void {
-        Route::get('/dashboard', DashboardController::class)->middleware('permission:dashboard.view')->name('dashboard');
+        Route::get('/dashboard', DashboardController::class)->middleware('permission:dashboard.read')->name('dashboard');
 
-        Route::apiResource('orders', OrderController::class)->only('index')->middleware('permission:orders.view');
-        Route::apiResource('orders', OrderController::class)->only(['update', 'destroy'])->middleware('permission:orders.manage');
-        Route::apiResource('products', ProductController::class)->only(['index', 'show'])->middleware('permission:products.view');
-        Route::apiResource('products', ProductController::class)->only(['store', 'update', 'destroy'])->middleware('permission:products.manage');
-        Route::apiResource('inventory', InventoryController::class)->only('index')->middleware('permission:inventory.view');
-        Route::apiResource('inventory', InventoryController::class)->only('store')->middleware('permission:inventory.manage');
+        Route::apiResource('orders', OrderController::class)->only('index')->middleware('permission:orders.read');
+        Route::apiResource('orders', OrderController::class)->only('update')->middleware('permission:orders.update');
+        Route::apiResource('orders', OrderController::class)->only('destroy')->middleware('permission:orders.delete');
+        Route::apiResource('products', ProductController::class)->only(['index', 'show'])->middleware('permission:products.read');
+        Route::apiResource('products', ProductController::class)->only('store')->middleware('permission:products.create');
+        Route::apiResource('products', ProductController::class)->only('update')->middleware('permission:products.update');
+        Route::apiResource('products', ProductController::class)->only('destroy')->middleware('permission:products.delete');
+        Route::apiResource('inventory', InventoryController::class)->only('index')->middleware('permission:inventory.read');
+        Route::apiResource('inventory', InventoryController::class)->only('store')->middleware('permission:inventory.create');
         Route::apiResource('categories', ProductCategoryController::class)
-            ->only('index')->middleware('permission:categories.view')
+            ->only('index')->middleware('permission:categories.read')
             ->parameters(['categories' => 'productCategory']);
         Route::apiResource('categories', ProductCategoryController::class)
-            ->only(['store', 'update', 'destroy'])->middleware('permission:categories.manage')
+            ->only('store')->middleware('permission:categories.create')
+            ->parameters(['categories' => 'productCategory']);
+        Route::apiResource('categories', ProductCategoryController::class)
+            ->only('update')->middleware('permission:categories.update')
+            ->parameters(['categories' => 'productCategory']);
+        Route::apiResource('categories', ProductCategoryController::class)
+            ->only('destroy')->middleware('permission:categories.delete')
             ->parameters(['categories' => 'productCategory']);
 
-        Route::apiResource('campaigns', CampaignController::class)->only('index')->middleware('permission:campaigns.view');
-        Route::apiResource('campaigns', CampaignController::class)->only(['store', 'update', 'destroy'])->middleware('permission:campaigns.manage');
-        Route::apiResource('banners', StorefrontBannerController::class)->only('index')->middleware('permission:banners.view');
-        Route::apiResource('banners', StorefrontBannerController::class)->only(['store', 'update', 'destroy'])->middleware('permission:banners.manage');
-        Route::get('/customers', CustomerController::class)->middleware('permission:customers.view')->name('customers.index');
-        Route::get('/settings', StoreSettingController::class)->middleware('permission:settings.view')->name('settings.index');
-        Route::apiResource('roles', RoleController::class)->except('show')->middleware('permission:roles.manage');
-        Route::apiResource('permissions', PermissionController::class)->except('show')->middleware('permission:permissions.manage');
+        Route::apiResource('campaigns', CampaignController::class)->only('index')->middleware('permission:campaigns.read');
+        Route::apiResource('campaigns', CampaignController::class)->only('store')->middleware('permission:campaigns.create');
+        Route::apiResource('campaigns', CampaignController::class)->only('update')->middleware('permission:campaigns.update');
+        Route::apiResource('campaigns', CampaignController::class)->only('destroy')->middleware('permission:campaigns.delete');
+        Route::apiResource('banners', StorefrontBannerController::class)->only('index')->middleware('permission:banners.read');
+        Route::apiResource('banners', StorefrontBannerController::class)->only('store')->middleware('permission:banners.create');
+        Route::apiResource('banners', StorefrontBannerController::class)->only('update')->middleware('permission:banners.update');
+        Route::apiResource('banners', StorefrontBannerController::class)->only('destroy')->middleware('permission:banners.delete');
+        Route::get('/customers', CustomerController::class)->middleware('permission:customers.read')->name('customers.index');
+        Route::apiResource('roles', RoleController::class)->only('index')->middleware('permission:roles.read');
+        Route::apiResource('roles', RoleController::class)->only('store')->middleware('permission:roles.create');
+        Route::apiResource('roles', RoleController::class)->only('update')->middleware('permission:roles.update');
+        Route::apiResource('roles', RoleController::class)->only('destroy')->middleware('permission:roles.delete');
+        Route::apiResource('permissions', PermissionController::class)->only('index')->middleware('permission:permissions.read');
+        Route::apiResource('permissions', PermissionController::class)->only('store')->middleware('permission:permissions.create');
+        Route::apiResource('permissions', PermissionController::class)->only('update')->middleware('permission:permissions.update');
+        Route::apiResource('permissions', PermissionController::class)->only('destroy')->middleware('permission:permissions.delete');
     });

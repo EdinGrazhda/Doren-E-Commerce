@@ -43,7 +43,7 @@ class OrderFactory extends Factory
             'tax_cents' => $taxCents,
             'discount_cents' => 0,
             'total_cents' => $subtotalCents + $shippingCents + $taxCents,
-            'currency' => 'USD',
+            'currency' => 'EUR',
             'placed_at' => now(),
         ];
     }

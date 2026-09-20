@@ -9,7 +9,7 @@ class StoreCampaignRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->can('campaigns.manage') === true;
+        return $this->user()?->can($this->isMethod('post') ? 'campaigns.create' : 'campaigns.update') === true;
     }
 
     /** @return array<string, array<int, mixed>> */

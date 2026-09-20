@@ -30,7 +30,7 @@ test('storefront checkout creates pending order from cart', function () {
         'name' => 'Organic Cotton Polo',
         'slug' => 'organic-cotton-polo',
         'price_cents' => 8800,
-        'currency' => 'USD',
+        'currency' => 'EUR',
         'primary_image_url' => 'https://example.com/polo.jpg',
         'is_active' => true,
     ]);
@@ -107,7 +107,7 @@ function cartItem(array $overrides = []): array
         'color_hex' => '#4e5738',
         'quantity' => 1,
         'unit_price_cents' => 8800,
-        'currency' => 'USD',
+        'currency' => 'EUR',
         ...$overrides,
     ];
 }

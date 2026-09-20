@@ -30,7 +30,7 @@ class ProductFactory extends Factory
             'description' => fake()->paragraph(),
             'price_cents' => $priceCents,
             'compare_at_price_cents' => fake()->boolean(25) ? $priceCents + 3000 : null,
-            'currency' => 'USD',
+            'currency' => 'EUR',
             'primary_image_url' => fake()->imageUrl(width: 900, height: 1100),
             'gallery_image_urls' => [
                 fake()->imageUrl(width: 900, height: 1100),

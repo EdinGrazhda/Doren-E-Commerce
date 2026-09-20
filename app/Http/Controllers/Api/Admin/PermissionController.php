@@ -11,19 +11,16 @@ use Spatie\Permission\Models\Permission;
 class PermissionController extends Controller
 {
     private const CORE_PERMISSIONS = [
-        'dashboard.view',
-        'orders.view', 'orders.manage',
-        'products.view', 'products.manage',
-        'categories.view', 'categories.manage',
-        'inventory.view', 'inventory.manage',
-        'campaigns.view', 'campaigns.manage',
-        'sales.view',
-        'customers.view',
-        'banners.view', 'banners.manage',
-        'settings.view',
-        'storefront.view',
-        'roles.manage',
-        'permissions.manage',
+        'dashboard.read',
+        'orders.create', 'orders.read', 'orders.update', 'orders.delete',
+        'products.create', 'products.read', 'products.update', 'products.delete',
+        'categories.create', 'categories.read', 'categories.update', 'categories.delete',
+        'inventory.create', 'inventory.read', 'inventory.update', 'inventory.delete',
+        'campaigns.create', 'campaigns.read', 'campaigns.update', 'campaigns.delete',
+        'sales.read', 'customers.read',
+        'banners.create', 'banners.read', 'banners.update', 'banners.delete',
+        'roles.create', 'roles.read', 'roles.update', 'roles.delete',
+        'permissions.create', 'permissions.read', 'permissions.update', 'permissions.delete',
     ];
 
     public function index(): JsonResponse

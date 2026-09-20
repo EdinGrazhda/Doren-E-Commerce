@@ -1148,6 +1148,19 @@
       "norm_label": "inputhtmlattributes"
     },
     {
+      "label": "CreateCheckoutOrder",
+      "file_type": "code",
+      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
+      "source_location": "L14",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "app_actions_checkout_createcheckoutorder_createcheckoutorder",
+      "community": 163,
+      "community_name": "ProductCampaignPrice",
+      "norm_label": "createcheckoutorder"
+    },
+    {
       "label": "CartController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/CartController.php",
@@ -1157,7 +1170,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_cartcontroller_cartcontroller",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": "cartcontroller"
     },
     {
@@ -1170,7 +1183,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_checkoutcontroller_checkoutcontroller",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": "checkoutcontroller"
     },
     {
@@ -1183,7 +1196,7 @@
       "_origin": "ast",
       "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": "storecheckoutrequest"
     },
     {
@@ -1196,8 +1209,21 @@
       "_origin": "ast",
       "id": "app_services_pricecartitems_pricecartitems",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": "pricecartitems"
+    },
+    {
+      "label": "ProductCampaignPrice",
+      "file_type": "code",
+      "source_file": "app/Services/ProductCampaignPrice.php",
+      "source_location": "L8",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "app_services_productcampaignprice_productcampaignprice",
+      "community": 163,
+      "community_name": "ProductCampaignPrice",
+      "norm_label": "productcampaignprice"
     },
     {
       "label": "SafeActionUrl",
@@ -2409,17 +2435,17 @@
       "norm_label": "inventorymovement"
     },
     {
-      "label": "StoreProductCategoryRequest",
+      "label": "HomeController",
       "file_type": "code",
-      "source_file": "app/Http/Requests/Admin/StoreProductCategoryRequest.php",
-      "source_location": "L9",
+      "source_file": "app/Http/Controllers/HomeController.php",
+      "source_location": "L14",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "app_http_requests_admin_storeproductcategoryrequest_storeproductcategoryrequest",
+      "id": "app_http_controllers_homecontroller_homecontroller",
       "community": 7,
-      "community_name": "StoreProductCategoryRequest",
-      "norm_label": "storeproductcategoryrequest"
+      "community_name": ".__invoke",
+      "norm_label": "homecontroller"
     },
     {
       "label": "TestCase",
@@ -2433,6 +2459,19 @@
       "community": 70,
       "community_name": "TestCase",
       "norm_label": "testcase"
+    },
+    {
+      "label": "StoreProductCategoryRequest",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/Admin/StoreProductCategoryRequest.php",
+      "source_location": "L9",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "app_http_requests_admin_storeproductcategoryrequest_storeproductcategoryrequest",
+      "community": 73,
+      "community_name": "StoreProductCategoryRequest",
+      "norm_label": "storeproductcategoryrequest"
     },
     {
       "label": "PlaceholderPatternProps",
@@ -2578,32 +2617,6 @@
       "norm_label": "iconprops"
     },
     {
-      "label": "CreateCheckoutOrder",
-      "file_type": "code",
-      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
-      "source_location": "L14",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "app_actions_checkout_createcheckoutorder_createcheckoutorder",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": "createcheckoutorder"
-    },
-    {
-      "label": "HomeController",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/HomeController.php",
-      "source_location": "L14",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "app_http_controllers_homecontroller_homecontroller",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": "homecontroller"
-    },
-    {
       "label": "ProductShowController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/ProductShowController.php",
@@ -2613,21 +2626,8 @@
       "_origin": "ast",
       "id": "app_http_controllers_productshowcontroller_productshowcontroller",
       "community": 94,
-      "community_name": "ProductCampaignPrice",
+      "community_name": "ProductShowController",
       "norm_label": "productshowcontroller"
-    },
-    {
-      "label": "ProductCampaignPrice",
-      "file_type": "code",
-      "source_file": "app/Services/ProductCampaignPrice.php",
-      "source_location": "L8",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "app_services_productcampaignprice_productcampaignprice",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": "productcampaignprice"
     },
     {
       "label": "Props",
@@ -2698,7 +2698,7 @@
       "label": "RoleController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L12",
+      "source_location": "L13",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -4131,7 +4131,7 @@
       "label": "AdminSidebar()",
       "file_type": "code",
       "source_file": "resources/js/components/admin-sidebar.tsx",
-      "source_location": "L146",
+      "source_location": "L151",
       "_callable": true,
       "_origin": "ast",
       "id": "resources_js_components_admin_sidebar_adminsidebar",
@@ -4539,7 +4539,7 @@
       "label": ".destroy()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L38",
+      "source_location": "L52",
       "_callable": true,
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_permissioncontroller_permissioncontroller_destroy",
@@ -4551,7 +4551,7 @@
       "label": ".index()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L15",
+      "source_location": "L29",
       "_callable": true,
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_permissioncontroller_permissioncontroller_index",
@@ -4563,7 +4563,7 @@
       "label": ".store()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L22",
+      "source_location": "L36",
       "_callable": true,
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_permissioncontroller_permissioncontroller_store",
@@ -4575,7 +4575,7 @@
       "label": ".update()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L29",
+      "source_location": "L43",
       "_callable": true,
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_permissioncontroller_permissioncontroller_update",
@@ -5460,6 +5460,18 @@
       "norm_label": "up()"
     },
     {
+      "label": ".__construct()",
+      "file_type": "code",
+      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
+      "source_location": "L16",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_actions_checkout_createcheckoutorder_createcheckoutorder_construct",
+      "community": 163,
+      "community_name": "ProductCampaignPrice",
+      "norm_label": ".__construct()"
+    },
+    {
       "label": ".__invoke()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/CartController.php",
@@ -5468,7 +5480,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_cartcontroller_cartcontroller_invoke",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": ".__invoke()"
     },
     {
@@ -5480,7 +5492,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_checkoutcontroller_checkoutcontroller_cartpayload",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": ".cartpayload()"
     },
     {
@@ -5492,7 +5504,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_checkoutcontroller_checkoutcontroller_construct",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": ".__construct()"
     },
     {
@@ -5504,7 +5516,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_checkoutcontroller_checkoutcontroller_index",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": ".index()"
     },
     {
@@ -5516,7 +5528,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_checkoutcontroller_checkoutcontroller_store",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": ".store()"
     },
     {
@@ -5528,7 +5540,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_checkoutcontroller_checkoutcontroller_thankyou",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": ".thankyou()"
     },
     {
@@ -5540,7 +5552,7 @@
       "_origin": "ast",
       "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_after",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": ".after()"
     },
     {
@@ -5552,7 +5564,7 @@
       "_origin": "ast",
       "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_authorize",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": ".authorize()"
     },
     {
@@ -5564,7 +5576,7 @@
       "_origin": "ast",
       "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_rules",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": ".rules()"
     },
     {
@@ -5576,8 +5588,20 @@
       "_origin": "ast",
       "id": "app_services_pricecartitems_pricecartitems_construct",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": ".__construct()"
+    },
+    {
+      "label": ".calculate()",
+      "file_type": "code",
+      "source_file": "app/Services/ProductCampaignPrice.php",
+      "source_location": "L11",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_services_productcampaignprice_productcampaignprice_calculate",
+      "community": 163,
+      "community_name": "ProductCampaignPrice",
+      "norm_label": ".calculate()"
     },
     {
       "label": ".containsUnsafeCharacters()",
@@ -8160,40 +8184,52 @@
       "norm_label": ".variant()"
     },
     {
-      "label": ".authorize()",
+      "label": ".bannerPayload()",
       "file_type": "code",
-      "source_file": "app/Http/Requests/Admin/StoreProductCategoryRequest.php",
-      "source_location": "L11",
+      "source_file": "app/Http/Controllers/HomeController.php",
+      "source_location": "L183",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_http_requests_admin_storeproductcategoryrequest_storeproductcategoryrequest_authorize",
+      "id": "app_http_controllers_homecontroller_homecontroller_bannerpayload",
       "community": 7,
-      "community_name": "StoreProductCategoryRequest",
-      "norm_label": ".authorize()"
+      "community_name": ".__invoke",
+      "norm_label": ".bannerpayload()"
     },
     {
-      "label": ".prepareForValidation()",
+      "label": ".__construct()",
       "file_type": "code",
-      "source_file": "app/Http/Requests/Admin/StoreProductCategoryRequest.php",
-      "source_location": "L29",
+      "source_file": "app/Http/Controllers/HomeController.php",
+      "source_location": "L16",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_http_requests_admin_storeproductcategoryrequest_storeproductcategoryrequest_prepareforvalidation",
+      "id": "app_http_controllers_homecontroller_homecontroller_construct",
       "community": 7,
-      "community_name": "StoreProductCategoryRequest",
-      "norm_label": ".prepareforvalidation()"
+      "community_name": ".__invoke",
+      "norm_label": ".__construct()"
     },
     {
-      "label": ".rules()",
+      "label": ".__invoke()",
       "file_type": "code",
-      "source_file": "app/Http/Requests/Admin/StoreProductCategoryRequest.php",
-      "source_location": "L19",
+      "source_file": "app/Http/Controllers/HomeController.php",
+      "source_location": "L18",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_http_requests_admin_storeproductcategoryrequest_storeproductcategoryrequest_rules",
+      "id": "app_http_controllers_homecontroller_homecontroller_invoke",
       "community": 7,
-      "community_name": "StoreProductCategoryRequest",
-      "norm_label": ".rules()"
+      "community_name": ".__invoke",
+      "norm_label": ".__invoke()"
+    },
+    {
+      "label": ".productPayload()",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/HomeController.php",
+      "source_location": "L150",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_controllers_homecontroller_homecontroller_productpayload",
+      "community": 7,
+      "community_name": ".__invoke",
+      "norm_label": ".productpayload()"
     },
     {
       "label": "something()",
@@ -8218,6 +8254,42 @@
       "community": 70,
       "community_name": "TestCase",
       "norm_label": ".skipunlessfortifyhas()"
+    },
+    {
+      "label": ".authorize()",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/Admin/StoreProductCategoryRequest.php",
+      "source_location": "L11",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_requests_admin_storeproductcategoryrequest_storeproductcategoryrequest_authorize",
+      "community": 73,
+      "community_name": "StoreProductCategoryRequest",
+      "norm_label": ".authorize()"
+    },
+    {
+      "label": ".prepareForValidation()",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/Admin/StoreProductCategoryRequest.php",
+      "source_location": "L29",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_requests_admin_storeproductcategoryrequest_storeproductcategoryrequest_prepareforvalidation",
+      "community": 73,
+      "community_name": "StoreProductCategoryRequest",
+      "norm_label": ".prepareforvalidation()"
+    },
+    {
+      "label": ".rules()",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/Admin/StoreProductCategoryRequest.php",
+      "source_location": "L19",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_requests_admin_storeproductcategoryrequest_storeproductcategoryrequest_rules",
+      "community": 73,
+      "community_name": "StoreProductCategoryRequest",
+      "norm_label": ".rules()"
     },
     {
       "label": "PlaceholderPattern()",
@@ -8966,73 +9038,13 @@
     {
       "label": ".__construct()",
       "file_type": "code",
-      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
-      "source_location": "L16",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_actions_checkout_createcheckoutorder_createcheckoutorder_construct",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": ".__construct()"
-    },
-    {
-      "label": ".bannerPayload()",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/HomeController.php",
-      "source_location": "L183",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_controllers_homecontroller_homecontroller_bannerpayload",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": ".bannerpayload()"
-    },
-    {
-      "label": ".__construct()",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/HomeController.php",
-      "source_location": "L16",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_controllers_homecontroller_homecontroller_construct",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": ".__construct()"
-    },
-    {
-      "label": ".__invoke()",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/HomeController.php",
-      "source_location": "L18",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_controllers_homecontroller_homecontroller_invoke",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": ".__invoke()"
-    },
-    {
-      "label": ".productPayload()",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/HomeController.php",
-      "source_location": "L150",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_controllers_homecontroller_homecontroller_productpayload",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": ".productpayload()"
-    },
-    {
-      "label": ".__construct()",
-      "file_type": "code",
       "source_file": "app/Http/Controllers/ProductShowController.php",
       "source_location": "L13",
       "_callable": true,
       "_origin": "ast",
       "id": "app_http_controllers_productshowcontroller_productshowcontroller_construct",
       "community": 94,
-      "community_name": "ProductCampaignPrice",
+      "community_name": "ProductShowController",
       "norm_label": ".__construct()"
     },
     {
@@ -9044,7 +9056,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_productshowcontroller_productshowcontroller_invoke",
       "community": 94,
-      "community_name": "ProductCampaignPrice",
+      "community_name": "ProductShowController",
       "norm_label": ".__invoke()"
     },
     {
@@ -9056,7 +9068,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_productshowcontroller_productshowcontroller_productpayload",
       "community": 94,
-      "community_name": "ProductCampaignPrice",
+      "community_name": "ProductShowController",
       "norm_label": ".productpayload()"
     },
     {
@@ -9068,7 +9080,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_productshowcontroller_productshowcontroller_relatedproductpayload",
       "community": 94,
-      "community_name": "ProductCampaignPrice",
+      "community_name": "ProductShowController",
       "norm_label": ".relatedproductpayload()"
     },
     {
@@ -9080,20 +9092,8 @@
       "_origin": "ast",
       "id": "app_http_controllers_productshowcontroller_productshowcontroller_variantimageurls",
       "community": 94,
-      "community_name": "ProductCampaignPrice",
+      "community_name": "ProductShowController",
       "norm_label": ".variantimageurls()"
-    },
-    {
-      "label": ".calculate()",
-      "file_type": "code",
-      "source_file": "app/Services/ProductCampaignPrice.php",
-      "source_location": "L11",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_services_productcampaignprice_productcampaignprice_calculate",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": ".calculate()"
     },
     {
       "label": "AlertError()",
@@ -9267,7 +9267,7 @@
       "label": ".destroy()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L40",
+      "source_location": "L52",
       "_callable": true,
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_rolecontroller_rolecontroller_destroy",
@@ -9279,7 +9279,7 @@
       "label": ".index()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L14",
+      "source_location": "L15",
       "_callable": true,
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_rolecontroller_rolecontroller_index",
@@ -9291,7 +9291,7 @@
       "label": ".store()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L22",
+      "source_location": "L34",
       "_callable": true,
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_rolecontroller_rolecontroller_store",
@@ -9303,7 +9303,7 @@
       "label": ".update()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L30",
+      "source_location": "L42",
       "_callable": true,
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_rolecontroller_rolecontroller_update",
@@ -9617,7 +9617,7 @@
       "label": "adminNavSections",
       "file_type": "code",
       "source_file": "resources/js/components/admin-sidebar.tsx",
-      "source_location": "L47",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "resources_js_components_admin_sidebar_adminnavsections",
       "community": 103,
@@ -10063,6 +10063,28 @@
       "community": 114,
       "community_name": "@radix-ui/react-slot",
       "norm_label": "@radix-ui/react-slot"
+    },
+    {
+      "label": "clsx",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "package_dependencies_clsx",
+      "community": 115,
+      "community_name": "clsx",
+      "norm_label": "clsx"
+    },
+    {
+      "label": "clsx",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "clsx",
+      "community": 115,
+      "community_name": "clsx",
+      "norm_label": "clsx"
     },
     {
       "label": "@radix-ui/react-tooltip",
@@ -11858,6 +11880,28 @@
       "norm_label": "keep product variants as the inventory source of truth"
     },
     {
+      "label": "@radix-ui/react-toggle",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "package_dependencies_radix_ui_react_toggle",
+      "community": 155,
+      "community_name": "@radix-ui/react-toggle",
+      "norm_label": "@radix-ui/react-toggle"
+    },
+    {
+      "label": "@radix-ui/react-toggle",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "radix_ui_react_toggle",
+      "community": 155,
+      "community_name": "@radix-ui/react-toggle",
+      "norm_label": "@radix-ui/react-toggle"
+    },
+    {
       "label": "auth.ts",
       "file_type": "code",
       "source_file": "resources/js/types/auth.ts",
@@ -12254,6 +12298,17 @@
       "norm_label": "2026_08_19_162948_add_image_url_to_product_variants_table.php"
     },
     {
+      "label": "CreateCheckoutOrder.php",
+      "file_type": "code",
+      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_actions_checkout_createcheckoutorder",
+      "community": 163,
+      "community_name": "ProductCampaignPrice",
+      "norm_label": "createcheckoutorder.php"
+    },
+    {
       "label": "CartController.php",
       "file_type": "code",
       "source_file": "app/Http/Controllers/CartController.php",
@@ -12261,7 +12316,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_cartcontroller",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": "cartcontroller.php"
     },
     {
@@ -12272,8 +12327,30 @@
       "_origin": "ast",
       "id": "app_http_controllers_checkoutcontroller",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": "checkoutcontroller.php"
+    },
+    {
+      "label": "HomeController.php",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/HomeController.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_http_controllers_homecontroller",
+      "community": 163,
+      "community_name": "ProductCampaignPrice",
+      "norm_label": "homecontroller.php"
+    },
+    {
+      "label": "ProductShowController.php",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/ProductShowController.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_http_controllers_productshowcontroller",
+      "community": 163,
+      "community_name": "ProductCampaignPrice",
+      "norm_label": "productshowcontroller.php"
     },
     {
       "label": "StoreCheckoutRequest.php",
@@ -12283,8 +12360,30 @@
       "_origin": "ast",
       "id": "app_http_requests_storecheckoutrequest",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "ProductCampaignPrice",
       "norm_label": "storecheckoutrequest.php"
+    },
+    {
+      "label": "ProductCampaignPrice.php",
+      "file_type": "code",
+      "source_file": "app/Services/ProductCampaignPrice.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_services_productcampaignprice",
+      "community": 163,
+      "community_name": "ProductCampaignPrice",
+      "norm_label": "productcampaignprice.php"
+    },
+    {
+      "label": "web.php",
+      "file_type": "code",
+      "source_file": "routes/web.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "routes_web",
+      "community": 163,
+      "community_name": "ProductCampaignPrice",
+      "norm_label": "web.php"
     },
     {
       "label": "eslint-plugin-react",
@@ -12362,28 +12461,6 @@
       "community": 167,
       "community_name": "@radix-ui/react-label",
       "norm_label": "@radix-ui/react-label"
-    },
-    {
-      "label": "@radix-ui/react-toggle",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "package_dependencies_radix_ui_react_toggle",
-      "community": 168,
-      "community_name": "@radix-ui/react-toggle",
-      "norm_label": "@radix-ui/react-toggle"
-    },
-    {
-      "label": "@radix-ui/react-toggle",
-      "file_type": "concept",
-      "source_file": "package.json",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "radix_ui_react_toggle",
-      "community": 168,
-      "community_name": "@radix-ui/react-toggle",
-      "norm_label": "@radix-ui/react-toggle"
     },
     {
       "label": "react",
@@ -17105,15 +17182,15 @@
       "norm_label": "class-variance-authority"
     },
     {
-      "label": "clsx",
+      "label": "concurrently",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L53",
+      "source_location": "L54",
       "_origin": "ast",
-      "id": "package_dependencies_clsx",
+      "id": "package_dependencies_concurrently",
       "community": 49,
       "community_name": "dependencies",
-      "norm_label": "clsx"
+      "norm_label": "concurrently"
     },
     {
       "label": "@inertiajs/vite",
@@ -17149,15 +17226,15 @@
       "norm_label": "class-variance-authority"
     },
     {
-      "label": "clsx",
+      "label": "concurrently",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L53",
+      "source_location": "L54",
       "_origin": "ast",
-      "id": "clsx",
+      "id": "concurrently",
       "community": 49,
       "community_name": "dependencies",
-      "norm_label": "clsx"
+      "norm_label": "concurrently"
     },
     {
       "label": "@inertiajs/vite",
@@ -19118,17 +19195,6 @@
       "norm_label": "@radix-ui/react-navigation-menu"
     },
     {
-      "label": "StoreProductCategoryRequest.php",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/Admin/StoreProductCategoryRequest.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_http_requests_admin_storeproductcategoryrequest",
-      "community": 7,
-      "community_name": "StoreProductCategoryRequest",
-      "norm_label": "storeproductcategoryrequest.php"
-    },
-    {
       "label": "Illuminate\\Foundation\\Testing\\TestCase",
       "file_type": "code",
       "source_file": "",
@@ -19272,26 +19338,15 @@
       "norm_label": "installer"
     },
     {
-      "label": "concurrently",
+      "label": "StoreProductCategoryRequest.php",
       "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L54",
+      "source_file": "app/Http/Requests/Admin/StoreProductCategoryRequest.php",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "package_dependencies_concurrently",
+      "id": "app_http_requests_admin_storeproductcategoryrequest",
       "community": 73,
-      "community_name": "concurrently",
-      "norm_label": "concurrently"
-    },
-    {
-      "label": "concurrently",
-      "file_type": "concept",
-      "source_file": "package.json",
-      "source_location": "L54",
-      "_origin": "ast",
-      "id": "concurrently",
-      "community": 73,
-      "community_name": "concurrently",
-      "norm_label": "concurrently"
+      "community_name": "StoreProductCategoryRequest",
+      "norm_label": "storeproductcategoryrequest.php"
     },
     {
       "label": "placeholder-pattern.tsx",
@@ -19855,61 +19910,6 @@
       "norm_label": "console.php"
     },
     {
-      "label": "CreateCheckoutOrder.php",
-      "file_type": "code",
-      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_actions_checkout_createcheckoutorder",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": "createcheckoutorder.php"
-    },
-    {
-      "label": "HomeController.php",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/HomeController.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_http_controllers_homecontroller",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": "homecontroller.php"
-    },
-    {
-      "label": "ProductShowController.php",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/ProductShowController.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_http_controllers_productshowcontroller",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": "productshowcontroller.php"
-    },
-    {
-      "label": "ProductCampaignPrice.php",
-      "file_type": "code",
-      "source_file": "app/Services/ProductCampaignPrice.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_services_productcampaignprice",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": "productcampaignprice.php"
-    },
-    {
-      "label": "web.php",
-      "file_type": "code",
-      "source_file": "routes/web.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "routes_web",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": "web.php"
-    },
-    {
       "label": "manage-two-factor.tsx",
       "file_type": "code",
       "source_file": "resources/js/components/manage-two-factor.tsx",
@@ -20350,7 +20350,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L18",
+      "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_permissioncontroller_permissioncontroller_index",
@@ -20362,7 +20362,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L24",
+      "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_permissioncontroller_permissioncontroller_store",
@@ -20530,7 +20530,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L17",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_rolecontroller_rolecontroller_index",
@@ -20542,7 +20542,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L24",
+      "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_rolecontroller_rolecontroller_store",
@@ -21107,7 +21107,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/components/admin-sidebar.tsx",
-      "source_location": "L147",
+      "source_location": "L152",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_components_admin_sidebar_adminsidebar",
@@ -25562,6 +25562,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_rolecontroller",
+      "target": "spatie_permission_models_permission",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "app_http_controllers_api_admin_rolecontroller",
       "target": "spatie_permission_models_role",
       "confidence_score": 1.0
     },
@@ -25611,18 +25623,6 @@
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_rolecontroller",
       "target": "illuminate_http_jsonresponse",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "app_http_controllers_api_admin_rolecontroller",
-      "target": "spatie_permission_models_permission",
       "confidence_score": 1.0
     },
     {
@@ -40293,7 +40293,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L38",
+      "source_location": "L52",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -40305,7 +40305,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L22",
+      "source_location": "L36",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -40317,7 +40317,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L29",
+      "source_location": "L43",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -40329,7 +40329,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L29",
+      "source_location": "L43",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -40533,7 +40533,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L40",
+      "source_location": "L52",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -40545,7 +40545,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L22",
+      "source_location": "L34",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -40557,7 +40557,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L30",
+      "source_location": "L42",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -40569,7 +40569,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L30",
+      "source_location": "L42",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -41445,7 +41445,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L38",
+      "source_location": "L52",
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
@@ -41457,7 +41457,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L15",
+      "source_location": "L29",
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
@@ -41469,7 +41469,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L22",
+      "source_location": "L36",
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
@@ -41481,7 +41481,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L29",
+      "source_location": "L43",
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
@@ -41601,7 +41601,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L40",
+      "source_location": "L52",
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
@@ -41613,7 +41613,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
@@ -41625,7 +41625,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L22",
+      "source_location": "L34",
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
@@ -41637,7 +41637,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L30",
+      "source_location": "L42",
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
@@ -46008,7 +46008,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L12",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_rolecontroller",
@@ -48956,7 +48956,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/components/admin-sidebar.tsx",
-      "source_location": "L146",
+      "source_location": "L151",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_components_admin_sidebar",
@@ -48978,7 +48978,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/components/admin-sidebar.tsx",
-      "source_location": "L47",
+      "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_components_admin_sidebar",
@@ -54104,7 +54104,7 @@
       "relation": "inherits",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L12",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_rolecontroller_rolecontroller",
@@ -55193,7 +55193,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L15",
+      "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_permissioncontroller_permissioncontroller",
@@ -55204,7 +55204,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L22",
+      "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_permissioncontroller_permissioncontroller",
@@ -55215,7 +55215,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L29",
+      "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_permissioncontroller_permissioncontroller",
@@ -55226,7 +55226,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/PermissionController.php",
-      "source_location": "L38",
+      "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_permissioncontroller_permissioncontroller",
@@ -55413,7 +55413,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_rolecontroller_rolecontroller",
@@ -55424,7 +55424,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L22",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_rolecontroller_rolecontroller",
@@ -55435,7 +55435,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L30",
+      "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_rolecontroller_rolecontroller",
@@ -55446,7 +55446,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/Admin/RoleController.php",
-      "source_location": "L40",
+      "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_controllers_api_admin_rolecontroller_rolecontroller",
@@ -58283,5 +58283,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6f8f74d9038172d6d374f24faf4dbc51b36f8713"
+  "built_at_commit": "ec8dde101c7bf2586d3854c8311609286fc1cb10"
 }

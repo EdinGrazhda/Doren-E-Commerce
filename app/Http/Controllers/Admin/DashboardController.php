@@ -15,7 +15,7 @@ class DashboardController extends Controller
      */
     public function __invoke(Request $request): Response|RedirectResponse
     {
-        if (! $request->user()->can('dashboard.view')) {
+        if (! $request->user()->can('dashboard.read')) {
             return to_route('dashboard.orders.index');
         }
 

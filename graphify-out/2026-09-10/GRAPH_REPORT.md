@@ -1,16 +1,16 @@
 # Graph Report - doren  (2026-09-10)
 
 ## Corpus Check
-- 325 files · ~222,466 words
+- 325 files · ~222,600 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1743 nodes · 3296 edges · 188 communities (128 shown, 60 thin omitted)
+- 1743 nodes · 3296 edges · 189 communities (127 shown, 62 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 34 edges (avg confidence: 0.76)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6f8f74d9`
+- Built from commit: `ec8dde10`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -22,7 +22,7 @@
 - AGENTS.md
 - Inertia React Development
 - @laravel/passkeys
-- StoreProductCategoryRequest
+- .__invoke
 - Product.php
 - dropdown-menu.tsx
 - Product
@@ -84,7 +84,7 @@
 - TestCase
 - psr-4
 - laravel
-- concurrently
+- StoreProductCategoryRequest
 - placeholder-pattern.tsx
 - show.tsx
 - input-otp
@@ -92,7 +92,7 @@
 - keywords
 - eslint.config.js
 - icon.tsx
-- ProductCampaignPrice
+- ProductShowController
 - two-factor-setup-modal.tsx
 - Admin Products
 - Illuminate\Http\JsonResponse
@@ -112,6 +112,7 @@
 - categories/index.tsx
 - @radix-ui/react-separator
 - @radix-ui/react-slot
+- clsx
 - @radix-ui/react-tooltip
 - index.ts
 - react-dom
@@ -133,16 +134,16 @@
 - Illuminate\Http\Request
 - package.json
 - Inventory
+- @radix-ui/react-toggle
 - auth.ts
 - @eslint/js
 - Products
 - RTK - Rust Token Killer
-- CheckoutController.php
+- ProductCampaignPrice
 - eslint-plugin-react
 - SafeActionUrl
 - globals
 - @radix-ui/react-label
-- @radix-ui/react-toggle
 - react
 - tailwindcss
 - @tailwindcss/vite
@@ -189,7 +190,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (188 total, 60 thin omitted)
+## Communities (189 total, 62 thin omitted)
 
 ### Community 0 - "Mail Best Practices"
 Cohesion: 0.29
@@ -357,7 +358,7 @@ Nodes (10): Configuration Best Practices, `env()` Only in Config Files, Use `App
 
 ### Community 49 - "dependencies"
 Cohesion: 0.22
-Nodes (9): class-variance-authority, clsx, @inertiajs/vite, laravel-vite-plugin, dependencies, class-variance-authority, clsx, @inertiajs/vite (+1 more)
+Nodes (9): class-variance-authority, concurrently, @inertiajs/vite, laravel-vite-plugin, dependencies, class-variance-authority, concurrently, @inertiajs/vite (+1 more)
 
 ### Community 50 - "scripts"
 Cohesion: 0.22
@@ -447,10 +448,6 @@ Nodes (3): autoload-dev, psr-4, Tests\\
 Cohesion: 0.67
 Nodes (3): keywords, framework, laravel
 
-### Community 94 - "ProductCampaignPrice"
-Cohesion: 0.16
-Nodes (4): CreateCheckoutOrder, HomeController, ProductShowController, ProductCampaignPrice
-
 ### Community 95 - "two-factor-setup-modal.tsx"
 Cohesion: 0.16
 Nodes (13): AlertError(), ManageTwoFactor(), Props, TwoFactorRecoveryCodes(), Props, TwoFactorSetupModal(), InputOTP, InputOTPGroup (+5 more)
@@ -519,9 +516,9 @@ Nodes (9): Auth, Passkey, TwoFactorSecretKey, TwoFactorSetupData, User, InertiaC
 Cohesion: 0.29
 Nodes (6): Avoid RTK For, Good RTK Uses, How RTK Fits With Graphify, RTK - Rust Token Killer, RTK With Laravel Commands, Useful Checks
 
-### Community 163 - "CheckoutController.php"
-Cohesion: 0.15
-Nodes (4): CartController, CheckoutController, StoreCheckoutRequest, PriceCartItems
+### Community 163 - "ProductCampaignPrice"
+Cohesion: 0.12
+Nodes (6): CreateCheckoutOrder, CartController, CheckoutController, StoreCheckoutRequest, PriceCartItems, ProductCampaignPrice
 
 ### Community 181 - "Illuminate\Database\Eloquent\Factories\Factory"
 Cohesion: 0.12
@@ -538,7 +535,7 @@ Nodes (7): Breadcrumb(), BreadcrumbEllipsis(), BreadcrumbItem(), BreadcrumbLink(
 ## Knowledge Gaps
 - **555 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+550 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **60 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **62 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -547,7 +544,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.067) - this node is a cross-community bridge._
 - **Why does `Role` connect `Illuminate\Http\JsonResponse` to `orders/index.tsx`?**
   _High betweenness centrality (0.063) - this node is a cross-community bridge._
-- **Why does `Controller` connect `Controller` to `Illuminate\Http\JsonResponse`, `StorefrontBanner`, `CheckoutController.php`, `ProductVariant.php`, `Api/Admin/DashboardController.php`, `Order`, `Product`, `Campaign`, `RoleController.php`, `Illuminate\Http\RedirectResponse`, `ProductCampaignPrice`?**
+- **Why does `Controller` connect `Controller` to `Illuminate\Http\JsonResponse`, `StorefrontBanner`, `ProductCampaignPrice`, `ProductVariant.php`, `Api/Admin/DashboardController.php`, `Order`, `.__invoke`, `Product`, `Campaign`, `RoleController.php`, `Illuminate\Http\RedirectResponse`, `ProductShowController`?**
   _High betweenness centrality (0.041) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
   _555 weakly-connected nodes found - possible documentation gaps or missing edges._

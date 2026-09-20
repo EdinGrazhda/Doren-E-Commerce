@@ -20,6 +20,7 @@ import {
 import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 
+import BrandLogo from '@/components/brand-logo';
 import { cart as cartRoute, home, login } from '@/routes';
 import { store as storeCartItem } from '@/routes/cart-items';
 import { show as showProduct } from '@/routes/products';
@@ -96,6 +97,7 @@ const fallbackImages = [
     'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?auto=format&fit=crop&w=1200&q=85',
     'https://images.unsplash.com/photo-1593032465175-481ac7f401f0?auto=format&fit=crop&w=1200&q=85',
 ];
+const instagramUrl = 'https://www.instagram.com/doren.ks/?hl=en';
 
 function imageFor(value: string | null | undefined, index: number): string {
     return value || fallbackImages[index % fallbackImages.length];
@@ -104,7 +106,7 @@ function imageFor(value: string | null | undefined, index: number): string {
 function formatPrice(cents: number, currency: string): string {
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: currency || 'USD',
+        currency: currency || 'EUR',
     }).format(cents / 100);
 }
 
@@ -335,9 +337,9 @@ export default function Show({ product, relatedProducts }: Props) {
                     <div className="mx-auto flex h-[68px] max-w-[1158px] items-center justify-between px-6">
                         <Link
                             href={home()}
-                            className="[font-family:Georgia,_serif] text-[31px] leading-none font-medium tracking-[0.04em]"
+                            className="flex h-12 w-28 items-center justify-center sm:w-32"
                         >
-                            DOREN
+                            <BrandLogo className="h-12 w-full object-cover object-center" />
                         </Link>
                         <nav className="hidden items-center gap-11 text-[11px] font-bold tracking-[0.12em] uppercase lg:flex">
                             {navigationItems.map((item) => (
@@ -784,16 +786,22 @@ export default function Show({ product, relatedProducts }: Props) {
                 <footer className="bg-[#11191b] text-[#f4f1ea]">
                     <div className="mx-auto flex max-w-[1158px] flex-col gap-8 px-6 py-8 md:flex-row md:items-start md:justify-between">
                         <div>
-                            <p className="[font-family:Georgia,_serif] text-[31px] leading-none tracking-[0.04em]">
-                                DOREN
-                            </p>
+                            <BrandLogo className="h-20 w-36 object-cover object-center" />
                             <p className="mt-4 max-w-[240px] text-[11px] leading-5 text-[#c9c5bb]">
                                 Timeless menswear designed for the modern man.
                                 Quality. Simplicity. Versatility.
                             </p>
                         </div>
                         <div className="flex gap-5 text-[#c9c5bb]">
-                            <Instagram className="h-4 w-4" />
+                            <a
+                                href={instagramUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Doren on Instagram"
+                                className="transition hover:text-white"
+                            >
+                                <Instagram className="h-4 w-4" />
+                            </a>
                             <Youtube className="h-4 w-4" />
                             <Mail className="h-4 w-4" />
                         </div>
@@ -810,7 +818,7 @@ export default function Show({ product, relatedProducts }: Props) {
                             type="button"
                             className="inline-flex items-center gap-2 self-start sm:self-auto"
                         >
-                            United States (USD $)
+                            Kosovo (EUR €)
                             <ChevronDown className="h-4 w-4" />
                         </button>
                     </div>

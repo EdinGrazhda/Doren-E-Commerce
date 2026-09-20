@@ -327,7 +327,7 @@ export default function AdminCampaignsIndex() {
                                                           'en-US',
                                                           {
                                                               style: 'currency',
-                                                              currency: 'USD',
+                                                              currency: 'EUR',
                                                           },
                                                       ).format(
                                                           campaign.discount_value /
@@ -464,7 +464,7 @@ export default function AdminCampaignsIndex() {
                                 <Label htmlFor="campaign-value">
                                     {form.data.discount_type === 'percentage'
                                         ? 'Percentage'
-                                        : 'Amount (USD)'}
+                                        : 'Amount (EUR)'}
                                 </Label>
                                 <Input
                                     id="campaign-value"

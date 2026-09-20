@@ -40,7 +40,7 @@ test('storefront home renders real catalog data', function () {
             ->has('newInProducts.data.0', fn (Assert $page) => $page
                 ->where('name', 'Pima Cotton Polo')
                 ->where('price_cents', 8900)
-                ->where('currency', 'USD')
+                ->where('currency', 'EUR')
                 ->whereNot('image_url', null)
                 ->has('colors')
                 ->etc()

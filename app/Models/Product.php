@@ -54,7 +54,7 @@ class Product extends Model
     use HasFactory;
 
     protected $attributes = [
-        'currency' => 'USD',
+        'currency' => 'EUR',
         'is_active' => true,
         'is_featured' => false,
         'sort_order' => 0,

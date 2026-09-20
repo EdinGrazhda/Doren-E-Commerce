@@ -17,8 +17,10 @@ import {
     X,
     Youtube,
 } from 'lucide-react';
-import { type FormEvent, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { FormEvent } from 'react';
 
+import BrandLogo from '@/components/brand-logo';
 import {
     cart as cartRoute,
     dashboard as adminDashboard,
@@ -120,6 +122,7 @@ const bannerImage =
     'https://images.unsplash.com/photo-1507680434567-5739c80be1ac?auto=format&fit=crop&w=1800&q=90';
 
 const carouselIntervalMs = 6000;
+const instagramUrl = 'https://www.instagram.com/doren.ks/?hl=en';
 
 const benefits = [
     {
@@ -181,7 +184,7 @@ function imageFor(value: string | null, index: number): string {
 function formatPrice(product: StoreProduct): string {
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: product.currency || 'USD',
+        currency: product.currency || 'EUR',
         minimumFractionDigits: 2,
     }).format(product.price_cents / 100);
 }
@@ -528,7 +531,7 @@ function ProductCard({
                         <span className="font-normal text-[#756e62] line-through">
                             {new Intl.NumberFormat('en-US', {
                                 style: 'currency',
-                                currency: product.currency || 'USD',
+                                currency: product.currency || 'EUR',
                             }).format(product.compare_at_price_cents / 100)}
                         </span>
                     )}
@@ -786,9 +789,9 @@ export default function Welcome({
 
                         <Link
                             href="/"
-                            className="[font-family:Georgia,_serif] text-[31px] leading-none font-medium tracking-[0.04em]"
+                            className="flex h-12 w-28 items-center justify-center sm:w-32"
                         >
-                            DOREN
+                            <BrandLogo className="h-12 w-full object-cover object-center" />
                         </Link>
 
                         <nav className="hidden items-center gap-11 text-[11px] font-bold tracking-[0.12em] uppercase lg:flex">
@@ -1065,15 +1068,21 @@ export default function Welcome({
                 <footer className="bg-[#11191b] text-[#f4f1ea]">
                     <div className="mx-auto grid max-w-[1158px] grid-cols-1 gap-9 px-6 py-8 md:grid-cols-[1.35fr_repeat(4,1fr)]">
                         <div>
-                            <p className="[font-family:Georgia,_serif] text-[31px] leading-none tracking-[0.04em]">
-                                DOREN
-                            </p>
+                            <BrandLogo className="h-20 w-36 object-cover object-center" />
                             <p className="mt-4 max-w-[210px] text-[11px] leading-5 text-[#c9c5bb]">
                                 Timeless menswear designed for the modern man.
                                 Quality. Simplicity. Versatility.
                             </p>
                             <div className="mt-5 flex gap-5 text-[#c9c5bb]">
-                                <Instagram className="h-4 w-4" />
+                                <a
+                                    href={instagramUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Doren on Instagram"
+                                    className="transition hover:text-white"
+                                >
+                                    <Instagram className="h-4 w-4" />
+                                </a>
                                 <Youtube className="h-4 w-4" />
                                 <Mail className="h-4 w-4" />
                             </div>
@@ -1100,7 +1109,7 @@ export default function Welcome({
                             type="button"
                             className="inline-flex items-center gap-2 self-start sm:self-auto"
                         >
-                            United States (USD $)
+                            Kosovo (EUR €)
                             <ChevronDown className="h-4 w-4" />
                         </button>
                     </div>

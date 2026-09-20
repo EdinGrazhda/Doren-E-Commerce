@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import type { FormEvent } from 'react';
 
+import BrandLogo from '@/components/brand-logo';
 import { cart as cartRoute, home, login } from '@/routes';
 import { store as storeCheckout } from '@/routes/checkout';
 import { show as showProduct } from '@/routes/products';
@@ -53,7 +54,7 @@ const fallbackImage =
 function formatPrice(cents: number, currency: string): string {
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: currency || 'USD',
+        currency: currency || 'EUR',
     }).format(cents / 100);
 }
 
@@ -105,9 +106,9 @@ export default function Checkout({ items, subtotal_cents, currency }: Props) {
                     <div className="mx-auto flex h-[68px] max-w-[1158px] items-center justify-between px-6">
                         <Link
                             href={home()}
-                            className="[font-family:Georgia,_serif] text-[31px] leading-none font-medium tracking-[0.04em]"
+                            className="flex h-12 w-28 items-center justify-center sm:w-32"
                         >
-                            DOREN
+                            <BrandLogo className="h-12 w-full object-cover object-center" />
                         </Link>
                         <div className="flex items-center gap-3">
                             <button
@@ -421,7 +422,10 @@ export default function Checkout({ items, subtotal_cents, currency }: Props) {
 
                 <footer className="border-t border-[#d6cec0] bg-[#f8f4ed]">
                     <div className="mx-auto flex max-w-[1158px] flex-col gap-3 px-6 py-5 text-[11px] text-[#5d554b] sm:flex-row sm:items-center sm:justify-between">
-                        <span>DOREN</span>
+                        <BrandLogo
+                            variant="light"
+                            className="h-12 w-24 object-cover object-center"
+                        />
                         <span className="inline-flex items-center gap-2">
                             <Mail className="h-3.5 w-3.5" />
                             Customer care

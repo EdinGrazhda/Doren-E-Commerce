@@ -16,7 +16,7 @@ class UpdateProductRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return $this->user()?->can('products.manage') === true;
+        return $this->user()?->can('products.update') === true;
     }
 
     /**
@@ -126,7 +126,7 @@ class UpdateProductRequest extends FormRequest
         $this->merge([
             'slug' => Str::slug((string) ($this->input('slug') ?: $this->input('name'))),
             'sku' => $this->filled('sku') ? Str::upper((string) $this->input('sku')) : null,
-            'currency' => Str::upper((string) ($this->input('currency') ?: 'USD')),
+            'currency' => 'EUR',
             'product_category_id' => $this->input('product_category_id') ?: null,
             'is_active' => $this->boolean('is_active'),
             'is_featured' => $this->boolean('is_featured'),

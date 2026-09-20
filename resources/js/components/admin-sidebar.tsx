@@ -6,11 +6,9 @@ import {
     Images,
     LayoutDashboard,
     Package,
-    Tags,
-    Settings,
     ShoppingBag,
     ShieldCheck,
-    Store,
+    Tags,
     Users,
 } from 'lucide-react';
 
@@ -28,8 +26,8 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
-import { dashboard, home } from '@/routes';
-import { accessControl, inventory, sales, settings } from '@/routes/dashboard';
+import { dashboard } from '@/routes';
+import { accessControl, inventory, sales } from '@/routes/dashboard';
 import { index as bannersIndex } from '@/routes/dashboard/banners';
 import { index as campaignsIndex } from '@/routes/dashboard/campaigns';
 import { index as categoriesIndex } from '@/routes/dashboard/categories';
@@ -49,7 +47,7 @@ const adminNavSections: AdminNavSection[] = [
         items: [
             {
                 title: 'Dashboard',
-                permission: 'dashboard.view',
+                permission: 'dashboard.read',
                 href: dashboard(),
                 icon: LayoutDashboard,
             },
@@ -60,25 +58,25 @@ const adminNavSections: AdminNavSection[] = [
         items: [
             {
                 title: 'Orders',
-                permission: 'orders.view',
+                permission: 'orders.read',
                 href: ordersIndex(),
                 icon: ShoppingBag,
             },
             {
                 title: 'Products',
-                permission: 'products.view',
+                permission: 'products.read',
                 href: productsIndex(),
                 icon: Package,
             },
             {
                 title: 'Categories',
-                permission: 'categories.view',
+                permission: 'categories.read',
                 href: categoriesIndex(),
                 icon: FolderTree,
             },
             {
                 title: 'Inventory',
-                permission: 'inventory.view',
+                permission: 'inventory.read',
                 href: inventory(),
                 icon: Boxes,
             },
@@ -89,13 +87,13 @@ const adminNavSections: AdminNavSection[] = [
         items: [
             {
                 title: 'Product Campaigns',
-                permission: 'campaigns.view',
+                permission: 'campaigns.read',
                 href: campaignsIndex(),
                 icon: Tags,
             },
             {
                 title: 'Counter Sales',
-                permission: 'sales.view',
+                permission: 'sales.read',
                 href: sales(),
                 icon: CircleDollarSign,
             },
@@ -106,7 +104,7 @@ const adminNavSections: AdminNavSection[] = [
         items: [
             {
                 title: 'Customers',
-                permission: 'customers.view',
+                permission: 'customers.read',
                 href: customersIndex(),
                 icon: Users,
             },
@@ -117,21 +115,9 @@ const adminNavSections: AdminNavSection[] = [
         items: [
             {
                 title: 'Banners',
-                permission: 'banners.view',
+                permission: 'banners.read',
                 href: bannersIndex(),
                 icon: Images,
-            },
-            {
-                title: 'Store Settings',
-                permission: 'settings.view',
-                href: settings(),
-                icon: Settings,
-            },
-            {
-                title: 'Storefront',
-                permission: 'storefront.view',
-                href: home(),
-                icon: Store,
             },
         ],
     },
@@ -140,7 +126,7 @@ const adminNavSections: AdminNavSection[] = [
         items: [
             {
                 title: 'Roles & Permissions',
-                permission: 'roles.manage',
+                permission: 'roles.read',
                 href: accessControl(),
                 icon: ShieldCheck,
             },

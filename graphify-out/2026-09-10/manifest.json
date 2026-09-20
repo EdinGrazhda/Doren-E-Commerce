@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "app/Http/Middleware/HandleInertiaRequests.php": {
-    "mtime": 1789046402.2004282,
-    "ast_hash": "e7d46023559236f4a3540e00df8c4b14",
+    "mtime": 1789049394.837072,
+    "ast_hash": "ef05415c0eea7cf48f43e5288c6e4686",
     "semantic_hash": ""
   },
   "app/Http/Requests/Settings/PasswordUpdateRequest.php": {
@@ -260,8 +260,8 @@
     "semantic_hash": ""
   },
   "database/factories/UserFactory.php": {
-    "mtime": 1789046909.4325604,
-    "ast_hash": "6297f13594a606ffded4c0f997628169",
+    "mtime": 1789049394.7560728,
+    "ast_hash": "aef45f3f1db63a714d6e85e20294f653",
     "semantic_hash": ""
   },
   "database/migrations/0001_01_01_000000_create_users_table.php": {
@@ -355,8 +355,8 @@
     "semantic_hash": ""
   },
   "resources/js/components/admin-sidebar.tsx": {
-    "mtime": 1789046896.8656082,
-    "ast_hash": "cb605cb35f8fc63ef486c66291dbe03a",
+    "mtime": 1789049458.804267,
+    "ast_hash": "083d1fdd7aa9fc8f30c808871f878672",
     "semantic_hash": ""
   },
   "resources/js/components/alert-error.tsx": {
@@ -855,8 +855,8 @@
     "semantic_hash": ""
   },
   "routes/web.php": {
-    "mtime": 1789046909.383472,
-    "ast_hash": "e48f47e272ed2c266850d960617d82ce",
+    "mtime": 1789049436.4105484,
+    "ast_hash": "a84fc7c356f4f675cbb0bf5040f0deb5",
     "semantic_hash": ""
   },
   "tests/Feature/AdminPanelTest.php": {
@@ -1130,28 +1130,28 @@
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/StoreProductCategoryRequest.php": {
-    "mtime": 1786473165.0143142,
-    "ast_hash": "be8b7d1a127d8ce4e0bdb0a55fb1eee0",
+    "mtime": 1789049479.1830113,
+    "ast_hash": "6d08e044605b859fa0d2814ae08efc73",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/StoreProductRequest.php": {
-    "mtime": 1787854656.4810545,
-    "ast_hash": "51f6d8b2ebd178b7c335dc48fd6112d4",
+    "mtime": 1789049479.452008,
+    "ast_hash": "4a7f91b51de637d6382ee5ab29b41975",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/UpdateOrderRequest.php": {
-    "mtime": 1786471618.420912,
-    "ast_hash": "151ad163666d9c133e610fd45ab7429b",
+    "mtime": 1789049479.7970035,
+    "ast_hash": "d2ed45eec41c17dc9faa5d6ef289f026",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/UpdateProductCategoryRequest.php": {
-    "mtime": 1786473165.1443102,
-    "ast_hash": "66dd222906e3a929016cc03e3c7585d6",
+    "mtime": 1789049479.3060098,
+    "ast_hash": "fcdb035941ea43c2ee088153eb8cf13b",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/UpdateProductRequest.php": {
-    "mtime": 1787854656.4812236,
-    "ast_hash": "9b4157517ec9fa418785ce8272fd970e",
+    "mtime": 1789049479.6100059,
+    "ast_hash": "a2c025bb5c79d1fc6ffe7b4def62d6b9",
     "semantic_hash": ""
   },
   "app/Http/Controllers/Admin/StorefrontBannerController.php": {
@@ -1165,13 +1165,13 @@
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/StoreStorefrontBannerRequest.php": {
-    "mtime": 1788385096.197471,
-    "ast_hash": "0292268a9d257551c1784c5ed020bc95",
+    "mtime": 1789049480.003001,
+    "ast_hash": "b0f122f982fb3a2aa0fd99d478b44d75",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/UpdateStorefrontBannerRequest.php": {
-    "mtime": 1788385096.399472,
-    "ast_hash": "27fa47a8999527f4e7b38f05bf6123ed",
+    "mtime": 1789049480.2599978,
+    "ast_hash": "46af239d7c4ca0605d45946cbc47ef59",
     "semantic_hash": ""
   },
   "app/Models/StorefrontBanner.php": {
@@ -1340,8 +1340,8 @@
     "semantic_hash": ""
   },
   "routes/api.php": {
-    "mtime": 1789046909.3419015,
-    "ast_hash": "077bf9b548623e25fd2f4f210519dfaa",
+    "mtime": 1789049436.5025473,
+    "ast_hash": "7b17bb6266181542bbddf81b01a948b6",
     "semantic_hash": ""
   },
   ".ai/rules/admin.md": {
@@ -1415,8 +1415,8 @@
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/StoreInventoryMovementRequest.php": {
-    "mtime": 1787854656.4808896,
-    "ast_hash": "110611fef3f4e15e2645eaae9785e367",
+    "mtime": 1789049479.0880125,
+    "ast_hash": "d3afe05bdb78f8c2e3b612d8cf0b0e4a",
     "semantic_hash": ""
   },
   "app/InventoryMovementType.php": {
@@ -1535,8 +1535,8 @@
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/StoreCampaignRequest.php": {
-    "mtime": 1788916553.0564775,
-    "ast_hash": "0a5685bddcebdb8c11c476680221c1ff",
+    "mtime": 1789049478.9940135,
+    "ast_hash": "6b36dfedebd0dce36a642226915ad9e0",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/UpdateCampaignRequest.php": {
@@ -1595,13 +1595,13 @@
     "semantic_hash": ""
   },
   "app/Http/Controllers/Api/Admin/PermissionController.php": {
-    "mtime": 1789046972.8463073,
-    "ast_hash": "dfb8ff5fef6455134db39e6f11924457",
+    "mtime": 1789049394.9250708,
+    "ast_hash": "84a0e3ba1249a0796ba606c564a013c4",
     "semantic_hash": ""
   },
   "app/Http/Controllers/Api/Admin/RoleController.php": {
-    "mtime": 1789046972.7193093,
-    "ast_hash": "e533cf8eb24ee7579f9bbef770b387fe",
+    "mtime": 1789049004.67707,
+    "ast_hash": "6d29dd98f2e57964b1c41afadf698d78",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/StorePermissionRequest.php": {
@@ -1640,18 +1640,18 @@
     "semantic_hash": ""
   },
   "database/seeders/RolePermissionSeeder.php": {
-    "mtime": 1789046424.3708196,
-    "ast_hash": "77966a5238e290b49d61dfc3d0eae9b4",
+    "mtime": 1789049394.6730738,
+    "ast_hash": "47a5e48b5635be630a046c0580896cc1",
     "semantic_hash": ""
   },
   "resources/js/pages/admin/access-control/index.tsx": {
-    "mtime": 1789046996.3389177,
-    "ast_hash": "5eac5ed93640fdd1b5a11e0037752aa3",
+    "mtime": 1789049537.7742774,
+    "ast_hash": "8d3020a6aa3edd710f4a4f8f05e1fb2d",
     "semantic_hash": ""
   },
   "tests/Feature/RolePermissionManagementTest.php": {
-    "mtime": 1789047013.846631,
-    "ast_hash": "521d8add9707281c0f2152fa3080f29b",
+    "mtime": 1789049502.2357223,
+    "ast_hash": "2c731bb9a7eed6d12fb62575771e20bc",
     "semantic_hash": ""
   }
 }

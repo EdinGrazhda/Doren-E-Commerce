@@ -83,10 +83,10 @@ class UserFactory extends Factory
         return $this->afterCreating(function (User $user): void {
             $role = Role::findOrCreate('employee');
             $role->givePermissionTo(collect([
-                'orders.view', 'orders.manage',
-                'products.view', 'products.manage',
-                'categories.view', 'categories.manage',
-                'inventory.view', 'inventory.manage',
+                'orders.create', 'orders.read', 'orders.update', 'orders.delete',
+                'products.create', 'products.read', 'products.update', 'products.delete',
+                'categories.create', 'categories.read', 'categories.update', 'categories.delete',
+                'inventory.create', 'inventory.read', 'inventory.update', 'inventory.delete',
             ])->map(fn (string $permission): Permission => Permission::findOrCreate($permission)));
             $user->assignRole($role);
         });

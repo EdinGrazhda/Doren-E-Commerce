@@ -13,7 +13,7 @@ class UpdateRoleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()?->can('roles.manage') === true;
+        return $this->user()?->can('roles.update') === true;
     }
 
     /**

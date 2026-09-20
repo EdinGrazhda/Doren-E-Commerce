@@ -155,7 +155,7 @@ const makeEmptyProduct = (sizeOptions: string[]): ProductFormData => ({
     sku: '',
     description: '',
     price: '0.00',
-    currency: 'USD',
+    currency: 'EUR',
     existing_image_urls: [],
     image_uploads: [],
     color_image_uploads: [],
@@ -756,12 +756,7 @@ export default function AdminProductsIndex() {
                                                 id="product-currency"
                                                 maxLength={3}
                                                 value={form.data.currency}
-                                                onChange={(event) =>
-                                                    form.setData(
-                                                        'currency',
-                                                        event.target.value,
-                                                    )
-                                                }
+                                                readOnly
                                             />
                                         </div>
                                     </div>

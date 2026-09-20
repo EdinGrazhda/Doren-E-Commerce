@@ -14,7 +14,7 @@ class StoreInventoryMovementRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()?->can('inventory.manage') === true;
+        return $this->user()?->can('inventory.create') === true;
     }
 
     /**

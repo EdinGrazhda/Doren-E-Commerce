@@ -1,5 +1,7 @@
 <?php
 
+use App\InventoryMovementType;
+use App\Models\InventoryMovement;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -11,6 +13,7 @@ use App\OrderStatus;
 use App\PaymentStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -44,6 +47,18 @@ test('non admin users cannot access the admin panel', function () {
     $this->actingAs($user)
         ->get(route('dashboard'))
         ->assertForbidden();
+});
+
+test('removed admin settings endpoints are not available', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->get('/dashboard/settings')
+        ->assertNotFound();
+
+    $this->actingAs($admin)
+        ->getJson('/api/admin/settings')
+        ->assertNotFound();
 });
 
 test('admin APIs reject guests and non admin users', function () {
@@ -129,7 +144,6 @@ test('admin users can view every sidebar section', function (string $routeName) 
             'dashboard.categories.index' => 'admin/categories/index',
             'dashboard.banners.index' => 'admin/banners/index',
             'dashboard.customers.index' => 'admin/customers/index',
-            'dashboard.settings' => 'admin/settings/index',
         }));
 })->with([
     'dashboard' => 'dashboard',
@@ -140,7 +154,6 @@ test('admin users can view every sidebar section', function (string $routeName) 
     'categories' => 'dashboard.categories.index',
     'banners' => 'dashboard.banners.index',
     'customers' => 'dashboard.customers.index',
-    'settings' => 'dashboard.settings',
 ]);
 
 test('admin users can retrieve every admin API section', function (string $routeName, string $dataKey) {
@@ -158,7 +171,6 @@ test('admin users can retrieve every admin API section', function (string $route
     'categories' => ['api.admin.categories.index', 'categories'],
     'banners' => ['api.admin.banners.index', 'banners'],
     'customers' => ['api.admin.customers.index', 'customers'],
-    'settings' => ['api.admin.settings.index', 'settings'],
 ]);
 
 test('admin list APIs return paginated data', function (string $routeName, string $dataKey, string $section) {
@@ -287,24 +299,140 @@ test('admin dashboard API returns compact order and product summaries', function
     ]);
 
     $this->actingAs($admin)
+        ->postJson(route('api.admin.inventory.store'), [
+            'product_variant_id' => $variant->id,
+            'type' => InventoryMovementType::Sold->value,
+            'quantity' => 2,
+            'unit_amount_cents' => 4500,
+            'reference' => 'POS-1001',
+        ])
+        ->assertCreated();
+
+    $this->actingAs($admin)
         ->getJson(route('api.admin.dashboard'))
         ->assertSuccessful()
         ->assertJsonPath('data.metrics.orders_count', 1)
         ->assertJsonPath('data.metrics.products_count', 1)
-        ->assertJsonPath('data.metrics.average_order_cents', 9900)
+        ->assertJsonPath('data.metrics.sales_count', 2)
+        ->assertJsonPath('data.metrics.counter_sales_count', 1)
+        ->assertJsonPath('data.metrics.revenue_cents', 18900)
+        ->assertJsonPath('data.metrics.average_order_cents', 9450)
         ->assertJsonPath('data.metrics.pending_revenue_cents', 9900)
-        ->assertJsonPath('data.metrics.units_sold_count', 2)
+        ->assertJsonPath('data.metrics.units_sold_count', 4)
         ->assertJsonCount(1, 'data.recentOrders')
         ->assertJsonCount(1, 'data.lowStockProducts')
         ->assertJsonCount(7, 'data.salesSeries.week')
         ->assertJsonCount(6, 'data.salesSeries.month')
         ->assertJsonCount(5, 'data.salesSeries.year')
-        ->assertJsonPath('data.salesSeries.week.6.revenue_cents', 9900)
-        ->assertJsonPath('data.salesSeries.week.6.orders_count', 1)
+        ->assertJsonCount(7, 'data.dailySales.days')
+        ->assertJsonPath('data.dailySales.today.revenue_cents', 18900)
+        ->assertJsonPath('data.dailySales.today.orders_count', 2)
+        ->assertJsonPath('data.dailySales.today.online_orders_count', 1)
+        ->assertJsonPath('data.dailySales.today.counter_sales_count', 1)
+        ->assertJsonPath('data.dailySales.today.units_sold_count', 4)
+        ->assertJsonPath('data.dailySales.today.average_order_cents', 9450)
+        ->assertJsonPath('data.dailySales.days.6.revenue_cents', 18900)
+        ->assertJsonPath('data.dailySales.days.6.orders_count', 2)
+        ->assertJsonPath('data.dailySales.days.6.online_orders_count', 1)
+        ->assertJsonPath('data.dailySales.days.6.counter_sales_count', 1)
+        ->assertJsonPath('data.dailySales.days.6.units_sold_count', 4)
+        ->assertJsonPath('data.salesSeries.week.6.revenue_cents', 18900)
+        ->assertJsonPath('data.salesSeries.week.6.orders_count', 2)
         ->assertJsonPath('data.statusBreakdown.0.status', OrderStatus::Pending->value)
         ->assertJsonPath('data.statusBreakdown.0.count', 1)
         ->assertJsonPath('data.topProducts.0.product_name', $product->name)
-        ->assertJsonPath('data.topProducts.0.revenue_cents', 9900);
+        ->assertJsonPath('data.topProducts.0.revenue_cents', 18900)
+        ->assertJsonPath('data.topProducts.0.quantity', 4);
+});
+
+test('dashboard sales reconcile across days and exclude receipts and unsuccessful orders', function () {
+    $this->travelTo(Carbon::parse('2026-09-12 12:00:00'));
+    $admin = User::factory()->admin()->create();
+    $today = Order::factory()->create(['total_cents' => 10000, 'created_at' => now()->startOfDay()]);
+    OrderItem::factory()->for($today)->create(['quantity' => 2, 'line_total_cents' => 10000]);
+    $yesterday = Order::factory()->create(['total_cents' => 4000, 'created_at' => now()->subDay()->endOfDay()]);
+    OrderItem::factory()->for($yesterday)->create(['quantity' => 1, 'line_total_cents' => 4000]);
+
+    foreach ([
+        ['status' => OrderStatus::Cancelled],
+        ['payment_status' => PaymentStatus::Refunded],
+        ['payment_status' => PaymentStatus::Failed],
+        ['created_at' => now()->addDay()],
+    ] as $attributes) {
+        $excluded = Order::factory()->create([...$attributes, 'total_cents' => 50000]);
+        OrderItem::factory()->for($excluded)->create(['quantity' => 9, 'line_total_cents' => 50000]);
+    }
+
+    InventoryMovement::factory()->sold()->create(['quantity' => 3, 'unit_amount_cents' => 2000, 'created_at' => now()->subDay()->endOfDay()]);
+    InventoryMovement::factory()->sold()->create(['quantity' => 2, 'unit_amount_cents' => 4500, 'created_at' => now()->startOfDay()]);
+    InventoryMovement::factory()->create(['quantity' => 100, 'unit_amount_cents' => 8000]);
+    InventoryMovement::factory()->sold()->create(['quantity' => 100, 'unit_amount_cents' => 8000, 'created_at' => now()->addDay()]);
+
+    $data = $this->actingAs($admin)->getJson(route('api.admin.dashboard'))
+        ->assertSuccessful()
+        ->assertJsonPath('data.metrics.revenue_cents', 29000)
+        ->assertJsonPath('data.metrics.sales_count', 4)
+        ->assertJsonPath('data.metrics.units_sold_count', 8)
+        ->assertJsonPath('data.metrics.average_order_cents', 7250)
+        ->assertJsonPath('data.dailySales.today.revenue_cents', 19000)
+        ->assertJsonPath('data.dailySales.today.orders_count', 2)
+        ->assertJsonPath('data.dailySales.today.units_sold_count', 4)
+        ->assertJsonPath('data.dailySales.days.5.revenue_cents', 10000)
+        ->assertJsonPath('data.dailySales.days.5.orders_count', 2)
+        ->assertJsonPath('data.dailySales.days.5.units_sold_count', 4)
+        ->json('data');
+
+    foreach ($data['dailySales']['days'] as $index => $day) {
+        expect($data['salesSeries']['week'][$index])
+            ->toMatchArray(collect($day)->only(['date', 'label', 'revenue_cents', 'orders_count'])->all());
+    }
+
+    foreach (['week', 'month', 'year'] as $range) {
+        expect(array_sum(array_column($data['salesSeries'][$range], 'revenue_cents')))->toBe(29000);
+        expect(array_sum(array_column($data['salesSeries'][$range], 'orders_count')))->toBe(4);
+    }
+    expect(array_sum(array_column($data['topProducts'], 'revenue_cents')))->toBe(29000);
+});
+
+test('dashboard periods remain contiguous at month ends and leap days', function (string $date, string $firstMonth) {
+    $this->travelTo(Carbon::parse($date));
+    $admin = User::factory()->admin()->create();
+    Order::factory()->create(['created_at' => Carbon::parse($firstMonth), 'total_cents' => 5000]);
+    Order::factory()->create(['created_at' => Carbon::parse($firstMonth)->subSecond(), 'total_cents' => 7000]);
+    Order::factory()->create(['created_at' => now()->subDays(6)->startOfDay(), 'total_cents' => 3000]);
+    Order::factory()->create(['created_at' => now()->subDays(6)->startOfDay()->subSecond(), 'total_cents' => 2000]);
+
+    $data = $this->actingAs($admin)->getJson(route('api.admin.dashboard'))
+        ->assertSuccessful()->json('data');
+
+    expect(array_column($data['salesSeries']['month'], 'date'))->toBe(
+        collect(range(0, 5))->map(fn (int $index): string => Carbon::parse($firstMonth)->addMonths($index)->toDateString())->all(),
+    );
+    expect(array_sum(array_column($data['salesSeries']['month'], 'revenue_cents')))->toBe(10000);
+    expect(array_sum(array_column($data['salesSeries']['week'], 'revenue_cents')))->toBe(3000);
+    expect($data['salesSeries']['week'][0]['revenue_cents'])->toBe(3000);
+    expect(array_column($data['salesSeries']['year'], 'date'))->toBe(
+        collect(range(0, 4))->map(fn (int $index): string => now()->startOfYear()->subYears(4)->addYears($index)->toDateString())->all(),
+    );
+})->with([
+    ['2026-03-31 12:00:00', '2025-10-01'],
+    ['2024-02-29 12:00:00', '2023-09-01'],
+]);
+
+test('dashboard sales return zero filled periods when there is no activity', function () {
+    $admin = User::factory()->admin()->create();
+    $data = $this->actingAs($admin)->getJson(route('api.admin.dashboard'))
+        ->assertSuccessful()
+        ->assertJsonPath('data.metrics.revenue_cents', 0)
+        ->assertJsonPath('data.metrics.sales_count', 0)
+        ->assertJsonPath('data.dailySales.today.average_order_cents', 0)
+        ->assertJsonCount(0, 'data.topProducts')
+        ->json('data');
+
+    foreach ($data['salesSeries'] as $points) {
+        expect(array_sum(array_column($points, 'revenue_cents')))->toBe(0);
+        expect(array_sum(array_column($points, 'orders_count')))->toBe(0);
+    }
 });
 
 test('admin sidebar shares pending order count until orders are opened', function () {
@@ -487,7 +615,7 @@ test('admins can create update and delete products without order history', funct
             'sku' => 'DRN-100',
             'description' => 'Structured overshirt.',
             'price' => '129.00',
-            'currency' => 'usd',
+            'currency' => 'eur',
             'image_uploads' => [
                 UploadedFile::fake()->image('overshirt-front.jpg', 2400, 1200),
                 UploadedFile::fake()->image('overshirt-back.jpg', 900, 1100),
@@ -515,7 +643,7 @@ test('admins can create update and delete products without order history', funct
     $primaryImageInfo = getimagesize(Storage::disk('public')->path($primaryImagePath));
 
     expect($product->sku)->toBe('DRN-100')
-        ->and($product->currency)->toBe('USD')
+        ->and($product->currency)->toBe('EUR')
         ->and($product->price_cents)->toBe(12900)
         ->and($product->category?->is($category))->toBeTrue()
         ->and($product->primary_image_url)->toContain('/storage/products/')
@@ -547,7 +675,7 @@ test('admins can create update and delete products without order history', funct
             'sku' => 'DRN-101',
             'description' => null,
             'price' => '99.00',
-            'currency' => 'USD',
+            'currency' => 'EUR',
             'image_uploads' => [
                 UploadedFile::fake()->image('work-shirt-front.webp', 900, 1100),
                 UploadedFile::fake()->image('work-shirt-detail.webp', 900, 1100),
@@ -741,7 +869,7 @@ function productPayload(array $overrides = []): array
         'sku' => 'DRN-100',
         'description' => 'Structured overshirt.',
         'price' => '129.00',
-        'currency' => 'usd',
+        'currency' => 'eur',
         'is_active' => true,
         'is_featured' => false,
         'variants' => variantsPayload('Olive', '#4b4a35', [3, 4, 5, 2, 1], 0),

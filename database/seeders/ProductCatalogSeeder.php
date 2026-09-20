@@ -46,7 +46,7 @@ class ProductCatalogSeeder extends Seeder
                     'description' => $productData['description'],
                     'price_cents' => $productData['price_cents'],
                     'compare_at_price_cents' => $productData['compare_at_price_cents'] ?? null,
-                    'currency' => 'USD',
+                    'currency' => 'EUR',
                     'primary_image_url' => $productData['primary_image_url'],
                     'gallery_image_urls' => $productData['gallery_image_urls'],
                     'is_active' => true,

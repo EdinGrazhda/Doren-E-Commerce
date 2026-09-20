@@ -44,7 +44,7 @@ class OrderItem extends Model
     use HasFactory;
 
     protected $attributes = [
-        'currency' => 'USD',
+        'currency' => 'EUR',
     ];
 
     /**

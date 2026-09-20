@@ -73,7 +73,7 @@ export default function AccessControlIndex() {
     const submitRole = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const request = editingRole
-            ? roleForm.put(updateRole.url(editingRole.id), {
+            ? roleForm.put(updateRole.url(String(editingRole.id)), {
                   onSuccess: () => {
                       resetRole();
                       void listing.reload();
@@ -91,7 +91,7 @@ export default function AccessControlIndex() {
         event.preventDefault();
         const request = editingPermission
             ? permissionForm.put(
-                  updatePermission.url(editingPermission.id),
+                  updatePermission.url(String(editingPermission.id)),
                   {
                       onSuccess: () => {
                           resetPermission();
@@ -261,7 +261,7 @@ export default function AccessControlIndex() {
                                                     ) {
                                                         void deletion.delete(
                                                             destroyRole.url(
-                                                                role.id,
+                                                                String(role.id),
                                                             ),
                                                             {
                                                                 onSuccess: () =>
@@ -317,7 +317,7 @@ export default function AccessControlIndex() {
                                             event.target.value,
                                         )
                                     }
-                                    placeholder="reports.view"
+                                    placeholder="reports.read"
                                 />
                                 {permissionForm.errors.name && (
                                     <p className="text-sm text-destructive">
@@ -377,7 +377,9 @@ export default function AccessControlIndex() {
                                                     ) {
                                                         void deletion.delete(
                                                             destroyPermission.url(
-                                                                permission.id,
+                                                                String(
+                                                                    permission.id,
+                                                                ),
                                                             ),
                                                             {
                                                                 onSuccess: () =>

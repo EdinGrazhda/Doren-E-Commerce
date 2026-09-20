@@ -61,7 +61,7 @@ class HandleInertiaRequests extends Middleware
 
     private function pendingOrdersCount(Request $request): int
     {
-        if (! $request->user()?->can('orders.view')) {
+        if (! $request->user()?->can('orders.read')) {
             return 0;
         }
 

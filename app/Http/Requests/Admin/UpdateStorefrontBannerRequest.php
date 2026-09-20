@@ -12,7 +12,7 @@ class UpdateStorefrontBannerRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()?->can('banners.manage') === true;
+        return $this->user()?->can('banners.update') === true;
     }
 
     /**

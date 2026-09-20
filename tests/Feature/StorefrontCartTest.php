@@ -14,7 +14,7 @@ test('storefront cart renders session cart items', function () {
                 'color_hex' => '#4e5738',
                 'quantity' => 2,
                 'unit_price_cents' => 8800,
-                'currency' => 'USD',
+                'currency' => 'EUR',
             ],
         ],
     ]);
@@ -38,7 +38,7 @@ test('storefront cart renders empty state', function () {
             ->component('cart')
             ->has('items', 0)
             ->where('subtotal_cents', 0)
-            ->where('currency', 'USD')
+            ->where('currency', 'EUR')
             ->where('cart.count', 0)
         );
 });
@@ -57,7 +57,7 @@ test('storefront cart item can be removed', function () {
                 'color_hex' => '#4e5738',
                 'quantity' => 2,
                 'unit_price_cents' => 8800,
-                'currency' => 'USD',
+                'currency' => 'EUR',
             ],
         ],
     ]);

@@ -18,7 +18,7 @@ test('storefront product detail renders active product data', function () {
             'slug' => 'organic-cotton-polo',
             'description' => 'A refined organic cotton polo for everyday wear.',
             'price_cents' => 8800,
-            'currency' => 'USD',
+            'currency' => 'EUR',
             'is_active' => true,
             'gallery_image_urls' => [
                 'https://example.com/detail.jpg',
@@ -93,7 +93,7 @@ test('storefront product variant can be added to cart', function () {
         'name' => 'Organic Cotton Polo',
         'slug' => 'organic-cotton-polo',
         'price_cents' => 8800,
-        'currency' => 'USD',
+        'currency' => 'EUR',
         'is_active' => true,
     ]);
     $variant = ProductVariant::factory()->for($product)->create([

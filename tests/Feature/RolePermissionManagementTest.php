@@ -47,14 +47,22 @@ test('employee inertia props only contain commerce permissions', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->where('auth.user.roles', ['employee'])
             ->where('auth.user.permissions', fn ($permissions): bool => collect($permissions)->sort()->values()->all() === [
-                'categories.manage',
-                'categories.view',
-                'inventory.manage',
-                'inventory.view',
-                'orders.manage',
-                'orders.view',
-                'products.manage',
-                'products.view',
+                'categories.create',
+                'categories.delete',
+                'categories.read',
+                'categories.update',
+                'inventory.create',
+                'inventory.delete',
+                'inventory.read',
+                'inventory.update',
+                'orders.create',
+                'orders.delete',
+                'orders.read',
+                'orders.update',
+                'products.create',
+                'products.delete',
+                'products.read',
+                'products.update',
             ]));
 });
 
@@ -63,19 +71,19 @@ test('admins can create update and delete custom roles', function () {
 
     $this->actingAs($admin)->postJson(route('api.admin.roles.store'), [
         'name' => 'supervisor',
-        'permissions' => ['orders.view'],
+        'permissions' => ['orders.read'],
     ])->assertCreated();
 
     $role = Role::findByName('supervisor', 'web');
-    expect($role->hasPermissionTo('orders.view'))->toBeTrue();
+    expect($role->hasPermissionTo('orders.read'))->toBeTrue();
 
     $this->actingAs($admin)->putJson(route('api.admin.roles.update', $role), [
         'name' => 'store-supervisor',
-        'permissions' => ['orders.view', 'customers.view'],
+        'permissions' => ['orders.read', 'customers.read'],
     ])->assertSuccessful();
 
     expect($role->fresh()->name)->toBe('store-supervisor')
-        ->and($role->fresh()->hasPermissionTo('customers.view'))->toBeTrue();
+        ->and($role->fresh()->hasPermissionTo('customers.read'))->toBeTrue();
 
     $this->actingAs($admin)->deleteJson(route('api.admin.roles.destroy', $role))->assertSuccessful();
     expect(Role::find($role->id))->toBeNull();
@@ -94,11 +102,11 @@ test('admins can list roles with their user counts', function () {
 test('admins can create update and delete custom permissions', function () {
     $admin = User::factory()->admin()->create();
 
-    $this->actingAs($admin)->postJson(route('api.admin.permissions.store'), ['name' => 'reports.view'])->assertCreated();
-    $permission = Permission::findByName('reports.view', 'web');
+    $this->actingAs($admin)->postJson(route('api.admin.permissions.store'), ['name' => 'reports.read'])->assertCreated();
+    $permission = Permission::findByName('reports.read', 'web');
 
-    $this->actingAs($admin)->putJson(route('api.admin.permissions.update', $permission), ['name' => 'reports.manage'])->assertSuccessful();
-    expect($permission->fresh()->name)->toBe('reports.manage');
+    $this->actingAs($admin)->putJson(route('api.admin.permissions.update', $permission), ['name' => 'reports.update'])->assertSuccessful();
+    expect($permission->fresh()->name)->toBe('reports.update');
 
     $this->actingAs($admin)->deleteJson(route('api.admin.permissions.destroy', $permission))->assertSuccessful();
     expect(Permission::find($permission->id))->toBeNull();
@@ -108,7 +116,7 @@ test('built in roles and permissions cannot be deleted', function () {
     $admin = User::factory()->admin()->create();
 
     $this->actingAs($admin)->deleteJson(route('api.admin.roles.destroy', Role::findByName('admin', 'web')))->assertUnprocessable();
-    $this->actingAs($admin)->deleteJson(route('api.admin.permissions.destroy', Permission::findByName('orders.view', 'web')))->assertUnprocessable();
+    $this->actingAs($admin)->deleteJson(route('api.admin.permissions.destroy', Permission::findByName('orders.read', 'web')))->assertUnprocessable();
 });
 
 test('employee seeder creates a verified employee account', function () {
@@ -116,6 +124,6 @@ test('employee seeder creates a verified employee account', function () {
     $employee = User::where('email', 'employee@doren.test')->firstOrFail();
 
     expect($employee->hasRole('employee'))->toBeTrue()
-        ->and($employee->hasPermissionTo('orders.view'))->toBeTrue()
+        ->and($employee->hasPermissionTo('orders.read'))->toBeTrue()
         ->and($employee->email_verified_at)->not->toBeNull();
 });

@@ -75,7 +75,7 @@ class CheckoutController extends Controller
         return [
             'items' => $items,
             'subtotal_cents' => $items->sum('line_total_cents'),
-            'currency' => $items->first()['currency'] ?? 'USD',
+            'currency' => $items->first()['currency'] ?? 'EUR',
         ];
     }
 }
