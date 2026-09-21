@@ -26,6 +26,7 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin|employee', 'throttle:
         Route::get('/dashboard', DashboardController::class)->middleware('permission:dashboard.read')->name('dashboard');
 
         Route::apiResource('orders', OrderController::class)->only('index')->middleware('permission:orders.read');
+        Route::apiResource('orders', OrderController::class)->only('show')->middleware('permission:orders.read');
         Route::apiResource('orders', OrderController::class)->only('update')->middleware('permission:orders.update');
         Route::apiResource('orders', OrderController::class)->only('destroy')->middleware('permission:orders.delete');
         Route::apiResource('products', ProductController::class)->only(['index', 'show'])->middleware('permission:products.read');

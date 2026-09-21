@@ -5,15 +5,11 @@ import {
     ChevronDown,
     Heart,
     Instagram,
-    LockKeyhole,
     Mail,
     Menu,
-    PackageCheck,
     Search,
     ShieldCheck,
     ShoppingBag,
-    SlidersHorizontal,
-    User,
     X,
     Youtube,
 } from 'lucide-react';
@@ -21,11 +17,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 
 import BrandLogo from '@/components/brand-logo';
-import {
-    cart as cartRoute,
-    dashboard as adminDashboard,
-    login,
-} from '@/routes';
+import { cart as cartRoute } from '@/routes';
 import { home } from '@/routes';
 import { show as showProduct } from '@/routes/products';
 
@@ -99,13 +91,13 @@ type Props = {
 };
 
 const navigationItems = [
-    'New In',
-    'Polos',
-    'Knitwear',
-    'Shirts',
-    'Trousers',
-    'Jackets',
-    'Sale',
+    { label: 'New In', slug: null },
+    { label: 'Polos', slug: 'polos' },
+    { label: 'Knitwear', slug: 'knitwear' },
+    { label: 'Shirts', slug: 'shirts' },
+    { label: 'Trousers', slug: 'trousers' },
+    { label: 'Jackets', slug: 'jackets' },
+    { label: 'Sale', slug: 'sale' },
 ];
 
 const fallbackImages = [
@@ -123,29 +115,6 @@ const bannerImage =
 
 const carouselIntervalMs = 6000;
 const instagramUrl = 'https://www.instagram.com/doren.ks/?hl=en';
-
-const benefits = [
-    {
-        icon: SlidersHorizontal,
-        title: 'Premium Materials',
-        description: 'Finest fabrics, built to last',
-    },
-    {
-        icon: User,
-        title: 'Modern Fit',
-        description: 'Tailored for comfort and confidence',
-    },
-    {
-        icon: PackageCheck,
-        title: 'Easy Returns',
-        description: '30-day returns & exchanges',
-    },
-    {
-        icon: LockKeyhole,
-        title: 'Secure Payments',
-        description: 'Safe & encrypted checkout',
-    },
-];
 
 const footerColumns = [
     [
@@ -215,10 +184,6 @@ function paginationPages(currentPage: number, lastPage: number): number[] {
     return pages;
 }
 
-function sectionId(label: string): string {
-    return label.toLowerCase().replace(/\s+/g, '-');
-}
-
 function bannerTitleLines(title: string, fallback: string): string[] {
     const value = title || fallback;
 
@@ -239,6 +204,10 @@ function categoryHref(categorySlug: string) {
             category: categorySlug,
         },
     });
+}
+
+function navigationHref(slug: string | null) {
+    return slug ? categoryHref(slug) : `${home.url()}#new-in`;
 }
 
 function productPageHref(
@@ -713,7 +682,7 @@ export default function Welcome({
     newInProducts,
     bestSellerProducts,
 }: Props) {
-    const { auth, cart } = usePage().props;
+    const { cart } = usePage().props;
     const heroBanners = banners.hero ?? [];
     const [isSearchOpen, setIsSearchOpen] = useState(search !== '');
     const [searchValue, setSearchValue] = useState(search);
@@ -795,11 +764,25 @@ export default function Welcome({
                         </Link>
 
                         <nav className="hidden items-center gap-11 text-[11px] font-bold tracking-[0.12em] uppercase lg:flex">
-                            {navigationItems.map((item) => (
-                                <a key={item} href={`#${sectionId(item)}`}>
-                                    {item}
-                                </a>
-                            ))}
+                            {navigationItems.map((item) => {
+                                const isActive = item.slug
+                                    ? activeCategory?.slug === item.slug
+                                    : !activeCategory && !search;
+
+                                return (
+                                    <Link
+                                        key={item.label}
+                                        href={navigationHref(item.slug)}
+                                        preserveScroll
+                                        aria-current={
+                                            isActive ? 'page' : undefined
+                                        }
+                                        className={`relative py-2 transition-colors after:absolute after:right-0 after:bottom-0 after:left-0 after:h-px after:bg-[#8d6b35] after:transition-transform ${isActive ? 'text-[#8d6b35] after:scale-x-100' : 'after:scale-x-0 hover:text-[#8d6b35] hover:after:scale-x-100'}`}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                );
+                            })}
                         </nav>
 
                         <div className="flex items-center gap-3">
@@ -821,13 +804,6 @@ export default function Welcome({
                                     <Search className="h-5 w-5 stroke-[1.6]" />
                                 )}
                             </button>
-                            <Link
-                                href={auth.user ? adminDashboard() : login()}
-                                className="hidden h-9 w-9 place-items-center sm:grid"
-                                aria-label={auth.user ? 'Dashboard' : 'Log in'}
-                            >
-                                <User className="h-5 w-5 stroke-[1.6]" />
-                            </Link>
                             <Link
                                 href={cartRoute()}
                                 className="relative grid h-9 w-9 place-items-center"
@@ -886,29 +862,6 @@ export default function Welcome({
 
                 <main>
                     <HeroCarousel banners={heroBanners} />
-
-                    <section className="border-y border-[#ddd6ca] bg-[#f8f4ed]">
-                        <div className="mx-auto grid max-w-[1158px] grid-cols-1 divide-y divide-[#ddd6ca] px-6 py-5 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
-                            {benefits.map(
-                                ({ icon: Icon, title, description }) => (
-                                    <div
-                                        key={title}
-                                        className="flex items-center gap-5 px-0 py-4 sm:px-8 lg:min-h-[64px]"
-                                    >
-                                        <Icon className="h-8 w-8 shrink-0 stroke-[1.35]" />
-                                        <div>
-                                            <p className="text-[10px] font-bold tracking-[0.08em] uppercase">
-                                                {title}
-                                            </p>
-                                            <p className="mt-1 text-[11px] leading-snug text-[#4f493f]">
-                                                {description}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ),
-                            )}
-                        </div>
-                    </section>
 
                     {categories.length > 0 && (
                         <section

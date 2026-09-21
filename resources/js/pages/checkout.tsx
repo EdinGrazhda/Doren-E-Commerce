@@ -77,7 +77,7 @@ export default function Checkout({ items, subtotal_cents, currency }: Props) {
         shipping_address_line_two: '',
         shipping_city: '',
         shipping_postal_code: '',
-        shipping_country_code: 'US',
+        shipping_country_code: 'EU',
         customer_note: '',
     });
 

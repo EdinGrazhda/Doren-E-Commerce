@@ -1,11 +1,11 @@
 # Graph Report - doren  (2026-09-21)
 
 ## Corpus Check
-- 327 files · ~229,470 words
+- 327 files · ~229,239 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1760 nodes · 3340 edges · 194 communities (133 shown, 61 thin omitted)
+- 1760 nodes · 3340 edges · 195 communities (133 shown, 62 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 35 edges (avg confidence: 0.76)
 - Token cost: 0 input · 0 output
 
@@ -140,7 +140,7 @@
 - Products
 - RTK - Rust Token Killer
 - user-info.tsx
-- CheckoutController.php
+- PriceCartItems
 - eslint-plugin-react
 - breadcrumbs.tsx
 - globals
@@ -163,6 +163,7 @@
 - Mail
 - eslint-plugin-react-hooks
 - @radix-ui/react-checkbox
+- StoreCheckoutRequest
 - Campaigns
 
 ## God Nodes (most connected - your core abstractions)
@@ -192,7 +193,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (194 total, 61 thin omitted)
+## Communities (195 total, 62 thin omitted)
 
 ### Community 0 - "Mail Best Practices"
 Cohesion: 0.29
@@ -455,8 +456,8 @@ Cohesion: 0.67
 Nodes (3): keywords, framework, laravel
 
 ### Community 94 - "ProductCampaignPrice"
-Cohesion: 0.21
-Nodes (3): HomeController, ProductShowController, ProductCampaignPrice
+Cohesion: 0.20
+Nodes (4): CreateCheckoutOrder, HomeController, ProductShowController, ProductCampaignPrice
 
 ### Community 95 - "categories/index.tsx"
 Cohesion: 0.20
@@ -503,8 +504,8 @@ Cohesion: 0.14
 Nodes (4): PermissionController, StorePermissionRequest, UpdatePermissionRequest, Permission
 
 ### Community 124 - "Illuminate\Http\RedirectResponse"
-Cohesion: 0.17
-Nodes (5): DashboardController, CartItemController, ProfileController, SecurityController, Illuminate\Http\RedirectResponse
+Cohesion: 0.19
+Nodes (4): CartItemController, ProfileController, SecurityController, Illuminate\Http\RedirectResponse
 
 ### Community 131 - "Illuminate\Contracts\Validation\ValidationRule"
 Cohesion: 0.12
@@ -516,7 +517,7 @@ Nodes (4): formatPrice(), Order, Props, ThankYou()
 
 ### Community 152 - "Illuminate\Http\Request"
 Cohesion: 0.17
-Nodes (10): CartController, EnsureUserIsAdmin, HandleAppearance, HandleInertiaRequests, SecurityHeaders, Closure, Illuminate\Foundation\Configuration\Middleware, Illuminate\Http\Request (+2 more)
+Nodes (10): DashboardController, EnsureUserIsAdmin, HandleAppearance, HandleInertiaRequests, SecurityHeaders, Closure, Illuminate\Foundation\Configuration\Middleware, Illuminate\Http\Request (+2 more)
 
 ### Community 153 - "package.json"
 Cohesion: 0.50
@@ -534,9 +535,9 @@ Nodes (6): Avoid RTK For, Good RTK Uses, How RTK Fits With Graphify, RTK - Rust 
 Cohesion: 0.33
 Nodes (7): Avatar(), AvatarFallback(), AvatarImage(), UserInfo(), getInitial(), GetInitialsFn, useInitials()
 
-### Community 163 - "CheckoutController.php"
-Cohesion: 0.14
-Nodes (5): CreateCheckoutOrder, CheckoutController, StoreCheckoutRequest, PriceCartItems, Illuminate\Support\Collection
+### Community 163 - "PriceCartItems"
+Cohesion: 0.21
+Nodes (4): CartController, CheckoutController, PriceCartItems, Illuminate\Support\Collection
 
 ### Community 165 - "breadcrumbs.tsx"
 Cohesion: 0.39
@@ -549,7 +550,7 @@ Nodes (8): ProductCategory, CampaignFactory, ProductCategoryFactory, ProductFact
 ## Knowledge Gaps
 - **560 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+555 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **61 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **62 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

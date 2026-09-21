@@ -60,6 +60,7 @@ test('storefront checkout creates pending order from cart', function () {
 
     expect($order->customer_first_name)->toBe('Ada')
         ->and($order->customer_email)->toBe('ada@example.com')
+        ->and($order->shipping_country_code)->toBe('EU')
         ->and($order->total_cents)->toBe(8800)
         ->and($order->items)->toHaveCount(1)
         ->and($order->items->first()->sku)->toBe('DRN-POLO-OLV-M')
@@ -126,7 +127,7 @@ function checkoutData(): array
         'shipping_address_line_two' => 'Apt 1',
         'shipping_city' => 'New York',
         'shipping_postal_code' => '10001',
-        'shipping_country_code' => 'US',
+        'shipping_country_code' => 'EU',
         'customer_note' => 'Leave at reception.',
     ];
 }

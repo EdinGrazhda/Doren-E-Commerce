@@ -36,7 +36,7 @@ class OrderFactory extends Factory
             'shipping_street_address' => fake()->streetAddress(),
             'shipping_address_line_two' => fake()->boolean(25) ? fake()->secondaryAddress() : null,
             'shipping_postal_code' => fake()->postcode(),
-            'shipping_country_code' => 'US',
+            'shipping_country_code' => 'EU',
             'customer_note' => fake()->boolean(20) ? fake()->sentence() : null,
             'subtotal_cents' => $subtotalCents,
             'shipping_cents' => $shippingCents,

@@ -5,15 +5,11 @@ import {
     ChevronDown,
     Heart,
     Instagram,
-    LockKeyhole,
     Mail,
-    PackageCheck,
     Ruler,
     Search,
     ShieldCheck,
     ShoppingBag,
-    Truck,
-    User,
     Youtube,
     ZoomIn,
 } from 'lucide-react';
@@ -21,7 +17,7 @@ import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 
 import BrandLogo from '@/components/brand-logo';
-import { cart as cartRoute, home, login } from '@/routes';
+import { cart as cartRoute, home } from '@/routes';
 import { store as storeCartItem } from '@/routes/cart-items';
 import { show as showProduct } from '@/routes/products';
 
@@ -82,13 +78,13 @@ type Props = {
 };
 
 const navigationItems = [
-    'New In',
-    'Polos',
-    'Knitwear',
-    'Shirts',
-    'Trousers',
-    'Jackets',
-    'Sale',
+    { label: 'New In', slug: null },
+    { label: 'Polos', slug: 'polos' },
+    { label: 'Knitwear', slug: 'knitwear' },
+    { label: 'Shirts', slug: 'shirts' },
+    { label: 'Trousers', slug: 'trousers' },
+    { label: 'Jackets', slug: 'jackets' },
+    { label: 'Sale', slug: 'sale' },
 ];
 
 const fallbackImages = [
@@ -108,10 +104,6 @@ function formatPrice(cents: number, currency: string): string {
         style: 'currency',
         currency: currency || 'EUR',
     }).format(cents / 100);
-}
-
-function sectionId(label: string): string {
-    return label.toLowerCase().replace(/\s+/g, '-');
 }
 
 function requestedColorName(colorOptions: ProductColor[]): string | null {
@@ -329,10 +321,6 @@ export default function Show({ product, relatedProducts }: Props) {
             <Head title={`${product.name} | Doren`} />
 
             <div className="min-h-screen bg-[#f5f1e9] text-[#151513] antialiased">
-                <div className="bg-[#12110f] px-4 py-2 text-center text-[12px] leading-none text-[#f6f1e9]">
-                    Complimentary shipping on orders over $150
-                </div>
-
                 <header className="sticky top-0 z-40 border-b border-[#dfd8cc] bg-[#f8f4ed]/95 backdrop-blur">
                     <div className="mx-auto flex h-[68px] max-w-[1158px] items-center justify-between px-6">
                         <Link
@@ -342,14 +330,31 @@ export default function Show({ product, relatedProducts }: Props) {
                             <BrandLogo className="h-12 w-full object-cover object-center" />
                         </Link>
                         <nav className="hidden items-center gap-11 text-[11px] font-bold tracking-[0.12em] uppercase lg:flex">
-                            {navigationItems.map((item) => (
-                                <Link
-                                    key={item}
-                                    href={`${home.url()}#${sectionId(item)}`}
-                                >
-                                    {item}
-                                </Link>
-                            ))}
+                            {navigationItems.map((item) => {
+                                const isActive =
+                                    item.slug === product.category?.slug;
+
+                                return (
+                                    <Link
+                                        key={item.label}
+                                        href={
+                                            item.slug
+                                                ? home({
+                                                      query: {
+                                                          category: item.slug,
+                                                      },
+                                                  })
+                                                : `${home.url()}#new-in`
+                                        }
+                                        aria-current={
+                                            isActive ? 'page' : undefined
+                                        }
+                                        className={`relative py-2 transition-colors after:absolute after:right-0 after:bottom-0 after:left-0 after:h-px after:bg-[#8d6b35] after:transition-transform ${isActive ? 'text-[#8d6b35] after:scale-x-100' : 'after:scale-x-0 hover:text-[#8d6b35] hover:after:scale-x-100'}`}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                );
+                            })}
                         </nav>
                         <div className="flex items-center gap-3">
                             <button
@@ -359,13 +364,6 @@ export default function Show({ product, relatedProducts }: Props) {
                             >
                                 <Search className="h-5 w-5 stroke-[1.6]" />
                             </button>
-                            <Link
-                                href={login()}
-                                className="hidden h-9 w-9 place-items-center sm:grid"
-                                aria-label="Log in"
-                            >
-                                <User className="h-5 w-5 stroke-[1.6]" />
-                            </Link>
                             <Link
                                 href={cartRoute()}
                                 className="relative grid h-9 w-9 place-items-center"
@@ -631,56 +629,8 @@ export default function Show({ product, relatedProducts }: Props) {
                                               : 'Add To Cart'}
                                         <ShoppingBag className="h-4 w-4" />
                                     </button>
-                                    <button
-                                        type="submit"
-                                        disabled={
-                                            !selectedVariant || form.processing
-                                        }
-                                        className="h-12 border border-[#d6cec0] bg-[#f8f4ed] px-6 text-[11px] font-bold tracking-[0.12em] uppercase disabled:cursor-not-allowed disabled:text-[#8f887d]"
-                                    >
-                                        Buy It Now
-                                    </button>
                                 </div>
                             </form>
-
-                            <div className="mt-6 divide-y divide-[#d6cec0] border border-[#d6cec0] bg-[#f8f4ed]">
-                                {[
-                                    [
-                                        Truck,
-                                        'Free Shipping',
-                                        'On orders over $150',
-                                    ],
-                                    [
-                                        PackageCheck,
-                                        'Easy Returns',
-                                        '30-day returns & exchanges',
-                                    ],
-                                    [
-                                        LockKeyhole,
-                                        'Secure Payment',
-                                        'Safe & encrypted checkout',
-                                    ],
-                                ].map(([Icon, title, description]) => (
-                                    <button
-                                        key={title as string}
-                                        type="button"
-                                        className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left"
-                                    >
-                                        <span className="flex items-center gap-3">
-                                            <Icon className="h-5 w-5 stroke-[1.4]" />
-                                            <span>
-                                                <span className="block text-[11px] font-bold">
-                                                    {title as string}
-                                                </span>
-                                                <span className="text-[11px] text-[#756e62]">
-                                                    {description as string}
-                                                </span>
-                                            </span>
-                                        </span>
-                                        <ChevronDown className="h-4 w-4" />
-                                    </button>
-                                ))}
-                            </div>
                         </div>
                     </section>
 

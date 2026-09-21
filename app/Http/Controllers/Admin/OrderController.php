@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -19,6 +20,13 @@ class OrderController extends Controller
                     'pending_count' => 0,
                 ],
             ],
+        ]);
+    }
+
+    public function show(Order $order): Response
+    {
+        return Inertia::render('admin/orders/show', [
+            'orderId' => $order->id,
         ]);
     }
 }

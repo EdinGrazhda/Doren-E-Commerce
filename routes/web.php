@@ -34,7 +34,7 @@ Route::middleware(['auth', 'verified', 'role:admin|employee'])
     ->group(function (): void {
         Route::get('/', AdminDashboardController::class)->name('dashboard');
 
-        Route::resource('orders', AdminOrderController::class)->only('index')->middleware('permission:orders.read')->names('dashboard.orders');
+        Route::resource('orders', AdminOrderController::class)->only(['index', 'show'])->middleware('permission:orders.read')->names('dashboard.orders');
         Route::resource('products', AdminProductController::class)->only('index')->middleware('permission:products.read')->names('dashboard.products');
         Route::get('/inventory', AdminInventoryController::class)->middleware('permission:inventory.read')->name('dashboard.inventory');
         Route::resource('categories', AdminProductCategoryController::class)

@@ -589,19 +589,6 @@
       "norm_label": "permission"
     },
     {
-      "label": "DashboardController",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/Admin/DashboardController.php",
-      "source_location": "L11",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "app_http_controllers_admin_dashboardcontroller_dashboardcontroller",
-      "community": 124,
-      "community_name": "Illuminate\\Http\\RedirectResponse",
-      "norm_label": "dashboardcontroller"
-    },
-    {
       "label": "CartItemController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/CartItemController.php",
@@ -771,17 +758,17 @@
       "norm_label": "props"
     },
     {
-      "label": "CartController",
+      "label": "DashboardController",
       "file_type": "code",
-      "source_file": "app/Http/Controllers/CartController.php",
-      "source_location": "L10",
+      "source_file": "app/Http/Controllers/Admin/DashboardController.php",
+      "source_location": "L11",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "app_http_controllers_cartcontroller_cartcontroller",
+      "id": "app_http_controllers_admin_dashboardcontroller_dashboardcontroller",
       "community": 152,
       "community_name": "Illuminate\\Http\\Request",
-      "norm_label": "cartcontroller"
+      "norm_label": "dashboardcontroller"
     },
     {
       "label": "EnsureUserIsAdmin",
@@ -888,17 +875,17 @@
       "norm_label": "getinitialsfn"
     },
     {
-      "label": "CreateCheckoutOrder",
+      "label": "CartController",
       "file_type": "code",
-      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
-      "source_location": "L14",
+      "source_file": "app/Http/Controllers/CartController.php",
+      "source_location": "L10",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "app_actions_checkout_createcheckoutorder_createcheckoutorder",
+      "id": "app_http_controllers_cartcontroller_cartcontroller",
       "community": 163,
-      "community_name": "CheckoutController.php",
-      "norm_label": "createcheckoutorder"
+      "community_name": "PriceCartItems",
+      "norm_label": "cartcontroller"
     },
     {
       "label": "CheckoutController",
@@ -910,21 +897,8 @@
       "_origin": "ast",
       "id": "app_http_controllers_checkoutcontroller_checkoutcontroller",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "PriceCartItems",
       "norm_label": "checkoutcontroller"
-    },
-    {
-      "label": "StoreCheckoutRequest",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
-      "source_location": "L8",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest",
-      "community": 163,
-      "community_name": "CheckoutController.php",
-      "norm_label": "storecheckoutrequest"
     },
     {
       "label": "PriceCartItems",
@@ -936,7 +910,7 @@
       "_origin": "ast",
       "id": "app_services_pricecartitems_pricecartitems",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "PriceCartItems",
       "norm_label": "pricecartitems"
     },
     {
@@ -1380,6 +1354,19 @@
       "community": 19,
       "community_name": "ProductVariant",
       "norm_label": "orderitemfactory"
+    },
+    {
+      "label": "StoreCheckoutRequest",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
+      "source_location": "L8",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest",
+      "community": 190,
+      "community_name": "StoreCheckoutRequest",
+      "norm_label": "storecheckoutrequest"
     },
     {
       "label": "IsCurrentOrParentUrlFn",
@@ -1996,7 +1983,7 @@
       "label": "Order",
       "file_type": "code",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L40",
+      "source_location": "L31",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -2009,7 +1996,7 @@
       "label": "OrderItem",
       "file_type": "code",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L23",
+      "source_location": "L14",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -2022,7 +2009,7 @@
       "label": "Props",
       "file_type": "code",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L65",
+      "source_location": "L56",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -2576,6 +2563,19 @@
       "community": 92,
       "community_name": "icon.tsx",
       "norm_label": "iconprops"
+    },
+    {
+      "label": "CreateCheckoutOrder",
+      "file_type": "code",
+      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
+      "source_location": "L14",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "app_actions_checkout_createcheckoutorder_createcheckoutorder",
+      "community": 94,
+      "community_name": "ProductCampaignPrice",
+      "norm_label": "createcheckoutorder"
     },
     {
       "label": "HomeController",
@@ -4779,18 +4779,6 @@
       "norm_label": ".rules()"
     },
     {
-      "label": ".__invoke()",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/Admin/DashboardController.php",
-      "source_location": "L16",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_controllers_admin_dashboardcontroller_dashboardcontroller_invoke",
-      "community": 124,
-      "community_name": "Illuminate\\Http\\RedirectResponse",
-      "norm_label": ".__invoke()"
-    },
-    {
       "label": ".destroy()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/CartItemController.php",
@@ -5381,11 +5369,11 @@
     {
       "label": ".__invoke()",
       "file_type": "code",
-      "source_file": "app/Http/Controllers/CartController.php",
-      "source_location": "L12",
+      "source_file": "app/Http/Controllers/Admin/DashboardController.php",
+      "source_location": "L16",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_http_controllers_cartcontroller_cartcontroller_invoke",
+      "id": "app_http_controllers_admin_dashboardcontroller_dashboardcontroller_invoke",
       "community": 152,
       "community_name": "Illuminate\\Http\\Request",
       "norm_label": ".__invoke()"
@@ -5667,28 +5655,16 @@
       "norm_label": "up()"
     },
     {
-      "label": ".execute()",
+      "label": ".__invoke()",
       "file_type": "code",
-      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
-      "source_location": "L22",
+      "source_file": "app/Http/Controllers/CartController.php",
+      "source_location": "L12",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_actions_checkout_createcheckoutorder_createcheckoutorder_execute",
+      "id": "app_http_controllers_cartcontroller_cartcontroller_invoke",
       "community": 163,
-      "community_name": "CheckoutController.php",
-      "norm_label": ".execute()"
-    },
-    {
-      "label": ".orderNumber()",
-      "file_type": "code",
-      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
-      "source_location": "L99",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_actions_checkout_createcheckoutorder_createcheckoutorder_ordernumber",
-      "community": 163,
-      "community_name": "CheckoutController.php",
-      "norm_label": ".ordernumber()"
+      "community_name": "PriceCartItems",
+      "norm_label": ".__invoke()"
     },
     {
       "label": ".cartPayload()",
@@ -5699,7 +5675,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_checkoutcontroller_checkoutcontroller_cartpayload",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "PriceCartItems",
       "norm_label": ".cartpayload()"
     },
     {
@@ -5711,7 +5687,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_checkoutcontroller_checkoutcontroller_construct",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "PriceCartItems",
       "norm_label": ".__construct()"
     },
     {
@@ -5723,20 +5699,8 @@
       "_origin": "ast",
       "id": "app_http_controllers_checkoutcontroller_checkoutcontroller_index",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "PriceCartItems",
       "norm_label": ".index()"
-    },
-    {
-      "label": ".store()",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/CheckoutController.php",
-      "source_location": "L25",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_controllers_checkoutcontroller_checkoutcontroller_store",
-      "community": 163,
-      "community_name": "CheckoutController.php",
-      "norm_label": ".store()"
     },
     {
       "label": ".thankYou()",
@@ -5747,44 +5711,8 @@
       "_origin": "ast",
       "id": "app_http_controllers_checkoutcontroller_checkoutcontroller_thankyou",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "PriceCartItems",
       "norm_label": ".thankyou()"
-    },
-    {
-      "label": ".after()",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
-      "source_location": "L37",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_after",
-      "community": 163,
-      "community_name": "CheckoutController.php",
-      "norm_label": ".after()"
-    },
-    {
-      "label": ".authorize()",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
-      "source_location": "L10",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_authorize",
-      "community": 163,
-      "community_name": "CheckoutController.php",
-      "norm_label": ".authorize()"
-    },
-    {
-      "label": ".rules()",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
-      "source_location": "L18",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_rules",
-      "community": 163,
-      "community_name": "CheckoutController.php",
-      "norm_label": ".rules()"
     },
     {
       "label": ".__construct()",
@@ -5795,7 +5723,7 @@
       "_origin": "ast",
       "id": "app_services_pricecartitems_pricecartitems_construct",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "PriceCartItems",
       "norm_label": ".__construct()"
     },
     {
@@ -5807,7 +5735,7 @@
       "_origin": "ast",
       "id": "app_services_pricecartitems_pricecartitems_execute",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "PriceCartItems",
       "norm_label": ".execute()"
     },
     {
@@ -6697,6 +6625,54 @@
       "community": 19,
       "community_name": "ProductVariant",
       "norm_label": ".definition()"
+    },
+    {
+      "label": ".store()",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/CheckoutController.php",
+      "source_location": "L25",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_controllers_checkoutcontroller_checkoutcontroller_store",
+      "community": 190,
+      "community_name": "StoreCheckoutRequest",
+      "norm_label": ".store()"
+    },
+    {
+      "label": ".after()",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
+      "source_location": "L37",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_after",
+      "community": 190,
+      "community_name": "StoreCheckoutRequest",
+      "norm_label": ".after()"
+    },
+    {
+      "label": ".authorize()",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
+      "source_location": "L10",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_authorize",
+      "community": 190,
+      "community_name": "StoreCheckoutRequest",
+      "norm_label": ".authorize()"
+    },
+    {
+      "label": ".rules()",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
+      "source_location": "L18",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_rules",
+      "community": 190,
+      "community_name": "StoreCheckoutRequest",
+      "norm_label": ".rules()"
     },
     {
       "label": "down()",
@@ -7614,7 +7590,7 @@
       "label": "AdminOrderShow()",
       "file_type": "code",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L95",
+      "source_location": "L69",
       "_callable": true,
       "_origin": "ast",
       "id": "resources_js_pages_admin_orders_show_adminordershow",
@@ -7623,16 +7599,16 @@
       "norm_label": "adminordershow()"
     },
     {
-      "label": "PanelHeading()",
+      "label": "Detail()",
       "file_type": "code",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L69",
+      "source_location": "L60",
       "_callable": true,
       "_origin": "ast",
-      "id": "resources_js_pages_admin_orders_show_panelheading",
+      "id": "resources_js_pages_admin_orders_show_detail",
       "community": 38,
       "community_name": "admin/dashboard.tsx",
-      "norm_label": "panelheading()"
+      "norm_label": "detail()"
     },
     {
       "label": ".definition()",
@@ -9181,6 +9157,30 @@
       "community": 94,
       "community_name": "ProductCampaignPrice",
       "norm_label": ".__construct()"
+    },
+    {
+      "label": ".execute()",
+      "file_type": "code",
+      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
+      "source_location": "L22",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_actions_checkout_createcheckoutorder_createcheckoutorder_execute",
+      "community": 94,
+      "community_name": "ProductCampaignPrice",
+      "norm_label": ".execute()"
+    },
+    {
+      "label": ".orderNumber()",
+      "file_type": "code",
+      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
+      "source_location": "L99",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_actions_checkout_createcheckoutorder_createcheckoutorder_ordernumber",
+      "community": 94,
+      "community_name": "ProductCampaignPrice",
+      "norm_label": ".ordernumber()"
     },
     {
       "label": ".bannerPayload()",
@@ -10972,17 +10972,6 @@
       "norm_label": "api.php"
     },
     {
-      "label": "Controllers/Admin/DashboardController.php",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/Admin/DashboardController.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_http_controllers_admin_dashboardcontroller",
-      "community": 124,
-      "community_name": "Illuminate\\Http\\RedirectResponse",
-      "norm_label": "controllers/admin/dashboardcontroller.php"
-    },
-    {
       "label": "CartItemController.php",
       "file_type": "code",
       "source_file": "app/Http/Controllers/CartItemController.php",
@@ -10994,6 +10983,28 @@
       "norm_label": "cartitemcontroller.php"
     },
     {
+      "label": "ProfileController.php",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Settings/ProfileController.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_http_controllers_settings_profilecontroller",
+      "community": 124,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
+      "norm_label": "profilecontroller.php"
+    },
+    {
+      "label": "SecurityController.php",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Settings/SecurityController.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_http_controllers_settings_securitycontroller",
+      "community": 124,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
+      "norm_label": "securitycontroller.php"
+    },
+    {
       "label": "Illuminate\\Http\\RedirectResponse",
       "file_type": "code",
       "source_file": "",
@@ -11003,6 +11014,17 @@
       "community": 124,
       "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": "illuminate\\http\\redirectresponse"
+    },
+    {
+      "label": "settings.php",
+      "file_type": "code",
+      "source_file": "routes/settings.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "routes_settings",
+      "community": 124,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
+      "norm_label": "settings.php"
     },
     {
       "label": "tw-animate-css",
@@ -11852,15 +11874,15 @@
       "norm_label": "thank-you.tsx"
     },
     {
-      "label": "CartController.php",
+      "label": "Controllers/Admin/DashboardController.php",
       "file_type": "code",
-      "source_file": "app/Http/Controllers/CartController.php",
+      "source_file": "app/Http/Controllers/Admin/DashboardController.php",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_http_controllers_cartcontroller",
+      "id": "app_http_controllers_admin_dashboardcontroller",
       "community": 152,
       "community_name": "Illuminate\\Http\\Request",
-      "norm_label": "cartcontroller.php"
+      "norm_label": "controllers/admin/dashboardcontroller.php"
     },
     {
       "label": "EnsureUserIsAdmin.php",
@@ -12468,28 +12490,6 @@
       "norm_label": "2026_08_19_162948_add_image_url_to_product_variants_table.php"
     },
     {
-      "label": "CheckoutController.php",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/CheckoutController.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_http_controllers_checkoutcontroller",
-      "community": 163,
-      "community_name": "CheckoutController.php",
-      "norm_label": "checkoutcontroller.php"
-    },
-    {
-      "label": "StoreCheckoutRequest.php",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_http_requests_storecheckoutrequest",
-      "community": 163,
-      "community_name": "CheckoutController.php",
-      "norm_label": "storecheckoutrequest.php"
-    },
-    {
       "label": "PriceCartItems.php",
       "file_type": "code",
       "source_file": "app/Services/PriceCartItems.php",
@@ -12497,7 +12497,7 @@
       "_origin": "ast",
       "id": "app_services_pricecartitems",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "PriceCartItems",
       "norm_label": "pricecartitems.php"
     },
     {
@@ -12508,7 +12508,7 @@
       "_origin": "ast",
       "id": "illuminate_support_collection",
       "community": 163,
-      "community_name": "CheckoutController.php",
+      "community_name": "PriceCartItems",
       "norm_label": "illuminate\\support\\collection"
     },
     {
@@ -13667,6 +13667,17 @@
       "norm_label": "illuminate\\database\\eloquent\\relations\\hasmany"
     },
     {
+      "label": "StoreCheckoutRequest.php",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_http_requests_storecheckoutrequest",
+      "community": 190,
+      "community_name": "StoreCheckoutRequest",
+      "norm_label": "storecheckoutrequest.php"
+    },
+    {
       "label": "2026_09_21_133456_change_default_shipping_country_code_on_orders_table.php",
       "file_type": "code",
       "source_file": "database/migrations/2026_09_21_133456_change_default_shipping_country_code_on_orders_table.php",
@@ -14360,6 +14371,28 @@
       "norm_label": "controllers/admin/storefrontbannercontroller.php"
     },
     {
+      "label": "CartController.php",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/CartController.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_http_controllers_cartcontroller",
+      "community": 25,
+      "community_name": "Controller",
+      "norm_label": "cartcontroller.php"
+    },
+    {
+      "label": "CheckoutController.php",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/CheckoutController.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_http_controllers_checkoutcontroller",
+      "community": 25,
+      "community_name": "Controller",
+      "norm_label": "checkoutcontroller.php"
+    },
+    {
       "label": "Controller.php",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Controller.php",
@@ -14371,26 +14404,26 @@
       "norm_label": "controller.php"
     },
     {
-      "label": "ProfileController.php",
+      "label": "HomeController.php",
       "file_type": "code",
-      "source_file": "app/Http/Controllers/Settings/ProfileController.php",
+      "source_file": "app/Http/Controllers/HomeController.php",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_http_controllers_settings_profilecontroller",
+      "id": "app_http_controllers_homecontroller",
       "community": 25,
       "community_name": "Controller",
-      "norm_label": "profilecontroller.php"
+      "norm_label": "homecontroller.php"
     },
     {
-      "label": "SecurityController.php",
+      "label": "ProductShowController.php",
       "file_type": "code",
-      "source_file": "app/Http/Controllers/Settings/SecurityController.php",
+      "source_file": "app/Http/Controllers/ProductShowController.php",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_http_controllers_settings_securitycontroller",
+      "id": "app_http_controllers_productshowcontroller",
       "community": 25,
       "community_name": "Controller",
-      "norm_label": "securitycontroller.php"
+      "norm_label": "productshowcontroller.php"
     },
     {
       "label": "inertia.php",
@@ -14415,15 +14448,15 @@
       "norm_label": "inertia\\response"
     },
     {
-      "label": "settings.php",
+      "label": "web.php",
       "file_type": "code",
-      "source_file": "routes/settings.php",
+      "source_file": "routes/web.php",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_settings",
+      "id": "routes_web",
       "community": 25,
       "community_name": "Controller",
-      "norm_label": "settings.php"
+      "norm_label": "web.php"
     },
     {
       "label": "admin.md",
@@ -20135,39 +20168,6 @@
       "norm_label": "console.php"
     },
     {
-      "label": "HomeController.php",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/HomeController.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_http_controllers_homecontroller",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": "homecontroller.php"
-    },
-    {
-      "label": "ProductShowController.php",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/ProductShowController.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_http_controllers_productshowcontroller",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": "productshowcontroller.php"
-    },
-    {
-      "label": "web.php",
-      "file_type": "code",
-      "source_file": "routes/web.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "routes_web",
-      "community": 94,
-      "community_name": "ProductCampaignPrice",
-      "norm_label": "web.php"
-    },
-    {
       "label": "passkey-item.tsx",
       "file_type": "code",
       "source_file": "resources/js/components/passkey-item.tsx",
@@ -23566,7 +23566,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L138",
+      "source_location": "L104",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show_adminordershow",
@@ -23578,7 +23578,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L147",
+      "source_location": "L112",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show_adminordershow",
@@ -23590,7 +23590,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L243",
+      "source_location": "L192",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show_adminordershow",
@@ -23602,7 +23602,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L96",
+      "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show_adminordershow",
@@ -34401,7 +34401,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L13",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34413,7 +34413,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L14",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34425,7 +34425,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L15",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34437,7 +34437,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L16",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34449,7 +34449,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L16",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34461,7 +34461,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L16",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34473,7 +34473,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L16",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34485,7 +34485,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L17",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34497,7 +34497,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L18",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34509,7 +34509,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L18",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34521,7 +34521,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L18",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -39585,7 +39585,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L13",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -39597,7 +39597,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L14",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -39609,7 +39609,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L15",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -39621,7 +39621,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L16",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -39633,7 +39633,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L17",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -39645,7 +39645,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L18",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -52974,7 +52974,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L23",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -52985,7 +52985,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L40",
+      "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -52996,7 +52996,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L65",
+      "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -53007,18 +53007,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L69",
+      "source_location": "L60",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
-      "target": "resources_js_pages_admin_orders_show_panelheading",
+      "target": "resources_js_pages_admin_orders_show_detail",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L95",
+      "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",

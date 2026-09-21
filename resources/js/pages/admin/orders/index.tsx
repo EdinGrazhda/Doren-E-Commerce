@@ -1,4 +1,4 @@
-import { Head, useHttp } from '@inertiajs/react';
+import { Head, Link, useHttp } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
@@ -34,7 +34,10 @@ import {
     index as ordersApiIndex,
     update as updateOrder,
 } from '@/routes/api/admin/orders';
-import { index as ordersIndex } from '@/routes/dashboard/orders';
+import {
+    index as ordersIndex,
+    show as showOrder,
+} from '@/routes/dashboard/orders';
 
 type Order = {
     id: number;
@@ -229,6 +232,19 @@ export default function AdminOrdersIndex() {
                                             </td>
                                             <td className="py-3">
                                                 <div className="flex justify-end gap-2">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        asChild
+                                                    >
+                                                        <Link
+                                                            href={showOrder(
+                                                                order.id,
+                                                            )}
+                                                        >
+                                                            View
+                                                        </Link>
+                                                    </Button>
                                                     <Button
                                                         size="sm"
                                                         variant="outline"

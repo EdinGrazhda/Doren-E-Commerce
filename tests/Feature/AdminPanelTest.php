@@ -813,6 +813,42 @@ test('admins can update and delete orders', function () {
     $this->assertModelMissing($item);
 });
 
+test('admins can view order details', function () {
+    $admin = User::factory()->admin()->create();
+    $order = Order::factory()->create([
+        'customer_note' => 'Leave the parcel with reception.',
+    ]);
+    $item = OrderItem::factory()->create([
+        'order_id' => $order->id,
+        'product_name' => 'Pima Cotton Polo',
+        'variant_name' => 'Olive / M',
+        'product_options' => [
+            'color' => 'Olive',
+            'size' => 'M',
+            'image_url' => 'https://example.com/polo.jpg',
+        ],
+        'quantity' => 2,
+        'line_total_cents' => 17800,
+    ]);
+
+    $this->actingAs($admin)
+        ->get(route('dashboard.orders.show', $order))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/orders/show')
+            ->where('orderId', $order->id));
+
+    $this->actingAs($admin)
+        ->getJson(route('api.admin.orders.show', $order))
+        ->assertSuccessful()
+        ->assertJsonPath('data.order_number', $order->order_number)
+        ->assertJsonPath('data.customer_note', 'Leave the parcel with reception.')
+        ->assertJsonPath('data.items.0.id', $item->id)
+        ->assertJsonPath('data.items.0.quantity', 2)
+        ->assertJsonPath('data.items.0.product_options.size', 'M')
+        ->assertJsonPath('data.items.0.product_options.color', 'Olive');
+});
+
 /**
  * @param  array<int, int>  $quantities
  * @param  array<int, string>|null  $imageUrls
