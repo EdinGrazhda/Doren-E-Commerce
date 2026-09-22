@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "app/Providers/AppServiceProvider.php": {
-    "mtime": 1789909404.0702477,
-    "ast_hash": "6e646263cc3239e3f20499ae71e6f734",
+    "mtime": 1790026707.2794383,
+    "ast_hash": "515b100c5c4b11b1f66c42e861058f8b",
     "semantic_hash": ""
   },
   "app/Providers/FortifyServiceProvider.php": {
@@ -337,11 +337,6 @@
   "package.json": {
     "mtime": 1785422079.0,
     "ast_hash": "022ed9e0b959e6c9a51ff5450911c782",
-    "semantic_hash": ""
-  },
-  "public/index.php": {
-    "mtime": 1785422079.0,
-    "ast_hash": "d8eda274115af5fd2aaa8230af329ef7",
     "semantic_hash": ""
   },
   "resources/js/app.tsx": {
@@ -735,8 +730,8 @@
     "semantic_hash": ""
   },
   "resources/js/pages/admin/products/index.tsx": {
-    "mtime": 1789909404.1315641,
-    "ast_hash": "9256a490296785f23dc36432b60370c4",
+    "mtime": 1790026807.5831509,
+    "ast_hash": "b9dae33e9637a0795bfb5de70ed3979d",
     "semantic_hash": ""
   },
   "resources/js/pages/auth/confirm-password.tsx": {
@@ -850,8 +845,8 @@
     "semantic_hash": ""
   },
   "tests/Feature/AdminPanelTest.php": {
-    "mtime": 1789994026.1482477,
-    "ast_hash": "b6a312a1ee1249743537aedc17100d7f",
+    "mtime": 1790026687.8707078,
+    "ast_hash": "02ca9a6242ad8a84971d406e036c5c04",
     "semantic_hash": ""
   },
   "tests/Feature/Auth/AuthenticationTest.php": {
@@ -1097,21 +1092,6 @@
   "pnpm-workspace.yaml": {
     "mtime": 1785422079.0,
     "ast_hash": "773c1506870ff24d2587e280e215b12a",
-    "semantic_hash": ""
-  },
-  "public/robots.txt": {
-    "mtime": 1785422079.0,
-    "ast_hash": "b6216d61c03e6ce0c9aea6ca7808f7ca",
-    "semantic_hash": ""
-  },
-  "public/apple-touch-icon.png": {
-    "mtime": 1785422079.0,
-    "ast_hash": "4ec34bfee5050d402638888ce2e9a968",
-    "semantic_hash": ""
-  },
-  "public/favicon.svg": {
-    "mtime": 1785422079.0,
-    "ast_hash": "6d65603fc671e2ab354f3ff070494594",
     "semantic_hash": ""
   },
   "references/ecommerce.png": {
@@ -1385,8 +1365,8 @@
     "semantic_hash": ""
   },
   "app/Actions/Inventory/RecordInventoryMovement.php": {
-    "mtime": 1787854656.4798732,
-    "ast_hash": "b5b46ddd2b8907d361c6bc977a7f24fb",
+    "mtime": 1790025932.444746,
+    "ast_hash": "65a06722a03338f4558fe0899b174cea",
     "semantic_hash": ""
   },
   "app/Http/Controllers/Admin/InventoryController.php": {
@@ -1425,8 +1405,8 @@
     "semantic_hash": ""
   },
   "resources/js/pages/admin/inventory/index.tsx": {
-    "mtime": 1789909404.131262,
-    "ast_hash": "3d2f78d35cce06f6797954903c04b8f6",
+    "mtime": 1790026807.5831509,
+    "ast_hash": "3a61b9ba24d8294e0283073a5492327a",
     "semantic_hash": ""
   },
   "tests/Feature/InventoryManagementTest.php": {
@@ -1654,6 +1634,26 @@
     "ast_hash": "32f3e60eb50637c7e45b469afd6fa10b",
     "semantic_hash": ""
   },
+  "database/migrations/2026_09_21_133456_change_default_shipping_country_code_on_orders_table.php": {
+    "mtime": 1789997712.4390142,
+    "ast_hash": "8229755fa0da76493897b7f825ef71f4",
+    "semantic_hash": ""
+  },
+  "resources/js/pages/admin/orders/show.tsx": {
+    "mtime": 1789998722.522474,
+    "ast_hash": "0a5910107b1115d9b531ff08c03b7495",
+    "semantic_hash": ""
+  },
+  "public/index.php": {
+    "mtime": 1785422079.0,
+    "ast_hash": "d8eda274115af5fd2aaa8230af329ef7",
+    "semantic_hash": ""
+  },
+  "public/robots.txt": {
+    "mtime": 1785422079.0,
+    "ast_hash": "b6216d61c03e6ce0c9aea6ca7808f7ca",
+    "semantic_hash": ""
+  },
   "public/Images/doren-black-logo.jpeg": {
     "mtime": 1789909404.128847,
     "ast_hash": "8bd62fa2c368d772bea7c45a7829e31f",
@@ -1664,19 +1664,19 @@
     "ast_hash": "c908076d70f312fc52e4916860ac2e7d",
     "semantic_hash": ""
   },
+  "public/apple-touch-icon.png": {
+    "mtime": 1785422079.0,
+    "ast_hash": "4ec34bfee5050d402638888ce2e9a968",
+    "semantic_hash": ""
+  },
+  "public/favicon.svg": {
+    "mtime": 1785422079.0,
+    "ast_hash": "6d65603fc671e2ab354f3ff070494594",
+    "semantic_hash": ""
+  },
   "public/logo/doren-black-logo-removebg-preview.png": {
     "mtime": 1789909404.1294525,
     "ast_hash": "7088826a633fa1181c9a5b6dc95c8b1e",
-    "semantic_hash": ""
-  },
-  "database/migrations/2026_09_21_133456_change_default_shipping_country_code_on_orders_table.php": {
-    "mtime": 1789997712.4390142,
-    "ast_hash": "8229755fa0da76493897b7f825ef71f4",
-    "semantic_hash": ""
-  },
-  "resources/js/pages/admin/orders/show.tsx": {
-    "mtime": 1789994037.8119643,
-    "ast_hash": "662c4f54c4bb083d7de0be09015e13db",
     "semantic_hash": ""
   }
 }

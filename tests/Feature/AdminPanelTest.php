@@ -634,11 +634,44 @@ test('admins can create update and delete products without order history', funct
             ],
         ], ['Accept' => 'application/json'])
         ->assertCreated()
-        ->assertJsonPath('data.name', 'Cotton Overshirt');
+        ->assertJsonPath('data.name', 'Cotton Overshirt')
+        ->assertJsonCount(10, 'data.variants')
+        ->assertJsonCount(4, 'data.variants.0.images');
 
     $product = Product::query()->where('slug', 'cotton-overshirt')->firstOrFail();
 
     $oliveMediumVariant = $product->variants()->where('color_name', 'Olive')->where('size', 'M')->firstOrFail();
+
+    $this->getJson(route('api.admin.products.index'))
+        ->assertSuccessful()
+        ->assertJsonPath('data.products.data.0.id', $product->id)
+        ->assertJsonPath('data.products.data.0.variants_count', 10)
+        ->assertJsonPath('data.products.data.0.stock_quantity', 30)
+        ->assertJsonCount(2, 'data.products.data.0.colors');
+
+    $this->getJson(route('api.admin.inventory.index'))
+        ->assertSuccessful()
+        ->assertJsonCount(10, 'data.variants.data')
+        ->assertJsonPath('data.variants.data.0.product.id', $product->id)
+        ->assertJsonPath('data.variants.data.0.product.name', 'Cotton Overshirt');
+
+    $this->postJson(route('api.admin.inventory.store'), [
+        'product_variant_id' => $oliveMediumVariant->id,
+        'type' => InventoryMovementType::Received->value,
+        'quantity' => 2,
+    ])->assertCreated()->assertJsonPath('data.balance_after', 6);
+
+    $this->postJson(route('api.admin.inventory.store'), [
+        'product_variant_id' => $oliveMediumVariant->id,
+        'type' => InventoryMovementType::Sold->value,
+        'quantity' => 2,
+    ])->assertCreated()->assertJsonPath('data.balance_after', 4);
+
+    $this->getJson(route('api.admin.inventory.index', ['search' => $oliveMediumVariant->sku]))
+        ->assertSuccessful()
+        ->assertJsonPath('data.variants.data.0.stock_quantity', 4)
+        ->assertJsonPath('data.variants.data.0.product.id', $product->id)
+        ->assertJsonPath('data.metrics.sales_today', 2);
     $primaryImagePath = Str::after($product->primary_image_url, '/storage/');
     $primaryImageInfo = getimagesize(Storage::disk('public')->path($primaryImagePath));
 
@@ -719,6 +752,45 @@ test('admins can create update and delete products without order history', funct
 
     $this->assertModelMissing($product);
 });
+
+test('conflicting inventory SKUs are rejected before saving products or images', function (bool $updating) {
+    Storage::fake('public');
+
+    $admin = User::factory()->admin()->create();
+    $existingVariant = ProductVariant::factory()->create([
+        'sku' => '100-1-OLIVE-fa659831-S',
+        'stock_quantity' => 22,
+    ]);
+    $product = $updating ? Product::factory()->create(['sku' => 'ORIGINAL']) : null;
+    $originalAttributes = $product?->fresh()->getAttributes();
+    $productCount = Product::query()->count();
+    $variantAttributes = $existingVariant->fresh()->getAttributes();
+    $payload = productPayload([
+        'name' => 'Polo',
+        'slug' => 'polo',
+        'sku' => '100-1',
+        'image_uploads' => colorUploadSet('polo'),
+        'color_image_uploads' => [colorUploadSet('olive')],
+    ]);
+
+    $this->actingAs($admin);
+
+    $response = $updating
+        ? $this->patch(route('api.admin.products.update', $product), $payload, ['Accept' => 'application/json'])
+        : $this->post(route('api.admin.products.store'), $payload, ['Accept' => 'application/json']);
+
+    $response->assertUnprocessable()
+        ->assertJsonValidationErrors('variants');
+
+    expect(Product::query()->count())->toBe($productCount)
+        ->and(ProductVariant::query()->count())->toBe(1)
+        ->and($existingVariant->fresh()->getAttributes())->toBe($variantAttributes)
+        ->and(Storage::disk('public')->allFiles())->toBe([]);
+
+    if ($product !== null) {
+        expect($product->fresh()->getAttributes())->toBe($originalAttributes);
+    }
+})->with(['create' => false, 'update' => true]);
 
 test('admins must upload or retain at least four images per product color', function () {
     Storage::fake('public');

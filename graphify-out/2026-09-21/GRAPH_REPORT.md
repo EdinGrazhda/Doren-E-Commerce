@@ -1,7 +1,7 @@
 # Graph Report - doren  (2026-09-21)
 
 ## Corpus Check
-- 327 files · ~229,239 words
+- 328 files · ~231,233 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b981590e`
+- Built from commit: `6bffae83`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -23,7 +23,7 @@
 - Inertia React Development
 - @laravel/passkeys
 - concurrently
-- ProductVariant.php
+- ProductCategory
 - dropdown-menu.tsx
 - Product
 - use-appearance.tsx
@@ -128,6 +128,7 @@
 - @vitejs/plugin-react
 - @radix-ui/react-collapsible
 - Illuminate\Contracts\Validation\ValidationRule
+- user-info.tsx
 - StoreProductRequest
 - UpdateProductRequest
 - thank-you.tsx
@@ -139,7 +140,7 @@
 - @eslint/js
 - Products
 - RTK - Rust Token Killer
-- user-info.tsx
+- StoreCheckoutRequest
 - PriceCartItems
 - eslint-plugin-react
 - breadcrumbs.tsx
@@ -157,13 +158,12 @@
 - SafeImageUrl
 - Images
 - @radix-ui/react-toggle-group
-- ProductCategory
+- Illuminate\Database\Eloquent\Factories\Factory
 - ProductCatalogSeeder
 - UserFactory
 - Mail
 - eslint-plugin-react-hooks
 - @radix-ui/react-checkbox
-- StoreCheckoutRequest
 - Campaigns
 
 ## God Nodes (most connected - your core abstractions)
@@ -219,9 +219,9 @@ Nodes (32): APIs & Eloquent Resources, Application Structure & Architecture, Art
 Cohesion: 0.07
 Nodes (27): Basic Link Component, Basic Usage, Client-Side Navigation, Common Pitfalls, Deferred Props, Documentation, Form Component (Recommended), Form Component Reset Props (+19 more)
 
-### Community 8 - "ProductVariant.php"
-Cohesion: 0.17
-Nodes (6): OrderItem, ProductVariantImage, Illuminate\Database\Eloquent\Collection, Illuminate\Database\Eloquent\Factories\HasFactory, Illuminate\Database\Eloquent\Model, Illuminate\Database\Eloquent\Relations\BelongsTo
+### Community 8 - "ProductCategory"
+Cohesion: 0.19
+Nodes (5): ProductCategory, ProductVariantImage, Illuminate\Database\Eloquent\Collection, Illuminate\Database\Eloquent\Factories\HasFactory, Illuminate\Database\Eloquent\Model
 
 ### Community 9 - "dropdown-menu.tsx"
 Cohesion: 0.13
@@ -432,8 +432,8 @@ Cohesion: 0.05
 Nodes (47): BrandLogo(), BrandLogoProps, logoSources, Cart(), CartItem, formatPrice(), Props, CartItem (+39 more)
 
 ### Community 68 - "InventoryMovement"
-Cohesion: 0.21
-Nodes (4): RecordInventoryMovement, InventoryMovement, InventoryMovementFactory, static
+Cohesion: 0.19
+Nodes (4): RecordInventoryMovement, InventoryMovement, OrderItem, Illuminate\Database\Eloquent\Relations\BelongsTo
 
 ### Community 71 - "psr-4"
 Cohesion: 0.40
@@ -511,6 +511,10 @@ Nodes (4): CartItemController, ProfileController, SecurityController, Illuminate
 Cohesion: 0.12
 Nodes (10): CreateNewUser, emailRules(), nameRules(), profileRules(), PasswordUpdateRequest, ProfileDeleteRequest, ProfileUpdateRequest, SafeActionUrl (+2 more)
 
+### Community 142 - "user-info.tsx"
+Cohesion: 0.33
+Nodes (7): Avatar(), AvatarFallback(), AvatarImage(), UserInfo(), getInitial(), GetInitialsFn, useInitials()
+
 ### Community 151 - "thank-you.tsx"
 Cohesion: 0.50
 Nodes (4): formatPrice(), Order, Props, ThankYou()
@@ -531,10 +535,6 @@ Nodes (3): OrderController, UpdateOrderRequest, Order
 Cohesion: 0.29
 Nodes (6): Avoid RTK For, Good RTK Uses, How RTK Fits With Graphify, RTK - Rust Token Killer, RTK With Laravel Commands, Useful Checks
 
-### Community 161 - "user-info.tsx"
-Cohesion: 0.33
-Nodes (7): Avatar(), AvatarFallback(), AvatarImage(), UserInfo(), getInitial(), GetInitialsFn, useInitials()
-
 ### Community 163 - "PriceCartItems"
 Cohesion: 0.21
 Nodes (4): CartController, CheckoutController, PriceCartItems, Illuminate\Support\Collection
@@ -543,9 +543,9 @@ Nodes (4): CartController, CheckoutController, PriceCartItems, Illuminate\Suppor
 Cohesion: 0.39
 Nodes (7): Breadcrumb(), BreadcrumbEllipsis(), BreadcrumbItem(), BreadcrumbLink(), BreadcrumbList(), BreadcrumbPage(), BreadcrumbSeparator()
 
-### Community 181 - "ProductCategory"
-Cohesion: 0.14
-Nodes (8): ProductCategory, CampaignFactory, ProductCategoryFactory, ProductFactory, ProductVariantFactory, ProductVariantImageFactory, StorefrontBannerFactory, Illuminate\Database\Eloquent\Factories\Factory
+### Community 181 - "Illuminate\Database\Eloquent\Factories\Factory"
+Cohesion: 0.13
+Nodes (9): CampaignFactory, InventoryMovementFactory, static, ProductCategoryFactory, ProductFactory, ProductVariantFactory, ProductVariantImageFactory, StorefrontBannerFactory (+1 more)
 
 ## Knowledge Gaps
 - **560 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+555 more)
@@ -559,7 +559,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.077) - this node is a cross-community bridge._
 - **Why does `Role` connect `RoleController` to `access-control/index.tsx`?**
   _High betweenness centrality (0.077) - this node is a cross-community bridge._
-- **Why does `cn()` connect `cn` to `user-info.tsx`, `welcome.tsx`, `access-control/index.tsx`, `products/index.tsx`, `breadcrumbs.tsx`, `admin/dashboard.tsx`, `campaigns/index.tsx`, `utils.ts`, `dropdown-menu.tsx`, `sidebar.tsx`, `use-appearance.tsx`, `button.tsx`, `index.ts`, `banners/index.tsx`, `app-header.tsx`, `categories/index.tsx`?**
+- **Why does `cn()` connect `cn` to `access-control/index.tsx`, `welcome.tsx`, `campaigns/index.tsx`, `products/index.tsx`, `breadcrumbs.tsx`, `admin/dashboard.tsx`, `utils.ts`, `sidebar.tsx`, `dropdown-menu.tsx`, `use-appearance.tsx`, `user-info.tsx`, `button.tsx`, `index.ts`, `banners/index.tsx`, `app-header.tsx`, `categories/index.tsx`?**
   _High betweenness centrality (0.076) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
   _560 weakly-connected nodes found - possible documentation gaps or missing edges._

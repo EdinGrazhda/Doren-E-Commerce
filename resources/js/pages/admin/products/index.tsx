@@ -220,6 +220,7 @@ function productsListingUrl(search: string, page?: string): string {
 
 export default function AdminProductsIndex() {
     const [open, setOpen] = useState(false);
+    const [saveError, setSaveError] = useState<string | null>(null);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
     const [productsPageUrl, setProductsPageUrl] = useState(
         productsApiIndex.url(),
@@ -272,6 +273,7 @@ export default function AdminProductsIndex() {
 
     const openCreateDialog = () => {
         setEditingProduct(null);
+        setSaveError(null);
         form.clearErrors();
         form.setData(makeEmptyProduct(sizeOptions));
         setOpen(true);
@@ -280,6 +282,7 @@ export default function AdminProductsIndex() {
     const openEditDialog = async (product: ProductSummary) => {
         await editRequest.get(showProduct.url(product.id), {
             onSuccess: ({ data }) => {
+                setSaveError(null);
                 setEditingProduct(data);
                 form.clearErrors();
                 form.setData({
@@ -349,6 +352,18 @@ export default function AdminProductsIndex() {
     const submit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
+        if (form.processing) {
+            return;
+        }
+
+        setSaveError(null);
+
+        const handleSaveFailure = () => {
+            setSaveError(
+                'The save could not be confirmed. Close this dialog and refresh the product list before retrying to avoid duplicates. If the product appears without colors, contact support.',
+            );
+        };
+
         const options = {
             onSuccess: () => {
                 setOpen(false);
@@ -365,7 +380,9 @@ export default function AdminProductsIndex() {
                 variants: toIndexedRecord(colorVariants(data.colors)),
                 _method: 'put',
             }));
-            void form.post(updateProduct.url(editingProduct.id), options);
+            void form
+                .post(updateProduct.url(editingProduct.id), options)
+                .catch(handleSaveFailure);
 
             return;
         }
@@ -375,7 +392,7 @@ export default function AdminProductsIndex() {
             color_image_uploads: colorImageUploads(data.colors),
             variants: toIndexedRecord(colorVariants(data.colors)),
         }));
-        void form.post(storeProduct.url(), options);
+        void form.post(storeProduct.url(), options).catch(handleSaveFailure);
     };
 
     const deleteProduct = (product: ProductSummary) => {
@@ -587,6 +604,14 @@ export default function AdminProductsIndex() {
                                     className="grid max-h-[72vh] gap-4 overflow-y-auto pr-1"
                                     onSubmit={submit}
                                 >
+                                    {saveError && (
+                                        <p
+                                            role="alert"
+                                            className="text-sm text-destructive"
+                                        >
+                                            {saveError}
+                                        </p>
+                                    )}
                                     {validationErrorMessages.length > 0 && (
                                         <div className="rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive">
                                             <p className="font-medium">

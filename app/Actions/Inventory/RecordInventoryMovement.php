@@ -34,6 +34,12 @@ class RecordInventoryMovement
                 ->lockForUpdate()
                 ->findOrFail($variantId);
 
+            if ($variant->product === null) {
+                throw ValidationException::withMessages([
+                    'product_variant_id' => 'This inventory variant is not linked to a product.',
+                ]);
+            }
+
             if ($type === InventoryMovementType::Sold && (! $variant->is_active || ! $variant->product->is_active)) {
                 throw ValidationException::withMessages([
                     'product_variant_id' => 'Inactive products cannot be sold.',

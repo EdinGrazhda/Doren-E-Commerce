@@ -19,7 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $hostingPublicPath = realpath(base_path('public_html'));
+
+        if ($hostingPublicPath !== false && is_dir($hostingPublicPath)) {
+            $this->app->usePublicPath($hostingPublicPath);
+        }
     }
 
     /**

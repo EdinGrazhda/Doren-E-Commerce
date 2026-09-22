@@ -15,6 +15,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
@@ -127,7 +128,7 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product): JsonResponse
     {
-        $validated = $this->productAttributes($request);
+        $validated = $this->productAttributes($request, $product);
 
         DB::transaction(function () use ($product, $validated): void {
             $product->update(Arr::except($validated, ['variants', 'color_image_uploads']));
@@ -230,9 +231,22 @@ class ProductController extends Controller
     /**
      * @return array<string, mixed>
      */
-    private function productAttributes(StoreProductRequest|UpdateProductRequest $request): array
+    private function productAttributes(StoreProductRequest|UpdateProductRequest $request, ?Product $product = null): array
     {
         $attributes = $request->validated();
+        $prospectiveProduct = new Product(Arr::only($attributes, ['sku', 'slug']));
+        $variantSkus = collect($attributes['variants'])
+            ->map(fn (array $variant): string => $this->variantSku($prospectiveProduct, $variant['color_name'], $variant['size']));
+        $conflictingVariant = ProductVariant::query()
+            ->whereIn('sku', $variantSkus)
+            ->when($product !== null, fn ($query) => $query->where('product_id', '!=', $product->id))
+            ->first(['id', 'sku']);
+
+        if ($conflictingVariant !== null) {
+            throw ValidationException::withMessages([
+                'variants' => "Variant SKU {$conflictingVariant->sku} already exists in inventory. Resolve its product link before saving; existing stock has not been changed.",
+            ]);
+        }
 
         if ($request->hasFile('image_uploads')) {
             $uploadedImageUrls = collect($request->file('image_uploads'))

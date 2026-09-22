@@ -68,7 +68,7 @@ type ProductVariant = {
     reserved_quantity: number;
     is_active: boolean;
     updated_at: string;
-    product: Product;
+    product: Product | null;
 };
 
 type InventoryMovement = {
@@ -174,6 +174,7 @@ export default function AdminInventoryIndex() {
     const [listingUrl, setListingUrl] = useState(inventoryApiIndex.url());
     const [search, setSearch] = useState('');
     const [stockFilter, setStockFilter] = useState('all');
+    const [saveError, setSaveError] = useState<string | null>(null);
     const [selectedVariant, setSelectedVariant] =
         useState<ProductVariant | null>(null);
     const listing = useAdminApi<InventoryData>(listingUrl);
@@ -202,6 +203,11 @@ export default function AdminInventoryIndex() {
     };
 
     const openMovement = (variant: ProductVariant, type: MovementMode) => {
+        if (!variant.product) {
+            return;
+        }
+
+        setSaveError(null);
         setSelectedVariant(variant);
         form.clearErrors();
         form.setData({
@@ -210,7 +216,7 @@ export default function AdminInventoryIndex() {
             quantity: 1,
             unit_amount_cents:
                 type === 'sold'
-                    ? (variant.price_cents ?? variant.product.price_cents)
+                    ? (variant.price_cents ?? variant.product?.price_cents ?? 0)
                     : null,
             reference: '',
             note: '',
@@ -226,17 +232,29 @@ export default function AdminInventoryIndex() {
     const submitMovement = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        void form.post(storeInventoryMovement.url(), {
-            onSuccess: () => {
-                toast.success(
-                    form.data.type === 'received'
-                        ? 'Stock received'
-                        : 'Sale recorded',
+        if (form.processing) {
+            return;
+        }
+
+        setSaveError(null);
+
+        void form
+            .post(storeInventoryMovement.url(), {
+                onSuccess: () => {
+                    toast.success(
+                        form.data.type === 'received'
+                            ? 'Stock received'
+                            : 'Sale recorded',
+                    );
+                    closeMovement();
+                    void listing.reload();
+                },
+            })
+            .catch(() => {
+                setSaveError(
+                    'The stock change could not be confirmed. Close this dialog and refresh inventory before retrying to avoid recording it twice.',
                 );
-                closeMovement();
-                void listing.reload();
-            },
-        });
+            });
     };
 
     if (!listing.data) {
@@ -419,7 +437,7 @@ export default function AdminInventoryIndex() {
                                     {variants.data.map((variant) => {
                                         const imageUrl =
                                             variant.image_url ??
-                                            variant.product.primary_image_url;
+                                            variant.product?.primary_image_url;
                                         const available = Math.max(
                                             variant.stock_quantity -
                                                 variant.reserved_quantity,
@@ -450,17 +468,17 @@ export default function AdminInventoryIndex() {
                                                         </div>
                                                         <div className="min-w-0">
                                                             <div className="max-w-56 truncate font-medium">
-                                                                {
-                                                                    variant
-                                                                        .product
-                                                                        .name
-                                                                }
+                                                                {variant.product
+                                                                    ?.name ??
+                                                                    'Product unavailable'}
                                                             </div>
-                                                            {!variant.product
-                                                                .is_active && (
+                                                            {(!variant.product ||
+                                                                !variant.product
+                                                                    .is_active) && (
                                                                 <span className="text-xs text-muted-foreground">
-                                                                    Product
-                                                                    inactive
+                                                                    {variant.product
+                                                                        ? 'Product inactive'
+                                                                        : 'Product unavailable'}
                                                                 </span>
                                                             )}
                                                         </div>
@@ -515,6 +533,9 @@ export default function AdminInventoryIndex() {
                                                             type="button"
                                                             size="sm"
                                                             variant="outline"
+                                                            disabled={
+                                                                !variant.product
+                                                            }
                                                             onClick={() =>
                                                                 openMovement(
                                                                     variant,
@@ -533,7 +554,7 @@ export default function AdminInventoryIndex() {
                                                                     0 ||
                                                                 !variant.is_active ||
                                                                 !variant.product
-                                                                    .is_active
+                                                                    ?.is_active
                                                             }
                                                             onClick={() =>
                                                                 openMovement(
@@ -690,13 +711,22 @@ export default function AdminInventoryIndex() {
                     <DialogHeader>
                         <DialogTitle>{movementTitle}</DialogTitle>
                         <DialogDescription>
-                            {selectedVariant?.product.name} /{' '}
-                            {selectedVariant?.color_name} /{' '}
+                            {selectedVariant?.product?.name ??
+                                'Product unavailable'}{' '}
+                            / {selectedVariant?.color_name} /{' '}
                             {selectedVariant?.size}
                         </DialogDescription>
                     </DialogHeader>
 
                     <form className="grid gap-4" onSubmit={submitMovement}>
+                        {saveError && (
+                            <p
+                                role="alert"
+                                className="text-sm text-destructive"
+                            >
+                                {saveError}
+                            </p>
+                        )}
                         <div className="grid grid-cols-3 gap-2 rounded-md border bg-muted/30 p-3 text-center">
                             <div>
                                 <div className="text-xs text-muted-foreground">

@@ -693,6 +693,19 @@
       "norm_label": "safeactionurl"
     },
     {
+      "label": "GetInitialsFn",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-initials.tsx",
+      "source_location": "L3",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_initials_getinitialsfn",
+      "community": 142,
+      "community_name": "user-info.tsx",
+      "norm_label": "getinitialsfn"
+    },
+    {
       "label": "StoreProductRequest",
       "file_type": "code",
       "source_file": "app/Http/Requests/Admin/StoreProductRequest.php",
@@ -862,17 +875,17 @@
       "norm_label": "order"
     },
     {
-      "label": "GetInitialsFn",
+      "label": "StoreCheckoutRequest",
       "file_type": "code",
-      "source_file": "resources/js/hooks/use-initials.tsx",
-      "source_location": "L3",
+      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
+      "source_location": "L8",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "resources_js_hooks_use_initials_getinitialsfn",
+      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest",
       "community": 161,
-      "community_name": "user-info.tsx",
-      "norm_label": "getinitialsfn"
+      "community_name": "StoreCheckoutRequest",
+      "norm_label": "storecheckoutrequest"
     },
     {
       "label": "CartController",
@@ -1213,19 +1226,6 @@
       "norm_label": "inputhtmlattributes"
     },
     {
-      "label": "ProductCategory",
-      "file_type": "code",
-      "source_file": "app/Models/ProductCategory.php",
-      "source_location": "L22",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "app_models_productcategory_productcategory",
-      "community": 181,
-      "community_name": "ProductCategory",
-      "norm_label": "productcategory"
-    },
-    {
       "label": "CampaignFactory",
       "file_type": "code",
       "source_file": "database/factories/CampaignFactory.php",
@@ -1235,8 +1235,21 @@
       "_origin": "ast",
       "id": "database_factories_campaignfactory_campaignfactory",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": "campaignfactory"
+    },
+    {
+      "label": "InventoryMovementFactory",
+      "file_type": "code",
+      "source_file": "database/factories/InventoryMovementFactory.php",
+      "source_location": "L14",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "database_factories_inventorymovementfactory_inventorymovementfactory",
+      "community": 181,
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
+      "norm_label": "inventorymovementfactory"
     },
     {
       "label": "ProductCategoryFactory",
@@ -1248,7 +1261,7 @@
       "_origin": "ast",
       "id": "database_factories_productcategoryfactory_productcategoryfactory",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": "productcategoryfactory"
     },
     {
@@ -1261,7 +1274,7 @@
       "_origin": "ast",
       "id": "database_factories_productfactory_productfactory",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": "productfactory"
     },
     {
@@ -1274,7 +1287,7 @@
       "_origin": "ast",
       "id": "database_factories_productvariantfactory_productvariantfactory",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": "productvariantfactory"
     },
     {
@@ -1287,7 +1300,7 @@
       "_origin": "ast",
       "id": "database_factories_productvariantimagefactory_productvariantimagefactory",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": "productvariantimagefactory"
     },
     {
@@ -1300,7 +1313,7 @@
       "_origin": "ast",
       "id": "database_factories_storefrontbannerfactory_storefrontbannerfactory",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": "storefrontbannerfactory"
     },
     {
@@ -1354,19 +1367,6 @@
       "community": 19,
       "community_name": "ProductVariant",
       "norm_label": "orderitemfactory"
-    },
-    {
-      "label": "StoreCheckoutRequest",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
-      "source_location": "L8",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest",
-      "community": 190,
-      "community_name": "StoreCheckoutRequest",
-      "norm_label": "storecheckoutrequest"
     },
     {
       "label": "IsCurrentOrParentUrlFn",
@@ -1983,7 +1983,7 @@
       "label": "Order",
       "file_type": "code",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L31",
+      "source_location": "L40",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -1996,7 +1996,7 @@
       "label": "OrderItem",
       "file_type": "code",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L14",
+      "source_location": "L23",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -2009,7 +2009,7 @@
       "label": "Props",
       "file_type": "code",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L56",
+      "source_location": "L65",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -2383,17 +2383,17 @@
       "norm_label": "inventorymovement"
     },
     {
-      "label": "InventoryMovementFactory",
+      "label": "OrderItem",
       "file_type": "code",
-      "source_file": "database/factories/InventoryMovementFactory.php",
-      "source_location": "L14",
+      "source_file": "app/Models/OrderItem.php",
+      "source_location": "L28",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "database_factories_inventorymovementfactory_inventorymovementfactory",
+      "id": "app_models_orderitem_orderitem",
       "community": 68,
       "community_name": "InventoryMovement",
-      "norm_label": "inventorymovementfactory"
+      "norm_label": "orderitem"
     },
     {
       "label": "TestCase",
@@ -2500,17 +2500,17 @@
       "norm_label": "inventorycontroller"
     },
     {
-      "label": "OrderItem",
+      "label": "ProductCategory",
       "file_type": "code",
-      "source_file": "app/Models/OrderItem.php",
-      "source_location": "L28",
+      "source_file": "app/Models/ProductCategory.php",
+      "source_location": "L22",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "app_models_orderitem_orderitem",
+      "id": "app_models_productcategory_productcategory",
       "community": 8,
-      "community_name": "ProductVariant.php",
-      "norm_label": "orderitem"
+      "community_name": "ProductCategory",
+      "norm_label": "productcategory"
     },
     {
       "label": "ProductVariantImage",
@@ -2522,7 +2522,7 @@
       "_origin": "ast",
       "id": "app_models_productvariantimage_productvariantimage",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "productvariantimage"
     },
     {
@@ -5079,6 +5079,78 @@
       "norm_label": "up()"
     },
     {
+      "label": "Avatar()",
+      "file_type": "code",
+      "source_file": "resources/js/components/ui/avatar.tsx",
+      "source_location": "L6",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_ui_avatar_avatar",
+      "community": 142,
+      "community_name": "user-info.tsx",
+      "norm_label": "avatar()"
+    },
+    {
+      "label": "AvatarFallback()",
+      "file_type": "code",
+      "source_file": "resources/js/components/ui/avatar.tsx",
+      "source_location": "L35",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_ui_avatar_avatarfallback",
+      "community": 142,
+      "community_name": "user-info.tsx",
+      "norm_label": "avatarfallback()"
+    },
+    {
+      "label": "AvatarImage()",
+      "file_type": "code",
+      "source_file": "resources/js/components/ui/avatar.tsx",
+      "source_location": "L22",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_ui_avatar_avatarimage",
+      "community": 142,
+      "community_name": "user-info.tsx",
+      "norm_label": "avatarimage()"
+    },
+    {
+      "label": "UserInfo()",
+      "file_type": "code",
+      "source_file": "resources/js/components/user-info.tsx",
+      "source_location": "L5",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_user_info_userinfo",
+      "community": 142,
+      "community_name": "user-info.tsx",
+      "norm_label": "userinfo()"
+    },
+    {
+      "label": "getInitial()",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-initials.tsx",
+      "source_location": "L5",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_initials_getinitial",
+      "community": 142,
+      "community_name": "user-info.tsx",
+      "norm_label": "getinitial()"
+    },
+    {
+      "label": "useInitials()",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-initials.tsx",
+      "source_location": "L9",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_initials_useinitials",
+      "community": 142,
+      "community_name": "user-info.tsx",
+      "norm_label": "useinitials()"
+    },
+    {
       "label": ".after()",
       "file_type": "code",
       "source_file": "app/Http/Requests/Admin/StoreProductRequest.php",
@@ -5559,76 +5631,52 @@
       "norm_label": "up()"
     },
     {
-      "label": "Avatar()",
+      "label": ".store()",
       "file_type": "code",
-      "source_file": "resources/js/components/ui/avatar.tsx",
-      "source_location": "L6",
+      "source_file": "app/Http/Controllers/CheckoutController.php",
+      "source_location": "L25",
       "_callable": true,
       "_origin": "ast",
-      "id": "resources_js_components_ui_avatar_avatar",
+      "id": "app_http_controllers_checkoutcontroller_checkoutcontroller_store",
       "community": 161,
-      "community_name": "user-info.tsx",
-      "norm_label": "avatar()"
+      "community_name": "StoreCheckoutRequest",
+      "norm_label": ".store()"
     },
     {
-      "label": "AvatarFallback()",
+      "label": ".after()",
       "file_type": "code",
-      "source_file": "resources/js/components/ui/avatar.tsx",
-      "source_location": "L35",
+      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
+      "source_location": "L37",
       "_callable": true,
       "_origin": "ast",
-      "id": "resources_js_components_ui_avatar_avatarfallback",
+      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_after",
       "community": 161,
-      "community_name": "user-info.tsx",
-      "norm_label": "avatarfallback()"
+      "community_name": "StoreCheckoutRequest",
+      "norm_label": ".after()"
     },
     {
-      "label": "AvatarImage()",
+      "label": ".authorize()",
       "file_type": "code",
-      "source_file": "resources/js/components/ui/avatar.tsx",
-      "source_location": "L22",
+      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
+      "source_location": "L10",
       "_callable": true,
       "_origin": "ast",
-      "id": "resources_js_components_ui_avatar_avatarimage",
+      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_authorize",
       "community": 161,
-      "community_name": "user-info.tsx",
-      "norm_label": "avatarimage()"
+      "community_name": "StoreCheckoutRequest",
+      "norm_label": ".authorize()"
     },
     {
-      "label": "UserInfo()",
+      "label": ".rules()",
       "file_type": "code",
-      "source_file": "resources/js/components/user-info.tsx",
-      "source_location": "L5",
+      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
+      "source_location": "L18",
       "_callable": true,
       "_origin": "ast",
-      "id": "resources_js_components_user_info_userinfo",
+      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_rules",
       "community": 161,
-      "community_name": "user-info.tsx",
-      "norm_label": "userinfo()"
-    },
-    {
-      "label": "getInitial()",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-initials.tsx",
-      "source_location": "L5",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_initials_getinitial",
-      "community": 161,
-      "community_name": "user-info.tsx",
-      "norm_label": "getinitial()"
-    },
-    {
-      "label": "useInitials()",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-initials.tsx",
-      "source_location": "L9",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_initials_useinitials",
-      "community": 161,
-      "community_name": "user-info.tsx",
-      "norm_label": "useinitials()"
+      "community_name": "StoreCheckoutRequest",
+      "norm_label": ".rules()"
     },
     {
       "label": "down()",
@@ -6291,18 +6339,6 @@
       "norm_label": "security()"
     },
     {
-      "label": ".casts()",
-      "file_type": "code",
-      "source_file": "app/Models/ProductCategory.php",
-      "source_location": "L44",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_models_productcategory_productcategory_casts",
-      "community": 181,
-      "community_name": "ProductCategory",
-      "norm_label": ".casts()"
-    },
-    {
       "label": ".definition()",
       "file_type": "code",
       "source_file": "database/factories/CampaignFactory.php",
@@ -6311,8 +6347,20 @@
       "_origin": "ast",
       "id": "database_factories_campaignfactory_campaignfactory_definition",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": ".definition()"
+    },
+    {
+      "label": ".sold()",
+      "file_type": "code",
+      "source_file": "database/factories/InventoryMovementFactory.php",
+      "source_location": "L40",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "database_factories_inventorymovementfactory_inventorymovementfactory_sold",
+      "community": 181,
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
+      "norm_label": ".sold()"
     },
     {
       "label": ".definition()",
@@ -6323,7 +6371,7 @@
       "_origin": "ast",
       "id": "database_factories_productcategoryfactory_productcategoryfactory_definition",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": ".definition()"
     },
     {
@@ -6335,7 +6383,7 @@
       "_origin": "ast",
       "id": "database_factories_productfactory_productfactory_definition",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": ".definition()"
     },
     {
@@ -6347,7 +6395,7 @@
       "_origin": "ast",
       "id": "database_factories_productvariantimagefactory_productvariantimagefactory_definition",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": ".definition()"
     },
     {
@@ -6359,7 +6407,7 @@
       "_origin": "ast",
       "id": "database_factories_storefrontbannerfactory_storefrontbannerfactory_definition",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": ".definition()"
     },
     {
@@ -6625,54 +6673,6 @@
       "community": 19,
       "community_name": "ProductVariant",
       "norm_label": ".definition()"
-    },
-    {
-      "label": ".store()",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/CheckoutController.php",
-      "source_location": "L25",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_controllers_checkoutcontroller_checkoutcontroller_store",
-      "community": 190,
-      "community_name": "StoreCheckoutRequest",
-      "norm_label": ".store()"
-    },
-    {
-      "label": ".after()",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
-      "source_location": "L37",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_after",
-      "community": 190,
-      "community_name": "StoreCheckoutRequest",
-      "norm_label": ".after()"
-    },
-    {
-      "label": ".authorize()",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
-      "source_location": "L10",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_authorize",
-      "community": 190,
-      "community_name": "StoreCheckoutRequest",
-      "norm_label": ".authorize()"
-    },
-    {
-      "label": ".rules()",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
-      "source_location": "L18",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_requests_storecheckoutrequest_storecheckoutrequest_rules",
-      "community": 190,
-      "community_name": "StoreCheckoutRequest",
-      "norm_label": ".rules()"
     },
     {
       "label": "down()",
@@ -7590,7 +7590,7 @@
       "label": "AdminOrderShow()",
       "file_type": "code",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L69",
+      "source_location": "L95",
       "_callable": true,
       "_origin": "ast",
       "id": "resources_js_pages_admin_orders_show_adminordershow",
@@ -7599,16 +7599,16 @@
       "norm_label": "adminordershow()"
     },
     {
-      "label": "Detail()",
+      "label": "PanelHeading()",
       "file_type": "code",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L60",
+      "source_location": "L69",
       "_callable": true,
       "_origin": "ast",
-      "id": "resources_js_pages_admin_orders_show_detail",
+      "id": "resources_js_pages_admin_orders_show_panelheading",
       "community": 38,
       "community_name": "admin/dashboard.tsx",
-      "norm_label": "detail()"
+      "norm_label": "panelheading()"
     },
     {
       "label": ".definition()",
@@ -7626,7 +7626,7 @@
       "label": "colorImageUrls()",
       "file_type": "code",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L886",
+      "source_location": "L919",
       "_callable": true,
       "_origin": "ast",
       "id": "tests_feature_adminpaneltest_colorimageurls",
@@ -7638,7 +7638,7 @@
       "label": "colorUploadSet()",
       "file_type": "code",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L876",
+      "source_location": "L909",
       "_callable": true,
       "_origin": "ast",
       "id": "tests_feature_adminpaneltest_coloruploadset",
@@ -7650,7 +7650,7 @@
       "label": "productPayload()",
       "file_type": "code",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L899",
+      "source_location": "L932",
       "_callable": true,
       "_origin": "ast",
       "id": "tests_feature_adminpaneltest_productpayload",
@@ -7662,7 +7662,7 @@
       "label": "variantsPayload()",
       "file_type": "code",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L857",
+      "source_location": "L890",
       "_callable": true,
       "_origin": "ast",
       "id": "tests_feature_adminpaneltest_variantspayload",
@@ -7914,7 +7914,7 @@
       "label": ".boot()",
       "file_type": "code",
       "source_file": "app/Providers/AppServiceProvider.php",
-      "source_location": "L28",
+      "source_location": "L32",
       "_callable": true,
       "_origin": "ast",
       "id": "app_providers_appserviceprovider_appserviceprovider_boot",
@@ -7926,7 +7926,7 @@
       "label": ".configureDefaults()",
       "file_type": "code",
       "source_file": "app/Providers/AppServiceProvider.php",
-      "source_location": "L38",
+      "source_location": "L42",
       "_callable": true,
       "_origin": "ast",
       "id": "app_providers_appserviceprovider_appserviceprovider_configuredefaults",
@@ -8391,16 +8391,52 @@
       "norm_label": ".variant()"
     },
     {
-      "label": ".sold()",
+      "label": ".casts()",
       "file_type": "code",
-      "source_file": "database/factories/InventoryMovementFactory.php",
-      "source_location": "L40",
+      "source_file": "app/Models/OrderItem.php",
+      "source_location": "L77",
       "_callable": true,
       "_origin": "ast",
-      "id": "database_factories_inventorymovementfactory_inventorymovementfactory_sold",
+      "id": "app_models_orderitem_orderitem_casts",
       "community": 68,
       "community_name": "InventoryMovement",
-      "norm_label": ".sold()"
+      "norm_label": ".casts()"
+    },
+    {
+      "label": ".order()",
+      "file_type": "code",
+      "source_file": "app/Models/OrderItem.php",
+      "source_location": "L53",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_models_orderitem_orderitem_order",
+      "community": 68,
+      "community_name": "InventoryMovement",
+      "norm_label": ".order()"
+    },
+    {
+      "label": ".product()",
+      "file_type": "code",
+      "source_file": "app/Models/OrderItem.php",
+      "source_location": "L61",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_models_orderitem_orderitem_product",
+      "community": 68,
+      "community_name": "InventoryMovement",
+      "norm_label": ".product()"
+    },
+    {
+      "label": ".variant()",
+      "file_type": "code",
+      "source_file": "app/Models/OrderItem.php",
+      "source_location": "L69",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_models_orderitem_orderitem_variant",
+      "community": 68,
+      "community_name": "InventoryMovement",
+      "norm_label": ".variant()"
     },
     {
       "label": "something()",
@@ -8585,50 +8621,14 @@
     {
       "label": ".casts()",
       "file_type": "code",
-      "source_file": "app/Models/OrderItem.php",
-      "source_location": "L77",
+      "source_file": "app/Models/ProductCategory.php",
+      "source_location": "L44",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_models_orderitem_orderitem_casts",
+      "id": "app_models_productcategory_productcategory_casts",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": ".casts()"
-    },
-    {
-      "label": ".order()",
-      "file_type": "code",
-      "source_file": "app/Models/OrderItem.php",
-      "source_location": "L53",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_models_orderitem_orderitem_order",
-      "community": 8,
-      "community_name": "ProductVariant.php",
-      "norm_label": ".order()"
-    },
-    {
-      "label": ".product()",
-      "file_type": "code",
-      "source_file": "app/Models/OrderItem.php",
-      "source_location": "L61",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_models_orderitem_orderitem_product",
-      "community": 8,
-      "community_name": "ProductVariant.php",
-      "norm_label": ".product()"
-    },
-    {
-      "label": ".variant()",
-      "file_type": "code",
-      "source_file": "app/Models/OrderItem.php",
-      "source_location": "L69",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_models_orderitem_orderitem_variant",
-      "community": 8,
-      "community_name": "ProductVariant.php",
-      "norm_label": ".variant()"
     },
     {
       "label": ".casts()",
@@ -8639,7 +8639,7 @@
       "_origin": "ast",
       "id": "app_models_productvariantimage_productvariantimage_casts",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": ".casts()"
     },
     {
@@ -8651,7 +8651,7 @@
       "_origin": "ast",
       "id": "app_models_productvariantimage_productvariantimage_variant",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": ".variant()"
     },
     {
@@ -8663,7 +8663,7 @@
       "_origin": "ast",
       "id": "tests_feature_campaignmanagementtest_campaigncheckoutdata",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "campaigncheckoutdata()"
     },
     {
@@ -11588,15 +11588,37 @@
       "norm_label": "eslint"
     },
     {
-      "label": "index.php",
+      "label": "avatar.tsx",
       "file_type": "code",
-      "source_file": "public/index.php",
+      "source_file": "resources/js/components/ui/avatar.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "public_index",
+      "id": "resources_js_components_ui_avatar",
       "community": 142,
-      "community_name": "index.php",
-      "norm_label": "index.php"
+      "community_name": "user-info.tsx",
+      "norm_label": "avatar.tsx"
+    },
+    {
+      "label": "user-info.tsx",
+      "file_type": "code",
+      "source_file": "resources/js/components/user-info.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "resources_js_components_user_info",
+      "community": 142,
+      "community_name": "user-info.tsx",
+      "norm_label": "user-info.tsx"
+    },
+    {
+      "label": "use-initials.tsx",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-initials.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_initials",
+      "community": 142,
+      "community_name": "user-info.tsx",
+      "norm_label": "use-initials.tsx"
     },
     {
       "label": "vite-env.d.ts",
@@ -12446,37 +12468,15 @@
       "norm_label": "useful checks"
     },
     {
-      "label": "avatar.tsx",
+      "label": "StoreCheckoutRequest.php",
       "file_type": "code",
-      "source_file": "resources/js/components/ui/avatar.tsx",
+      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "resources_js_components_ui_avatar",
+      "id": "app_http_requests_storecheckoutrequest",
       "community": 161,
-      "community_name": "user-info.tsx",
-      "norm_label": "avatar.tsx"
-    },
-    {
-      "label": "user-info.tsx",
-      "file_type": "code",
-      "source_file": "resources/js/components/user-info.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "resources_js_components_user_info",
-      "community": 161,
-      "community_name": "user-info.tsx",
-      "norm_label": "user-info.tsx"
-    },
-    {
-      "label": "use-initials.tsx",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-initials.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_initials",
-      "community": 161,
-      "community_name": "user-info.tsx",
-      "norm_label": "use-initials.tsx"
+      "community_name": "StoreCheckoutRequest",
+      "norm_label": "storecheckoutrequest.php"
     },
     {
       "label": "2026_08_19_162948_add_image_url_to_product_variants_table.php",
@@ -13447,17 +13447,6 @@
       "norm_label": "@radix-ui/react-toggle-group"
     },
     {
-      "label": "ProductCategory.php",
-      "file_type": "code",
-      "source_file": "app/Models/ProductCategory.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_models_productcategory",
-      "community": 181,
-      "community_name": "ProductCategory",
-      "norm_label": "productcategory.php"
-    },
-    {
       "label": "CampaignFactory.php",
       "file_type": "code",
       "source_file": "database/factories/CampaignFactory.php",
@@ -13465,19 +13454,19 @@
       "_origin": "ast",
       "id": "database_factories_campaignfactory",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": "campaignfactory.php"
     },
     {
-      "label": "ProductCategoryFactory.php",
+      "label": "static",
       "file_type": "code",
-      "source_file": "database/factories/ProductCategoryFactory.php",
-      "source_location": "L1",
+      "source_file": "",
+      "source_location": "",
       "_origin": "ast",
-      "id": "database_factories_productcategoryfactory",
+      "id": "database_factories_inventorymovementfactory_php_static",
       "community": 181,
-      "community_name": "ProductCategory",
-      "norm_label": "productcategoryfactory.php"
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
+      "norm_label": "static"
     },
     {
       "label": "ProductFactory.php",
@@ -13487,7 +13476,7 @@
       "_origin": "ast",
       "id": "database_factories_productfactory",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": "productfactory.php"
     },
     {
@@ -13498,7 +13487,7 @@
       "_origin": "ast",
       "id": "database_factories_productvariantfactory",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": "productvariantfactory.php"
     },
     {
@@ -13509,7 +13498,7 @@
       "_origin": "ast",
       "id": "database_factories_productvariantimagefactory",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": "productvariantimagefactory.php"
     },
     {
@@ -13520,7 +13509,7 @@
       "_origin": "ast",
       "id": "database_factories_storefrontbannerfactory",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": "storefrontbannerfactory.php"
     },
     {
@@ -13531,7 +13520,7 @@
       "_origin": "ast",
       "id": "illuminate_database_eloquent_factories_factory",
       "community": 181,
-      "community_name": "ProductCategory",
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
       "norm_label": "illuminate\\database\\eloquent\\factories\\factory"
     },
     {
@@ -13667,15 +13656,15 @@
       "norm_label": "illuminate\\database\\eloquent\\relations\\hasmany"
     },
     {
-      "label": "StoreCheckoutRequest.php",
+      "label": "index.php",
       "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCheckoutRequest.php",
+      "source_file": "public/index.php",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_http_requests_storecheckoutrequest",
+      "id": "public_index",
       "community": 190,
-      "community_name": "StoreCheckoutRequest",
-      "norm_label": "storecheckoutrequest.php"
+      "community_name": "index.php",
+      "norm_label": "index.php"
     },
     {
       "label": "2026_09_21_133456_change_default_shipping_country_code_on_orders_table.php",
@@ -19365,15 +19354,15 @@
       "norm_label": "inventorymovementfactory.php"
     },
     {
-      "label": "static",
+      "label": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "file_type": "code",
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "database_factories_inventorymovementfactory_php_static",
+      "id": "illuminate_database_eloquent_relations_belongsto",
       "community": 68,
       "community_name": "InventoryMovement",
-      "norm_label": "static"
+      "norm_label": "illuminate\\database\\eloquent\\relations\\belongsto"
     },
     {
       "label": "InventoryManagementTest.php",
@@ -19757,7 +19746,7 @@
       "_origin": "ast",
       "id": "app_models_campaign",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "campaign.php"
     },
     {
@@ -19768,7 +19757,7 @@
       "_origin": "ast",
       "id": "app_models_orderitem",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "orderitem.php"
     },
     {
@@ -19779,8 +19768,19 @@
       "_origin": "ast",
       "id": "app_models_product",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "product.php"
+    },
+    {
+      "label": "ProductCategory.php",
+      "file_type": "code",
+      "source_file": "app/Models/ProductCategory.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_models_productcategory",
+      "community": 8,
+      "community_name": "ProductCategory",
+      "norm_label": "productcategory.php"
     },
     {
       "label": "ProductVariant.php",
@@ -19790,7 +19790,7 @@
       "_origin": "ast",
       "id": "app_models_productvariant",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "productvariant.php"
     },
     {
@@ -19801,7 +19801,7 @@
       "_origin": "ast",
       "id": "app_models_productvariantimage",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "productvariantimage.php"
     },
     {
@@ -19812,7 +19812,7 @@
       "_origin": "ast",
       "id": "app_models_storefrontbanner",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "storefrontbanner.php"
     },
     {
@@ -19823,8 +19823,19 @@
       "_origin": "ast",
       "id": "database_factories_orderitemfactory",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "orderitemfactory.php"
+    },
+    {
+      "label": "ProductCategoryFactory.php",
+      "file_type": "code",
+      "source_file": "database/factories/ProductCategoryFactory.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "database_factories_productcategoryfactory",
+      "community": 8,
+      "community_name": "ProductCategory",
+      "norm_label": "productcategoryfactory.php"
     },
     {
       "label": "ProductCatalogSeeder.php",
@@ -19834,7 +19845,7 @@
       "_origin": "ast",
       "id": "database_seeders_productcatalogseeder",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "productcatalogseeder.php"
     },
     {
@@ -19845,7 +19856,7 @@
       "_origin": "ast",
       "id": "database_seeders_storefrontbannerseeder",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "storefrontbannerseeder.php"
     },
     {
@@ -19856,7 +19867,7 @@
       "_origin": "ast",
       "id": "illuminate_database_eloquent_collection",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "illuminate\\database\\eloquent\\collection"
     },
     {
@@ -19867,7 +19878,7 @@
       "_origin": "ast",
       "id": "illuminate_database_eloquent_factories_hasfactory",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "illuminate\\database\\eloquent\\factories\\hasfactory"
     },
     {
@@ -19878,19 +19889,8 @@
       "_origin": "ast",
       "id": "illuminate_database_eloquent_model",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "illuminate\\database\\eloquent\\model"
-    },
-    {
-      "label": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "illuminate_database_eloquent_relations_belongsto",
-      "community": 8,
-      "community_name": "ProductVariant.php",
-      "norm_label": "illuminate\\database\\eloquent\\relations\\belongsto"
     },
     {
       "label": "CampaignManagementTest.php",
@@ -19900,7 +19900,7 @@
       "_origin": "ast",
       "id": "tests_feature_campaignmanagementtest",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "campaignmanagementtest.php"
     },
     {
@@ -19911,7 +19911,7 @@
       "_origin": "ast",
       "id": "tests_feature_ecommercedatabasetest",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "ecommercedatabasetest.php"
     },
     {
@@ -19922,7 +19922,7 @@
       "_origin": "ast",
       "id": "tests_feature_storefronthometest",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "storefronthometest.php"
     },
     {
@@ -19933,7 +19933,7 @@
       "_origin": "ast",
       "id": "tests_feature_storefrontproductshowtest",
       "community": 8,
-      "community_name": "ProductVariant.php",
+      "community_name": "ProductCategory",
       "norm_label": "storefrontproductshowtest.php"
     },
     {
@@ -21177,7 +21177,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/Providers/AppServiceProvider.php",
-      "source_location": "L30",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_providers_appserviceprovider_appserviceprovider_boot",
@@ -23446,7 +23446,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/inventory/index.tsx",
-      "source_location": "L179",
+      "source_location": "L180",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_inventory_index_admininventoryindex",
@@ -23457,7 +23457,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/inventory/index.tsx",
-      "source_location": "L184",
+      "source_location": "L185",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_inventory_index_admininventoryindex",
@@ -23470,7 +23470,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/inventory/index.tsx",
-      "source_location": "L330",
+      "source_location": "L348",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_inventory_index_admininventoryindex",
@@ -23481,7 +23481,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/inventory/index.tsx",
-      "source_location": "L503",
+      "source_location": "L521",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_inventory_index_admininventoryindex",
@@ -23493,7 +23493,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/inventory/index.tsx",
-      "source_location": "L507",
+      "source_location": "L525",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_inventory_index_admininventoryindex",
@@ -23505,7 +23505,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/inventory/index.tsx",
-      "source_location": "L614",
+      "source_location": "L635",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_inventory_index_admininventoryindex",
@@ -23566,7 +23566,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L104",
+      "source_location": "L138",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show_adminordershow",
@@ -23578,7 +23578,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L112",
+      "source_location": "L147",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show_adminordershow",
@@ -23590,7 +23590,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L192",
+      "source_location": "L243",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show_adminordershow",
@@ -23602,7 +23602,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L70",
+      "source_location": "L96",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show_adminordershow",
@@ -23614,7 +23614,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L1392",
+      "source_location": "L1417",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23626,7 +23626,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L1395",
+      "source_location": "L1420",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23638,7 +23638,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L228",
+      "source_location": "L229",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23649,7 +23649,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L236",
+      "source_location": "L237",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23661,7 +23661,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L243",
+      "source_location": "L244",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23673,7 +23673,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L291",
+      "source_location": "L294",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23685,7 +23685,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L303",
+      "source_location": "L306",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23697,7 +23697,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L331",
+      "source_location": "L334",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23709,7 +23709,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L491",
+      "source_location": "L508",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -24033,7 +24033,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L911",
+      "source_location": "L944",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_feature_adminpaneltest_productpayload",
@@ -24045,7 +24045,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L859",
+      "source_location": "L892",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_feature_adminpaneltest_variantspayload",
@@ -34401,7 +34401,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L4",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34413,7 +34413,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L5",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34425,7 +34425,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L6",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34437,7 +34437,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L7",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34449,7 +34449,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L7",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34461,7 +34461,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L7",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34473,7 +34473,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L7",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34485,7 +34485,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L8",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34497,7 +34497,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L9",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34509,7 +34509,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L9",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -34521,7 +34521,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L9",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -39585,7 +39585,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L4",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -39597,7 +39597,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L5",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -39609,7 +39609,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L6",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -39621,7 +39621,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L7",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -39633,7 +39633,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L8",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -39645,7 +39645,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L9",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -52974,7 +52974,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L14",
+      "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -52985,7 +52985,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L31",
+      "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -52996,7 +52996,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L56",
+      "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -53007,18 +53007,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L60",
+      "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
-      "target": "resources_js_pages_admin_orders_show_detail",
+      "target": "resources_js_pages_admin_orders_show_panelheading",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/orders/show.tsx",
-      "source_location": "L69",
+      "source_location": "L95",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_orders_show",
@@ -54239,7 +54239,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L857",
+      "source_location": "L890",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_feature_adminpaneltest",
@@ -54250,7 +54250,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L876",
+      "source_location": "L909",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_feature_adminpaneltest",
@@ -54261,7 +54261,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L886",
+      "source_location": "L919",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_feature_adminpaneltest",
@@ -54272,7 +54272,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L899",
+      "source_location": "L932",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_feature_adminpaneltest",
@@ -57528,7 +57528,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Providers/AppServiceProvider.php",
-      "source_location": "L28",
+      "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_providers_appserviceprovider_appserviceprovider",
@@ -57539,7 +57539,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Providers/AppServiceProvider.php",
-      "source_location": "L38",
+      "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_providers_appserviceprovider_appserviceprovider",
@@ -58563,7 +58563,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/Actions/Inventory/RecordInventoryMovement.php",
-      "source_location": "L37",
+      "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_actions_inventory_recordinventorymovement_recordinventorymovement_execute",
@@ -59002,5 +59002,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "b981590e85870546cad68a5504d926cf7b295ac4"
+  "built_at_commit": "6bffae83667588a83129e39fc0b013c47428ef62"
 }
