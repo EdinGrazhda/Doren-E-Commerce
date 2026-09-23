@@ -4,6 +4,19 @@
   "graph": {},
   "nodes": [
     {
+      "label": "StoreOptimizedImage",
+      "file_type": "code",
+      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
+      "source_location": "L11",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "app_actions_images_storeoptimizedimage_storeoptimizedimage",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": "storeoptimizedimage"
+    },
+    {
       "label": "StorefrontBannerController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/StorefrontBannerController.php",
@@ -277,17 +290,30 @@
       "norm_label": "sidebarcontext"
     },
     {
-      "label": "StoreOptimizedImage",
+      "label": "GetInitialsFn",
       "file_type": "code",
-      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
-      "source_location": "L11",
+      "source_file": "resources/js/hooks/use-initials.tsx",
+      "source_location": "L3",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "app_actions_images_storeoptimizedimage_storeoptimizedimage",
+      "id": "resources_js_hooks_use_initials_getinitialsfn",
       "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "storeoptimizedimage"
+      "community_name": "user-info.tsx",
+      "norm_label": "getinitialsfn"
+    },
+    {
+      "label": "StoreCartItemRequest",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/StoreCartItemRequest.php",
+      "source_location": "L10",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "app_http_requests_storecartitemrequest_storecartitemrequest",
+      "community": 107,
+      "community_name": "StoreCartItemRequest",
+      "norm_label": "storecartitemrequest"
     },
     {
       "label": "Appearance",
@@ -442,7 +468,7 @@
       "_origin": "ast",
       "id": "app_http_requests_settings_passwordupdaterequest_passwordupdaterequest",
       "community": 115,
-      "community_name": "PasswordValidationRules.php",
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
       "norm_label": "passwordupdaterequest"
     },
     {
@@ -455,8 +481,21 @@
       "_origin": "ast",
       "id": "app_http_requests_settings_profiledeleterequest_profiledeleterequest",
       "community": 115,
-      "community_name": "PasswordValidationRules.php",
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
       "norm_label": "profiledeleterequest"
+    },
+    {
+      "label": "SafeActionUrl",
+      "file_type": "code",
+      "source_file": "app/Rules/SafeActionUrl.php",
+      "source_location": "L10",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "app_rules_safeactionurl_safeactionurl",
+      "community": 115,
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
+      "norm_label": "safeactionurl"
     },
     {
       "label": "Props",
@@ -641,19 +680,6 @@
       "norm_label": "profileupdaterequest"
     },
     {
-      "label": "GetInitialsFn",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-initials.tsx",
-      "source_location": "L3",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_initials_getinitialsfn",
-      "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "getinitialsfn"
-    },
-    {
       "label": "StoreProductRequest",
       "file_type": "code",
       "source_file": "app/Http/Requests/Admin/StoreProductRequest.php",
@@ -821,19 +847,6 @@
       "community": 156,
       "community_name": "Illuminate\\Http\\JsonResponse",
       "norm_label": "order"
-    },
-    {
-      "label": "SafeActionUrl",
-      "file_type": "code",
-      "source_file": "app/Rules/SafeActionUrl.php",
-      "source_location": "L10",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "app_rules_safeactionurl_safeactionurl",
-      "community": 161,
-      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
-      "norm_label": "safeactionurl"
     },
     {
       "label": "CreateCheckoutOrder",
@@ -2123,19 +2136,6 @@
       "norm_label": "updaterolerequest"
     },
     {
-      "label": "StoreCartItemRequest",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCartItemRequest.php",
-      "source_location": "L10",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "app_http_requests_storecartitemrequest_storecartitemrequest",
-      "community": 64,
-      "community_name": "Illuminate\\Foundation\\Http\\FormRequest",
-      "norm_label": "storecartitemrequest"
-    },
-    {
       "label": "AppServiceProvider",
       "file_type": "code",
       "source_file": "app/Providers/AppServiceProvider.php",
@@ -2799,6 +2799,42 @@
       "norm_label": "salesmovement"
     },
     {
+      "label": ".handle()",
+      "file_type": "code",
+      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
+      "source_location": "L17",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_actions_images_storeoptimizedimage_storeoptimizedimage_handle",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": ".handle()"
+    },
+    {
+      "label": ".resize()",
+      "file_type": "code",
+      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
+      "source_location": "L54",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_actions_images_storeoptimizedimage_storeoptimizedimage_resize",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": ".resize()"
+    },
+    {
+      "label": ".__construct()",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Api/Admin/ProductController.php",
+      "source_location": "L24",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_controllers_api_admin_productcontroller_productcontroller_construct",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": ".__construct()"
+    },
+    {
       "label": ".bannerAttributes()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/StorefrontBannerController.php",
@@ -2809,6 +2845,18 @@
       "community": 1,
       "community_name": "StorefrontBanner",
       "norm_label": ".bannerattributes()"
+    },
+    {
+      "label": ".__construct()",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Api/Admin/StorefrontBannerController.php",
+      "source_location": "L14",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_controllers_api_admin_storefrontbannercontroller_storefrontbannercontroller_construct",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": ".__construct()"
     },
     {
       "label": ".destroy()",
@@ -3747,52 +3795,112 @@
       "norm_label": "useismobile()"
     },
     {
-      "label": ".handle()",
+      "label": "Avatar()",
       "file_type": "code",
-      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
+      "source_file": "resources/js/components/ui/avatar.tsx",
+      "source_location": "L6",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_ui_avatar_avatar",
+      "community": 104,
+      "community_name": "user-info.tsx",
+      "norm_label": "avatar()"
+    },
+    {
+      "label": "AvatarFallback()",
+      "file_type": "code",
+      "source_file": "resources/js/components/ui/avatar.tsx",
+      "source_location": "L35",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_ui_avatar_avatarfallback",
+      "community": 104,
+      "community_name": "user-info.tsx",
+      "norm_label": "avatarfallback()"
+    },
+    {
+      "label": "AvatarImage()",
+      "file_type": "code",
+      "source_file": "resources/js/components/ui/avatar.tsx",
+      "source_location": "L22",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_ui_avatar_avatarimage",
+      "community": 104,
+      "community_name": "user-info.tsx",
+      "norm_label": "avatarimage()"
+    },
+    {
+      "label": "UserInfo()",
+      "file_type": "code",
+      "source_file": "resources/js/components/user-info.tsx",
+      "source_location": "L5",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_user_info_userinfo",
+      "community": 104,
+      "community_name": "user-info.tsx",
+      "norm_label": "userinfo()"
+    },
+    {
+      "label": "getInitial()",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-initials.tsx",
+      "source_location": "L5",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_initials_getinitial",
+      "community": 104,
+      "community_name": "user-info.tsx",
+      "norm_label": "getinitial()"
+    },
+    {
+      "label": "useInitials()",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-initials.tsx",
+      "source_location": "L9",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_initials_useinitials",
+      "community": 104,
+      "community_name": "user-info.tsx",
+      "norm_label": "useinitials()"
+    },
+    {
+      "label": ".after()",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/StoreCartItemRequest.php",
+      "source_location": "L28",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_requests_storecartitemrequest_storecartitemrequest_after",
+      "community": 107,
+      "community_name": "StoreCartItemRequest",
+      "norm_label": ".after()"
+    },
+    {
+      "label": ".authorize()",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/StoreCartItemRequest.php",
+      "source_location": "L12",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_requests_storecartitemrequest_storecartitemrequest_authorize",
+      "community": 107,
+      "community_name": "StoreCartItemRequest",
+      "norm_label": ".authorize()"
+    },
+    {
+      "label": ".rules()",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/StoreCartItemRequest.php",
       "source_location": "L17",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_actions_images_storeoptimizedimage_storeoptimizedimage_handle",
-      "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": ".handle()"
-    },
-    {
-      "label": ".resize()",
-      "file_type": "code",
-      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
-      "source_location": "L54",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_actions_images_storeoptimizedimage_storeoptimizedimage_resize",
-      "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": ".resize()"
-    },
-    {
-      "label": ".__construct()",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/Api/Admin/ProductController.php",
-      "source_location": "L24",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_controllers_api_admin_productcontroller_productcontroller_construct",
-      "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": ".__construct()"
-    },
-    {
-      "label": ".__construct()",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/Api/Admin/StorefrontBannerController.php",
-      "source_location": "L14",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_controllers_api_admin_storefrontbannercontroller_storefrontbannercontroller_construct",
-      "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": ".__construct()"
+      "id": "app_http_requests_storecartitemrequest_storecartitemrequest_rules",
+      "community": 107,
+      "community_name": "StoreCartItemRequest",
+      "norm_label": ".rules()"
     },
     {
       "label": "withApp()",
@@ -4235,7 +4343,7 @@
       "_origin": "ast",
       "id": "app_concerns_passwordvalidationrules_currentpasswordrules",
       "community": 115,
-      "community_name": "PasswordValidationRules.php",
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
       "norm_label": "currentpasswordrules()"
     },
     {
@@ -4247,7 +4355,7 @@
       "_origin": "ast",
       "id": "app_concerns_passwordvalidationrules_passwordrules",
       "community": 115,
-      "community_name": "PasswordValidationRules.php",
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
       "norm_label": "passwordrules()"
     },
     {
@@ -4259,7 +4367,7 @@
       "_origin": "ast",
       "id": "app_http_requests_settings_passwordupdaterequest_passwordupdaterequest_rules",
       "community": 115,
-      "community_name": "PasswordValidationRules.php",
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
       "norm_label": ".rules()"
     },
     {
@@ -4271,8 +4379,68 @@
       "_origin": "ast",
       "id": "app_http_requests_settings_profiledeleterequest_profiledeleterequest_rules",
       "community": 115,
-      "community_name": "PasswordValidationRules.php",
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
       "norm_label": ".rules()"
+    },
+    {
+      "label": ".containsUnsafeCharacters()",
+      "file_type": "code",
+      "source_file": "app/Rules/SafeActionUrl.php",
+      "source_location": "L40",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_rules_safeactionurl_safeactionurl_containsunsafecharacters",
+      "community": 115,
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
+      "norm_label": ".containsunsafecharacters()"
+    },
+    {
+      "label": ".isSafeFragment()",
+      "file_type": "code",
+      "source_file": "app/Rules/SafeActionUrl.php",
+      "source_location": "L45",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_rules_safeactionurl_safeactionurl_issafefragment",
+      "community": 115,
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
+      "norm_label": ".issafefragment()"
+    },
+    {
+      "label": ".isSafeHttpUrl()",
+      "file_type": "code",
+      "source_file": "app/Rules/SafeActionUrl.php",
+      "source_location": "L59",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_rules_safeactionurl_safeactionurl_issafehttpurl",
+      "community": 115,
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
+      "norm_label": ".issafehttpurl()"
+    },
+    {
+      "label": ".isSafeRelativeUrl()",
+      "file_type": "code",
+      "source_file": "app/Rules/SafeActionUrl.php",
+      "source_location": "L50",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_rules_safeactionurl_safeactionurl_issaferelativeurl",
+      "community": 115,
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
+      "norm_label": ".issaferelativeurl()"
+    },
+    {
+      "label": ".validate()",
+      "file_type": "code",
+      "source_file": "app/Rules/SafeActionUrl.php",
+      "source_location": "L17",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_rules_safeactionurl_safeactionurl_validate",
+      "community": 115,
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
+      "norm_label": ".validate()"
     },
     {
       "label": "AppContent()",
@@ -4887,78 +5055,6 @@
       "norm_label": "up()"
     },
     {
-      "label": "Avatar()",
-      "file_type": "code",
-      "source_file": "resources/js/components/ui/avatar.tsx",
-      "source_location": "L6",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_components_ui_avatar_avatar",
-      "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "avatar()"
-    },
-    {
-      "label": "AvatarFallback()",
-      "file_type": "code",
-      "source_file": "resources/js/components/ui/avatar.tsx",
-      "source_location": "L35",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_components_ui_avatar_avatarfallback",
-      "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "avatarfallback()"
-    },
-    {
-      "label": "AvatarImage()",
-      "file_type": "code",
-      "source_file": "resources/js/components/ui/avatar.tsx",
-      "source_location": "L22",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_components_ui_avatar_avatarimage",
-      "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "avatarimage()"
-    },
-    {
-      "label": "UserInfo()",
-      "file_type": "code",
-      "source_file": "resources/js/components/user-info.tsx",
-      "source_location": "L5",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_components_user_info_userinfo",
-      "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "userinfo()"
-    },
-    {
-      "label": "getInitial()",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-initials.tsx",
-      "source_location": "L5",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_initials_getinitial",
-      "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "getinitial()"
-    },
-    {
-      "label": "useInitials()",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-initials.tsx",
-      "source_location": "L9",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_initials_useinitials",
-      "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "useinitials()"
-    },
-    {
       "label": ".after()",
       "file_type": "code",
       "source_file": "app/Http/Requests/Admin/StoreProductRequest.php",
@@ -5437,66 +5533,6 @@
       "community": 157,
       "community_name": "2026_08_26_201215_create_inventory_movements_table.php",
       "norm_label": "up()"
-    },
-    {
-      "label": ".containsUnsafeCharacters()",
-      "file_type": "code",
-      "source_file": "app/Rules/SafeActionUrl.php",
-      "source_location": "L40",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_rules_safeactionurl_safeactionurl_containsunsafecharacters",
-      "community": 161,
-      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
-      "norm_label": ".containsunsafecharacters()"
-    },
-    {
-      "label": ".isSafeFragment()",
-      "file_type": "code",
-      "source_file": "app/Rules/SafeActionUrl.php",
-      "source_location": "L45",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_rules_safeactionurl_safeactionurl_issafefragment",
-      "community": 161,
-      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
-      "norm_label": ".issafefragment()"
-    },
-    {
-      "label": ".isSafeHttpUrl()",
-      "file_type": "code",
-      "source_file": "app/Rules/SafeActionUrl.php",
-      "source_location": "L59",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_rules_safeactionurl_safeactionurl_issafehttpurl",
-      "community": 161,
-      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
-      "norm_label": ".issafehttpurl()"
-    },
-    {
-      "label": ".isSafeRelativeUrl()",
-      "file_type": "code",
-      "source_file": "app/Rules/SafeActionUrl.php",
-      "source_location": "L50",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_rules_safeactionurl_safeactionurl_issaferelativeurl",
-      "community": 161,
-      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
-      "norm_label": ".issaferelativeurl()"
-    },
-    {
-      "label": ".validate()",
-      "file_type": "code",
-      "source_file": "app/Rules/SafeActionUrl.php",
-      "source_location": "L17",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_rules_safeactionurl_safeactionurl_validate",
-      "community": 161,
-      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
-      "norm_label": ".validate()"
     },
     {
       "label": "down()",
@@ -7851,42 +7887,6 @@
       "norm_label": ".rules()"
     },
     {
-      "label": ".after()",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCartItemRequest.php",
-      "source_location": "L28",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_requests_storecartitemrequest_storecartitemrequest_after",
-      "community": 64,
-      "community_name": "Illuminate\\Foundation\\Http\\FormRequest",
-      "norm_label": ".after()"
-    },
-    {
-      "label": ".authorize()",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCartItemRequest.php",
-      "source_location": "L12",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_requests_storecartitemrequest_storecartitemrequest_authorize",
-      "community": 64,
-      "community_name": "Illuminate\\Foundation\\Http\\FormRequest",
-      "norm_label": ".authorize()"
-    },
-    {
-      "label": ".rules()",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCartItemRequest.php",
-      "source_location": "L17",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_http_requests_storecartitemrequest_storecartitemrequest_rules",
-      "community": 64,
-      "community_name": "Illuminate\\Foundation\\Http\\FormRequest",
-      "norm_label": ".rules()"
-    },
-    {
       "label": ".boot()",
       "file_type": "code",
       "source_file": "app/Providers/AppServiceProvider.php",
@@ -9608,6 +9608,17 @@
       "norm_label": "use markdown mailables for transactional emails"
     },
     {
+      "label": "StoreOptimizedImage.php",
+      "file_type": "code",
+      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_actions_images_storeoptimizedimage",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": "storeoptimizedimage.php"
+    },
+    {
       "label": "Api/Admin/StorefrontBannerController.php",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/StorefrontBannerController.php",
@@ -9639,6 +9650,17 @@
       "community": 1,
       "community_name": "StorefrontBanner",
       "norm_label": "updatestorefrontbannerrequest.php"
+    },
+    {
+      "label": "GdImage",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "gdimage",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": "gdimage"
     },
     {
       "label": "Api/Admin/ProductController.php",
@@ -9872,70 +9894,37 @@
       "norm_label": "use-mobile.tsx"
     },
     {
-      "label": "StoreOptimizedImage.php",
+      "label": "avatar.tsx",
       "file_type": "code",
-      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
+      "source_file": "resources/js/components/ui/avatar.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_actions_images_storeoptimizedimage",
+      "id": "resources_js_components_ui_avatar",
       "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "storeoptimizedimage.php"
+      "community_name": "user-info.tsx",
+      "norm_label": "avatar.tsx"
     },
     {
-      "label": "StoreProductRequest.php",
+      "label": "user-info.tsx",
       "file_type": "code",
-      "source_file": "app/Http/Requests/Admin/StoreProductRequest.php",
+      "source_file": "resources/js/components/user-info.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_http_requests_admin_storeproductrequest",
+      "id": "resources_js_components_user_info",
       "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "storeproductrequest.php"
+      "community_name": "user-info.tsx",
+      "norm_label": "user-info.tsx"
     },
     {
-      "label": "UpdateProductRequest.php",
+      "label": "use-initials.tsx",
       "file_type": "code",
-      "source_file": "app/Http/Requests/Admin/UpdateProductRequest.php",
+      "source_file": "resources/js/hooks/use-initials.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_http_requests_admin_updateproductrequest",
+      "id": "resources_js_hooks_use_initials",
       "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "updateproductrequest.php"
-    },
-    {
-      "label": "SafeImageUrl.php",
-      "file_type": "code",
-      "source_file": "app/Rules/SafeImageUrl.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_rules_safeimageurl",
-      "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "safeimageurl.php"
-    },
-    {
-      "label": "GdImage",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "gdimage",
-      "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "gdimage"
-    },
-    {
-      "label": "Illuminate\\Http\\UploadedFile",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "illuminate_http_uploadedfile",
-      "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "illuminate\\http\\uploadedfile"
+      "community_name": "user-info.tsx",
+      "norm_label": "use-initials.tsx"
     },
     {
       "label": "@radix-ui/react-avatar",
@@ -9982,26 +9971,15 @@
       "norm_label": "eslint-plugin-import"
     },
     {
-      "label": "@inertiajs/react",
+      "label": "StoreCartItemRequest.php",
       "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L32",
+      "source_file": "app/Http/Requests/StoreCartItemRequest.php",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "package_dependencies_inertiajs_react",
+      "id": "app_http_requests_storecartitemrequest",
       "community": 107,
-      "community_name": "@inertiajs/react",
-      "norm_label": "@inertiajs/react"
-    },
-    {
-      "label": "@inertiajs/react",
-      "file_type": "concept",
-      "source_file": "package.json",
-      "source_location": "L32",
-      "_origin": "ast",
-      "id": "inertiajs_react",
-      "community": 107,
-      "community_name": "@inertiajs/react",
-      "norm_label": "@inertiajs/react"
+      "community_name": "StoreCartItemRequest",
+      "norm_label": "storecartitemrequest.php"
     },
     {
       "label": "@radix-ui/react-dialog",
@@ -10253,7 +10231,7 @@
       "_origin": "ast",
       "id": "app_concerns_passwordvalidationrules",
       "community": 115,
-      "community_name": "PasswordValidationRules.php",
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
       "norm_label": "passwordvalidationrules.php"
     },
     {
@@ -10264,7 +10242,7 @@
       "_origin": "ast",
       "id": "app_http_requests_settings_passwordupdaterequest",
       "community": 115,
-      "community_name": "PasswordValidationRules.php",
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
       "norm_label": "passwordupdaterequest.php"
     },
     {
@@ -10275,8 +10253,30 @@
       "_origin": "ast",
       "id": "app_http_requests_settings_profiledeleterequest",
       "community": 115,
-      "community_name": "PasswordValidationRules.php",
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
       "norm_label": "profiledeleterequest.php"
+    },
+    {
+      "label": "SafeActionUrl.php",
+      "file_type": "code",
+      "source_file": "app/Rules/SafeActionUrl.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_rules_safeactionurl",
+      "community": 115,
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
+      "norm_label": "safeactionurl.php"
+    },
+    {
+      "label": "Illuminate\\Contracts\\Validation\\ValidationRule",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "illuminate_contracts_validation_validationrule",
+      "community": 115,
+      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
+      "norm_label": "illuminate\\contracts\\validation\\validationrule"
     },
     {
       "label": "@radix-ui/react-tooltip",
@@ -11489,37 +11489,26 @@
       "norm_label": "eslint"
     },
     {
-      "label": "avatar.tsx",
+      "label": "globals",
       "file_type": "code",
-      "source_file": "resources/js/components/ui/avatar.tsx",
-      "source_location": "L1",
+      "source_file": "package.json",
+      "source_location": "L55",
       "_origin": "ast",
-      "id": "resources_js_components_ui_avatar",
+      "id": "package_dependencies_globals",
       "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "avatar.tsx"
+      "community_name": "globals",
+      "norm_label": "globals"
     },
     {
-      "label": "user-info.tsx",
-      "file_type": "code",
-      "source_file": "resources/js/components/user-info.tsx",
-      "source_location": "L1",
+      "label": "globals",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L55",
       "_origin": "ast",
-      "id": "resources_js_components_user_info",
+      "id": "globals",
       "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "user-info.tsx"
-    },
-    {
-      "label": "use-initials.tsx",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-initials.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_initials",
-      "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "use-initials.tsx"
+      "community_name": "globals",
+      "norm_label": "globals"
     },
     {
       "label": "vite-env.d.ts",
@@ -12457,28 +12446,6 @@
       "norm_label": "useful checks"
     },
     {
-      "label": "SafeActionUrl.php",
-      "file_type": "code",
-      "source_file": "app/Rules/SafeActionUrl.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_rules_safeactionurl",
-      "community": 161,
-      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
-      "norm_label": "safeactionurl.php"
-    },
-    {
-      "label": "Illuminate\\Contracts\\Validation\\ValidationRule",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "illuminate_contracts_validation_validationrule",
-      "community": 161,
-      "community_name": "Illuminate\\Contracts\\Validation\\ValidationRule",
-      "norm_label": "illuminate\\contracts\\validation\\validationrule"
-    },
-    {
       "label": "2026_08_19_162948_add_image_url_to_product_variants_table.php",
       "file_type": "code",
       "source_file": "database/migrations/2026_08_19_162948_add_image_url_to_product_variants_table.php",
@@ -12578,26 +12545,26 @@
       "norm_label": "breadcrumb.tsx"
     },
     {
-      "label": "globals",
+      "label": "@radix-ui/react-toggle",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L55",
+      "source_location": "L45",
       "_origin": "ast",
-      "id": "package_dependencies_globals",
+      "id": "package_dependencies_radix_ui_react_toggle",
       "community": 166,
-      "community_name": "globals",
-      "norm_label": "globals"
+      "community_name": "@radix-ui/react-toggle",
+      "norm_label": "@radix-ui/react-toggle"
     },
     {
-      "label": "globals",
+      "label": "@radix-ui/react-toggle",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L55",
+      "source_location": "L45",
       "_origin": "ast",
-      "id": "globals",
+      "id": "radix_ui_react_toggle",
       "community": 166,
-      "community_name": "globals",
-      "norm_label": "globals"
+      "community_name": "@radix-ui/react-toggle",
+      "norm_label": "@radix-ui/react-toggle"
     },
     {
       "label": "@radix-ui/react-label",
@@ -13005,6 +12972,50 @@
       "community": 176,
       "community_name": "@types/node",
       "norm_label": "@types/node"
+    },
+    {
+      "label": "StoreProductRequest.php",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/Admin/StoreProductRequest.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_http_requests_admin_storeproductrequest",
+      "community": 177,
+      "community_name": "SafeImageUrl",
+      "norm_label": "storeproductrequest.php"
+    },
+    {
+      "label": "UpdateProductRequest.php",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/Admin/UpdateProductRequest.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_http_requests_admin_updateproductrequest",
+      "community": 177,
+      "community_name": "SafeImageUrl",
+      "norm_label": "updateproductrequest.php"
+    },
+    {
+      "label": "SafeImageUrl.php",
+      "file_type": "code",
+      "source_file": "app/Rules/SafeImageUrl.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_rules_safeimageurl",
+      "community": 177,
+      "community_name": "SafeImageUrl",
+      "norm_label": "safeimageurl.php"
+    },
+    {
+      "label": "Illuminate\\Http\\UploadedFile",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "illuminate_http_uploadedfile",
+      "community": 177,
+      "community_name": "SafeImageUrl",
+      "norm_label": "illuminate\\http\\uploadedfile"
     },
     {
       "label": "images.md",
@@ -17297,6 +17308,17 @@
       "norm_label": "class-variance-authority"
     },
     {
+      "label": "@inertiajs/react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "package_dependencies_inertiajs_react",
+      "community": 49,
+      "community_name": "dependencies",
+      "norm_label": "@inertiajs/react"
+    },
+    {
       "label": "@inertiajs/vite",
       "file_type": "code",
       "source_file": "package.json",
@@ -17319,17 +17341,6 @@
       "norm_label": "laravel-vite-plugin"
     },
     {
-      "label": "@radix-ui/react-toggle",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "package_dependencies_radix_ui_react_toggle",
-      "community": 49,
-      "community_name": "dependencies",
-      "norm_label": "@radix-ui/react-toggle"
-    },
-    {
       "label": "class-variance-authority",
       "file_type": "concept",
       "source_file": "package.json",
@@ -17339,6 +17350,17 @@
       "community": 49,
       "community_name": "dependencies",
       "norm_label": "class-variance-authority"
+    },
+    {
+      "label": "@inertiajs/react",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "inertiajs_react",
+      "community": 49,
+      "community_name": "dependencies",
+      "norm_label": "@inertiajs/react"
     },
     {
       "label": "@inertiajs/vite",
@@ -17361,17 +17383,6 @@
       "community": 49,
       "community_name": "dependencies",
       "norm_label": "laravel-vite-plugin"
-    },
-    {
-      "label": "@radix-ui/react-toggle",
-      "file_type": "concept",
-      "source_file": "package.json",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "radix_ui_react_toggle",
-      "community": 49,
-      "community_name": "dependencies",
-      "norm_label": "@radix-ui/react-toggle"
     },
     {
       "label": "inertia-react-development/SKILL.md",
@@ -18956,17 +18967,6 @@
       "community": 64,
       "community_name": "Illuminate\\Foundation\\Http\\FormRequest",
       "norm_label": "updaterolerequest.php"
-    },
-    {
-      "label": "StoreCartItemRequest.php",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/StoreCartItemRequest.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_http_requests_storecartitemrequest",
-      "community": 64,
-      "community_name": "Illuminate\\Foundation\\Http\\FormRequest",
-      "norm_label": "storecartitemrequest.php"
     },
     {
       "label": "Illuminate\\Foundation\\Http\\FormRequest",
@@ -23481,7 +23481,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/inventory/index.tsx",
-      "source_location": "L185",
+      "source_location": "L184",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_inventory_index_admininventoryindex",
@@ -23494,7 +23494,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/inventory/index.tsx",
-      "source_location": "L348",
+      "source_location": "L354",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_inventory_index_admininventoryindex",
@@ -23505,7 +23505,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/inventory/index.tsx",
-      "source_location": "L521",
+      "source_location": "L527",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_inventory_index_admininventoryindex",
@@ -23517,7 +23517,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/inventory/index.tsx",
-      "source_location": "L525",
+      "source_location": "L531",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_inventory_index_admininventoryindex",
@@ -23529,7 +23529,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/inventory/index.tsx",
-      "source_location": "L635",
+      "source_location": "L641",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_inventory_index_admininventoryindex",
@@ -23638,7 +23638,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L1443",
+      "source_location": "L1445",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23650,7 +23650,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L1446",
+      "source_location": "L1448",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23733,7 +23733,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L534",
+      "source_location": "L536",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -59038,5 +59038,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "01b36dbe89825db1b7c3225749017c5fd4e1ffb3"
+  "built_at_commit": "a7c745921bab50657bbc7625063e615551928ab5"
 }

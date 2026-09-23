@@ -4,6 +4,19 @@
   "graph": {},
   "nodes": [
     {
+      "label": "StoreOptimizedImage",
+      "file_type": "code",
+      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
+      "source_location": "L11",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "app_actions_images_storeoptimizedimage_storeoptimizedimage",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": "storeoptimizedimage"
+    },
+    {
       "label": "StorefrontBannerController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/StorefrontBannerController.php",
@@ -80,6 +93,19 @@
       "community": 10,
       "community_name": "Product",
       "norm_label": "product"
+    },
+    {
+      "label": "ProductVariant",
+      "file_type": "code",
+      "source_file": "app/Models/ProductVariant.php",
+      "source_location": "L31",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "app_models_productvariant_productvariant",
+      "community": 10,
+      "community_name": "Product",
+      "norm_label": "productvariant"
     },
     {
       "label": "CategoryOption",
@@ -234,7 +260,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_dashboardcontroller_dashboardcontroller",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": "dashboardcontroller"
     },
     {
@@ -247,7 +273,7 @@
       "_origin": "ast",
       "id": "app_models_orderitem_orderitem",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": "orderitem"
     },
     {
@@ -275,19 +301,6 @@
       "community": 103,
       "community_name": "sidebar.tsx",
       "norm_label": "sidebarcontext"
-    },
-    {
-      "label": "StoreOptimizedImage",
-      "file_type": "code",
-      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
-      "source_location": "L11",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "app_actions_images_storeoptimizedimage_storeoptimizedimage",
-      "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "storeoptimizedimage"
     },
     {
       "label": "Appearance",
@@ -641,17 +654,17 @@
       "norm_label": "profileupdaterequest"
     },
     {
-      "label": "GetInitialsFn",
+      "label": "AuthLayoutProps",
       "file_type": "code",
-      "source_file": "resources/js/hooks/use-initials.tsx",
-      "source_location": "L3",
+      "source_file": "resources/js/types/ui.ts",
+      "source_location": "L16",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "resources_js_hooks_use_initials_getinitialsfn",
+      "id": "resources_js_types_ui_authlayoutprops",
       "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "getinitialsfn"
+      "community_name": "app-logo-icon.tsx",
+      "norm_label": "authlayoutprops"
     },
     {
       "label": "StoreProductRequest",
@@ -1226,19 +1239,6 @@
       "norm_label": "inventorymovementfactory"
     },
     {
-      "label": "OrderFactory",
-      "file_type": "code",
-      "source_file": "database/factories/OrderFactory.php",
-      "source_location": "L14",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "id": "database_factories_orderfactory_orderfactory",
-      "community": 181,
-      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
-      "norm_label": "orderfactory"
-    },
-    {
       "label": "OrderItemFactory",
       "file_type": "code",
       "source_file": "database/factories/OrderItemFactory.php",
@@ -1330,17 +1330,17 @@
       "norm_label": "userfactory"
     },
     {
-      "label": "ProductVariant",
+      "label": "OrderFactory",
       "file_type": "code",
-      "source_file": "app/Models/ProductVariant.php",
-      "source_location": "L31",
+      "source_file": "database/factories/OrderFactory.php",
+      "source_location": "L14",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "app_models_productvariant_productvariant",
+      "id": "database_factories_orderfactory_orderfactory",
       "community": 19,
-      "community_name": "ProductVariant",
-      "norm_label": "productvariant"
+      "community_name": "AdminPanelTest.php",
+      "norm_label": "orderfactory"
     },
     {
       "label": "TwoFactorAuthenticationRequest",
@@ -1460,17 +1460,17 @@
       "norm_label": "props"
     },
     {
-      "label": "AuthLayoutProps",
+      "label": "GetInitialsFn",
       "file_type": "code",
-      "source_file": "resources/js/types/ui.ts",
-      "source_location": "L16",
+      "source_file": "resources/js/hooks/use-initials.tsx",
+      "source_location": "L3",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "id": "resources_js_types_ui_authlayoutprops",
+      "id": "resources_js_hooks_use_initials_getinitialsfn",
       "community": 24,
       "community_name": "app-header.tsx",
-      "norm_label": "authlayoutprops"
+      "norm_label": "getinitialsfn"
     },
     {
       "label": "AccessControlController",
@@ -2799,6 +2799,42 @@
       "norm_label": "salesmovement"
     },
     {
+      "label": ".handle()",
+      "file_type": "code",
+      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
+      "source_location": "L17",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_actions_images_storeoptimizedimage_storeoptimizedimage_handle",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": ".handle()"
+    },
+    {
+      "label": ".resize()",
+      "file_type": "code",
+      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
+      "source_location": "L54",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_actions_images_storeoptimizedimage_storeoptimizedimage_resize",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": ".resize()"
+    },
+    {
+      "label": ".__construct()",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Api/Admin/ProductController.php",
+      "source_location": "L24",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_controllers_api_admin_productcontroller_productcontroller_construct",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": ".__construct()"
+    },
+    {
       "label": ".bannerAttributes()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/StorefrontBannerController.php",
@@ -2809,6 +2845,18 @@
       "community": 1,
       "community_name": "StorefrontBanner",
       "norm_label": ".bannerattributes()"
+    },
+    {
+      "label": ".__construct()",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Api/Admin/StorefrontBannerController.php",
+      "source_location": "L14",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_http_controllers_api_admin_storefrontbannercontroller_storefrontbannercontroller_construct",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": ".__construct()"
     },
     {
       "label": ".destroy()",
@@ -3051,40 +3099,16 @@
       "norm_label": ".variantsku()"
     },
     {
-      "label": ".products()",
+      "label": ".items()",
       "file_type": "code",
-      "source_file": "app/Models/Campaign.php",
-      "source_location": "L29",
+      "source_file": "app/Models/Order.php",
+      "source_location": "L79",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_models_campaign_campaign_products",
+      "id": "app_models_order_order_items",
       "community": 10,
       "community_name": "Product",
-      "norm_label": ".products()"
-    },
-    {
-      "label": ".activeCampaigns()",
-      "file_type": "code",
-      "source_file": "app/Models/Product.php",
-      "source_location": "L94",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_models_product_product_activecampaigns",
-      "community": 10,
-      "community_name": "Product",
-      "norm_label": ".activecampaigns()"
-    },
-    {
-      "label": ".campaigns()",
-      "file_type": "code",
-      "source_file": "app/Models/Product.php",
-      "source_location": "L88",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_models_product_product_campaigns",
-      "community": 10,
-      "community_name": "Product",
-      "norm_label": ".campaigns()"
+      "norm_label": ".items()"
     },
     {
       "label": ".casts()",
@@ -3097,6 +3121,102 @@
       "community": 10,
       "community_name": "Product",
       "norm_label": ".casts()"
+    },
+    {
+      "label": ".orderItems()",
+      "file_type": "code",
+      "source_file": "app/Models/Product.php",
+      "source_location": "L82",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_models_product_product_orderitems",
+      "community": 10,
+      "community_name": "Product",
+      "norm_label": ".orderitems()"
+    },
+    {
+      "label": ".variants()",
+      "file_type": "code",
+      "source_file": "app/Models/Product.php",
+      "source_location": "L74",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_models_product_product_variants",
+      "community": 10,
+      "community_name": "Product",
+      "norm_label": ".variants()"
+    },
+    {
+      "label": ".products()",
+      "file_type": "code",
+      "source_file": "app/Models/ProductCategory.php",
+      "source_location": "L36",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_models_productcategory_productcategory_products",
+      "community": 10,
+      "community_name": "Product",
+      "norm_label": ".products()"
+    },
+    {
+      "label": ".casts()",
+      "file_type": "code",
+      "source_file": "app/Models/ProductVariant.php",
+      "source_location": "L89",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_models_productvariant_productvariant_casts",
+      "community": 10,
+      "community_name": "Product",
+      "norm_label": ".casts()"
+    },
+    {
+      "label": ".images()",
+      "file_type": "code",
+      "source_file": "app/Models/ProductVariant.php",
+      "source_location": "L81",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_models_productvariant_productvariant_images",
+      "community": 10,
+      "community_name": "Product",
+      "norm_label": ".images()"
+    },
+    {
+      "label": ".inventoryMovements()",
+      "file_type": "code",
+      "source_file": "app/Models/ProductVariant.php",
+      "source_location": "L73",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_models_productvariant_productvariant_inventorymovements",
+      "community": 10,
+      "community_name": "Product",
+      "norm_label": ".inventorymovements()"
+    },
+    {
+      "label": ".orderItems()",
+      "file_type": "code",
+      "source_file": "app/Models/ProductVariant.php",
+      "source_location": "L67",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_models_productvariant_productvariant_orderitems",
+      "community": 10,
+      "community_name": "Product",
+      "norm_label": ".orderitems()"
+    },
+    {
+      "label": ".product()",
+      "file_type": "code",
+      "source_file": "app/Models/ProductVariant.php",
+      "source_location": "L59",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "app_models_productvariant_productvariant_product",
+      "community": 10,
+      "community_name": "Product",
+      "norm_label": ".product()"
     },
     {
       "label": ".calculate()",
@@ -3215,7 +3335,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_dashboardcontroller_dashboardcontroller_countersales",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": ".countersales()"
     },
     {
@@ -3227,7 +3347,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_dashboardcontroller_dashboardcontroller_dailysales",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": ".dailysales()"
     },
     {
@@ -3239,7 +3359,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_dashboardcontroller_dashboardcontroller_invoke",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": ".__invoke()"
     },
     {
@@ -3251,7 +3371,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_dashboardcontroller_dashboardcontroller_perioddate",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": ".perioddate()"
     },
     {
@@ -3263,7 +3383,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_dashboardcontroller_dashboardcontroller_periodend",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": ".periodend()"
     },
     {
@@ -3275,7 +3395,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_dashboardcontroller_dashboardcontroller_periodlabel",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": ".periodlabel()"
     },
     {
@@ -3287,7 +3407,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_dashboardcontroller_dashboardcontroller_salesorders",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": ".salesorders()"
     },
     {
@@ -3299,7 +3419,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_dashboardcontroller_dashboardcontroller_salesseries",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": ".salesseries()"
     },
     {
@@ -3311,7 +3431,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_dashboardcontroller_dashboardcontroller_statusbreakdown",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": ".statusbreakdown()"
     },
     {
@@ -3323,7 +3443,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_admin_dashboardcontroller_dashboardcontroller_topproducts",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": ".topproducts()"
     },
     {
@@ -3335,20 +3455,8 @@
       "_origin": "ast",
       "id": "app_models_orderitem_orderitem_casts",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": ".casts()"
-    },
-    {
-      "label": "AdminSidebar()",
-      "file_type": "code",
-      "source_file": "resources/js/components/admin-sidebar.tsx",
-      "source_location": "L137",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_components_admin_sidebar_adminsidebar",
-      "community": 103,
-      "community_name": "sidebar.tsx",
-      "norm_label": "adminsidebar()"
     },
     {
       "label": "AppLogo()",
@@ -3373,18 +3481,6 @@
       "community": 103,
       "community_name": "sidebar.tsx",
       "norm_label": "appsidebar()"
-    },
-    {
-      "label": "NavMain()",
-      "file_type": "code",
-      "source_file": "resources/js/components/nav-main.tsx",
-      "source_location": "L12",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_components_nav_main_navmain",
-      "community": 103,
-      "community_name": "sidebar.tsx",
-      "norm_label": "navmain()"
     },
     {
       "label": "NavUser()",
@@ -3615,18 +3711,6 @@
       "norm_label": "sidebarmenusubitem()"
     },
     {
-      "label": "SidebarProvider()",
-      "file_type": "code",
-      "source_file": "resources/js/components/ui/sidebar.tsx",
-      "source_location": "L54",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_components_ui_sidebar_sidebarprovider",
-      "community": 103,
-      "community_name": "sidebar.tsx",
-      "norm_label": "sidebarprovider()"
-    },
-    {
       "label": "SidebarRail()",
       "file_type": "code",
       "source_file": "resources/js/components/ui/sidebar.tsx",
@@ -3675,124 +3759,52 @@
       "norm_label": "usesidebar()"
     },
     {
-      "label": "Skeleton()",
+      "label": ".products()",
       "file_type": "code",
-      "source_file": "resources/js/components/ui/skeleton.tsx",
-      "source_location": "L3",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_components_ui_skeleton_skeleton",
-      "community": 103,
-      "community_name": "sidebar.tsx",
-      "norm_label": "skeleton()"
-    },
-    {
-      "label": "useCurrentUrl()",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-current-url.ts",
+      "source_file": "app/Models/Campaign.php",
       "source_location": "L29",
       "_callable": true,
       "_origin": "ast",
-      "id": "resources_js_hooks_use_current_url_usecurrenturl",
-      "community": 103,
-      "community_name": "sidebar.tsx",
-      "norm_label": "usecurrenturl()"
-    },
-    {
-      "label": "getServerSnapshot()",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-mobile.tsx",
-      "source_location": "L26",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_mobile_getserversnapshot",
-      "community": 103,
-      "community_name": "sidebar.tsx",
-      "norm_label": "getserversnapshot()"
-    },
-    {
-      "label": "isSmallerThanBreakpoint()",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-mobile.tsx",
-      "source_location": "L22",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_mobile_issmallerthanbreakpoint",
-      "community": 103,
-      "community_name": "sidebar.tsx",
-      "norm_label": "issmallerthanbreakpoint()"
-    },
-    {
-      "label": "mediaQueryListener()",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-mobile.tsx",
-      "source_location": "L10",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_mobile_mediaquerylistener",
-      "community": 103,
-      "community_name": "sidebar.tsx",
-      "norm_label": "mediaquerylistener()"
-    },
-    {
-      "label": "useIsMobile()",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-mobile.tsx",
-      "source_location": "L30",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_mobile_useismobile",
-      "community": 103,
-      "community_name": "sidebar.tsx",
-      "norm_label": "useismobile()"
-    },
-    {
-      "label": ".handle()",
-      "file_type": "code",
-      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
-      "source_location": "L17",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_actions_images_storeoptimizedimage_storeoptimizedimage_handle",
+      "id": "app_models_campaign_campaign_products",
       "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": ".handle()"
+      "community_name": "Campaign.php",
+      "norm_label": ".products()"
     },
     {
-      "label": ".resize()",
+      "label": ".activeCampaigns()",
       "file_type": "code",
-      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
-      "source_location": "L54",
+      "source_file": "app/Models/Product.php",
+      "source_location": "L94",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_actions_images_storeoptimizedimage_storeoptimizedimage_resize",
+      "id": "app_models_product_product_activecampaigns",
       "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": ".resize()"
+      "community_name": "Campaign.php",
+      "norm_label": ".activecampaigns()"
     },
     {
-      "label": ".__construct()",
+      "label": ".campaigns()",
       "file_type": "code",
-      "source_file": "app/Http/Controllers/Api/Admin/ProductController.php",
-      "source_location": "L24",
+      "source_file": "app/Models/Product.php",
+      "source_location": "L88",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_http_controllers_api_admin_productcontroller_productcontroller_construct",
+      "id": "app_models_product_product_campaigns",
       "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": ".__construct()"
+      "community_name": "Campaign.php",
+      "norm_label": ".campaigns()"
     },
     {
-      "label": ".__construct()",
+      "label": "campaignCheckoutData()",
       "file_type": "code",
-      "source_file": "app/Http/Controllers/Api/Admin/StorefrontBannerController.php",
-      "source_location": "L14",
+      "source_file": "tests/Feature/CampaignManagementTest.php",
+      "source_location": "L136",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_http_controllers_api_admin_storefrontbannercontroller_storefrontbannercontroller_construct",
+      "id": "tests_feature_campaignmanagementtest_campaigncheckoutdata",
       "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": ".__construct()"
+      "community_name": "Campaign.php",
+      "norm_label": "campaigncheckoutdata()"
     },
     {
       "label": "withApp()",
@@ -4311,18 +4323,6 @@
       "norm_label": "appsidebarheader()"
     },
     {
-      "label": "Breadcrumbs()",
-      "file_type": "code",
-      "source_file": "resources/js/components/breadcrumbs.tsx",
-      "source_location": "L13",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_components_breadcrumbs_breadcrumbs",
-      "community": 117,
-      "community_name": "index.ts",
-      "norm_label": "breadcrumbs()"
-    },
-    {
       "label": "SidebarInset()",
       "file_type": "code",
       "source_file": "resources/js/components/ui/sidebar.tsx",
@@ -4585,6 +4585,18 @@
       "community": 122,
       "community_name": "cn",
       "norm_label": "selectseparator()"
+    },
+    {
+      "label": "Skeleton()",
+      "file_type": "code",
+      "source_file": "resources/js/components/ui/skeleton.tsx",
+      "source_location": "L3",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_ui_skeleton_skeleton",
+      "community": 122,
+      "community_name": "cn",
+      "norm_label": "skeleton()"
     },
     {
       "label": "ToggleGroup()",
@@ -4887,76 +4899,28 @@
       "norm_label": "up()"
     },
     {
-      "label": "Avatar()",
+      "label": "AppLogoIcon()",
       "file_type": "code",
-      "source_file": "resources/js/components/ui/avatar.tsx",
+      "source_file": "resources/js/components/app-logo-icon.tsx",
+      "source_location": "L5",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_app_logo_icon_applogoicon",
+      "community": 142,
+      "community_name": "app-logo-icon.tsx",
+      "norm_label": "applogoicon()"
+    },
+    {
+      "label": "AuthSplitLayout()",
+      "file_type": "code",
+      "source_file": "resources/js/layouts/auth/auth-split-layout.tsx",
       "source_location": "L6",
       "_callable": true,
       "_origin": "ast",
-      "id": "resources_js_components_ui_avatar_avatar",
+      "id": "resources_js_layouts_auth_auth_split_layout_authsplitlayout",
       "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "avatar()"
-    },
-    {
-      "label": "AvatarFallback()",
-      "file_type": "code",
-      "source_file": "resources/js/components/ui/avatar.tsx",
-      "source_location": "L35",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_components_ui_avatar_avatarfallback",
-      "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "avatarfallback()"
-    },
-    {
-      "label": "AvatarImage()",
-      "file_type": "code",
-      "source_file": "resources/js/components/ui/avatar.tsx",
-      "source_location": "L22",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_components_ui_avatar_avatarimage",
-      "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "avatarimage()"
-    },
-    {
-      "label": "UserInfo()",
-      "file_type": "code",
-      "source_file": "resources/js/components/user-info.tsx",
-      "source_location": "L5",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_components_user_info_userinfo",
-      "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "userinfo()"
-    },
-    {
-      "label": "getInitial()",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-initials.tsx",
-      "source_location": "L5",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_initials_getinitial",
-      "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "getinitial()"
-    },
-    {
-      "label": "useInitials()",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-initials.tsx",
-      "source_location": "L9",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_initials_useinitials",
-      "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "useinitials()"
+      "community_name": "app-logo-icon.tsx",
+      "norm_label": "authsplitlayout()"
     },
     {
       "label": ".after()",
@@ -5679,6 +5643,18 @@
       "norm_label": ".execute()"
     },
     {
+      "label": "Breadcrumbs()",
+      "file_type": "code",
+      "source_file": "resources/js/components/breadcrumbs.tsx",
+      "source_location": "L13",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_breadcrumbs_breadcrumbs",
+      "community": 165,
+      "community_name": "breadcrumbs.tsx",
+      "norm_label": "breadcrumbs()"
+    },
+    {
       "label": "Breadcrumb()",
       "file_type": "code",
       "source_file": "resources/js/components/ui/breadcrumb.tsx",
@@ -6257,18 +6233,6 @@
     {
       "label": ".definition()",
       "file_type": "code",
-      "source_file": "database/factories/OrderFactory.php",
-      "source_location": "L21",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "database_factories_orderfactory_orderfactory_definition",
-      "community": 181,
-      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\Factory",
-      "norm_label": ".definition()"
-    },
-    {
-      "label": ".definition()",
-      "file_type": "code",
       "source_file": "database/factories/OrderItemFactory.php",
       "source_location": "L21",
       "_callable": true,
@@ -6483,112 +6447,64 @@
       "norm_label": "up()"
     },
     {
-      "label": ".items()",
+      "label": ".definition()",
       "file_type": "code",
-      "source_file": "app/Models/Order.php",
-      "source_location": "L79",
+      "source_file": "database/factories/OrderFactory.php",
+      "source_location": "L21",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_models_order_order_items",
+      "id": "database_factories_orderfactory_orderfactory_definition",
       "community": 19,
-      "community_name": "ProductVariant",
-      "norm_label": ".items()"
+      "community_name": "AdminPanelTest.php",
+      "norm_label": ".definition()"
     },
     {
-      "label": ".orderItems()",
+      "label": "colorImageUrls()",
       "file_type": "code",
-      "source_file": "app/Models/Product.php",
-      "source_location": "L82",
+      "source_file": "tests/Feature/AdminPanelTest.php",
+      "source_location": "L958",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_models_product_product_orderitems",
+      "id": "tests_feature_adminpaneltest_colorimageurls",
       "community": 19,
-      "community_name": "ProductVariant",
-      "norm_label": ".orderitems()"
+      "community_name": "AdminPanelTest.php",
+      "norm_label": "colorimageurls()"
     },
     {
-      "label": ".variants()",
+      "label": "colorUploadSet()",
       "file_type": "code",
-      "source_file": "app/Models/Product.php",
-      "source_location": "L74",
+      "source_file": "tests/Feature/AdminPanelTest.php",
+      "source_location": "L948",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_models_product_product_variants",
+      "id": "tests_feature_adminpaneltest_coloruploadset",
       "community": 19,
-      "community_name": "ProductVariant",
-      "norm_label": ".variants()"
+      "community_name": "AdminPanelTest.php",
+      "norm_label": "coloruploadset()"
     },
     {
-      "label": ".products()",
+      "label": "productPayload()",
       "file_type": "code",
-      "source_file": "app/Models/ProductCategory.php",
-      "source_location": "L36",
+      "source_file": "tests/Feature/AdminPanelTest.php",
+      "source_location": "L971",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_models_productcategory_productcategory_products",
+      "id": "tests_feature_adminpaneltest_productpayload",
       "community": 19,
-      "community_name": "ProductVariant",
-      "norm_label": ".products()"
+      "community_name": "AdminPanelTest.php",
+      "norm_label": "productpayload()"
     },
     {
-      "label": ".casts()",
+      "label": "variantsPayload()",
       "file_type": "code",
-      "source_file": "app/Models/ProductVariant.php",
-      "source_location": "L89",
+      "source_file": "tests/Feature/AdminPanelTest.php",
+      "source_location": "L929",
       "_callable": true,
       "_origin": "ast",
-      "id": "app_models_productvariant_productvariant_casts",
+      "id": "tests_feature_adminpaneltest_variantspayload",
       "community": 19,
-      "community_name": "ProductVariant",
-      "norm_label": ".casts()"
-    },
-    {
-      "label": ".images()",
-      "file_type": "code",
-      "source_file": "app/Models/ProductVariant.php",
-      "source_location": "L81",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_models_productvariant_productvariant_images",
-      "community": 19,
-      "community_name": "ProductVariant",
-      "norm_label": ".images()"
-    },
-    {
-      "label": ".inventoryMovements()",
-      "file_type": "code",
-      "source_file": "app/Models/ProductVariant.php",
-      "source_location": "L73",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_models_productvariant_productvariant_inventorymovements",
-      "community": 19,
-      "community_name": "ProductVariant",
-      "norm_label": ".inventorymovements()"
-    },
-    {
-      "label": ".orderItems()",
-      "file_type": "code",
-      "source_file": "app/Models/ProductVariant.php",
-      "source_location": "L67",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_models_productvariant_productvariant_orderitems",
-      "community": 19,
-      "community_name": "ProductVariant",
-      "norm_label": ".orderitems()"
-    },
-    {
-      "label": ".product()",
-      "file_type": "code",
-      "source_file": "app/Models/ProductVariant.php",
-      "source_location": "L59",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "app_models_productvariant_productvariant_product",
-      "community": 19,
-      "community_name": "ProductVariant",
-      "norm_label": ".product()"
+      "community_name": "AdminPanelTest.php",
+      "norm_label": "variantspayload()"
     },
     {
       "label": "down()",
@@ -6675,6 +6591,18 @@
       "norm_label": "up()"
     },
     {
+      "label": "AdminSidebar()",
+      "file_type": "code",
+      "source_file": "resources/js/components/admin-sidebar.tsx",
+      "source_location": "L137",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_admin_sidebar_adminsidebar",
+      "community": 2,
+      "community_name": "utils.ts",
+      "norm_label": "adminsidebar()"
+    },
+    {
       "label": "NavFooter()",
       "file_type": "code",
       "source_file": "resources/js/components/nav-footer.tsx",
@@ -6687,6 +6615,18 @@
       "norm_label": "navfooter()"
     },
     {
+      "label": "NavMain()",
+      "file_type": "code",
+      "source_file": "resources/js/components/nav-main.tsx",
+      "source_location": "L12",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_nav_main_navmain",
+      "community": 2,
+      "community_name": "utils.ts",
+      "norm_label": "navmain()"
+    },
+    {
       "label": "Separator()",
       "file_type": "code",
       "source_file": "resources/js/components/ui/separator.tsx",
@@ -6697,6 +6637,18 @@
       "community": 2,
       "community_name": "utils.ts",
       "norm_label": "separator()"
+    },
+    {
+      "label": "useCurrentUrl()",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-current-url.ts",
+      "source_location": "L29",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_current_url_usecurrenturl",
+      "community": 2,
+      "community_name": "utils.ts",
+      "norm_label": "usecurrenturl()"
     },
     {
       "label": "SettingsLayout()",
@@ -6843,16 +6795,40 @@
       "norm_label": "preparedbannerupload()"
     },
     {
-      "label": "AppLogoIcon()",
+      "label": "Avatar()",
       "file_type": "code",
-      "source_file": "resources/js/components/app-logo-icon.tsx",
-      "source_location": "L5",
+      "source_file": "resources/js/components/ui/avatar.tsx",
+      "source_location": "L6",
       "_callable": true,
       "_origin": "ast",
-      "id": "resources_js_components_app_logo_icon_applogoicon",
+      "id": "resources_js_components_ui_avatar_avatar",
       "community": 24,
       "community_name": "app-header.tsx",
-      "norm_label": "applogoicon()"
+      "norm_label": "avatar()"
+    },
+    {
+      "label": "AvatarFallback()",
+      "file_type": "code",
+      "source_file": "resources/js/components/ui/avatar.tsx",
+      "source_location": "L35",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_ui_avatar_avatarfallback",
+      "community": 24,
+      "community_name": "app-header.tsx",
+      "norm_label": "avatarfallback()"
+    },
+    {
+      "label": "AvatarImage()",
+      "file_type": "code",
+      "source_file": "resources/js/components/ui/avatar.tsx",
+      "source_location": "L22",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_ui_avatar_avatarimage",
+      "community": 24,
+      "community_name": "app-header.tsx",
+      "norm_label": "avatarimage()"
     },
     {
       "label": "Sheet()",
@@ -7011,16 +6987,40 @@
       "norm_label": "tooltiptrigger()"
     },
     {
-      "label": "AuthSplitLayout()",
+      "label": "UserInfo()",
       "file_type": "code",
-      "source_file": "resources/js/layouts/auth/auth-split-layout.tsx",
-      "source_location": "L6",
+      "source_file": "resources/js/components/user-info.tsx",
+      "source_location": "L5",
       "_callable": true,
       "_origin": "ast",
-      "id": "resources_js_layouts_auth_auth_split_layout_authsplitlayout",
+      "id": "resources_js_components_user_info_userinfo",
       "community": 24,
       "community_name": "app-header.tsx",
-      "norm_label": "authsplitlayout()"
+      "norm_label": "userinfo()"
+    },
+    {
+      "label": "getInitial()",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-initials.tsx",
+      "source_location": "L5",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_initials_getinitial",
+      "community": 24,
+      "community_name": "app-header.tsx",
+      "norm_label": "getinitial()"
+    },
+    {
+      "label": "useInitials()",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-initials.tsx",
+      "source_location": "L9",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_initials_useinitials",
+      "community": 24,
+      "community_name": "app-header.tsx",
+      "norm_label": "useinitials()"
     },
     {
       "label": ".__invoke()",
@@ -8691,66 +8691,6 @@
       "norm_label": ".definition()"
     },
     {
-      "label": "colorImageUrls()",
-      "file_type": "code",
-      "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L958",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_feature_adminpaneltest_colorimageurls",
-      "community": 8,
-      "community_name": "ProductCategory",
-      "norm_label": "colorimageurls()"
-    },
-    {
-      "label": "colorUploadSet()",
-      "file_type": "code",
-      "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L948",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_feature_adminpaneltest_coloruploadset",
-      "community": 8,
-      "community_name": "ProductCategory",
-      "norm_label": "coloruploadset()"
-    },
-    {
-      "label": "productPayload()",
-      "file_type": "code",
-      "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L971",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_feature_adminpaneltest_productpayload",
-      "community": 8,
-      "community_name": "ProductCategory",
-      "norm_label": "productpayload()"
-    },
-    {
-      "label": "variantsPayload()",
-      "file_type": "code",
-      "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L929",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_feature_adminpaneltest_variantspayload",
-      "community": 8,
-      "community_name": "ProductCategory",
-      "norm_label": "variantspayload()"
-    },
-    {
-      "label": "campaignCheckoutData()",
-      "file_type": "code",
-      "source_file": "tests/Feature/CampaignManagementTest.php",
-      "source_location": "L136",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "tests_feature_campaignmanagementtest_campaigncheckoutdata",
-      "community": 8,
-      "community_name": "ProductCategory",
-      "norm_label": "campaigncheckoutdata()"
-    },
-    {
       "label": "down()",
       "file_type": "code",
       "source_file": "database/migrations/0001_01_01_000000_create_users_table.php",
@@ -9171,6 +9111,18 @@
       "norm_label": "dropdownmenutrigger()"
     },
     {
+      "label": "SidebarProvider()",
+      "file_type": "code",
+      "source_file": "resources/js/components/ui/sidebar.tsx",
+      "source_location": "L54",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_ui_sidebar_sidebarprovider",
+      "community": 9,
+      "community_name": "dropdown-menu.tsx",
+      "norm_label": "sidebarprovider()"
+    },
+    {
       "label": "UserMenuContent()",
       "file_type": "code",
       "source_file": "resources/js/components/user-menu-content.tsx",
@@ -9183,6 +9135,42 @@
       "norm_label": "usermenucontent()"
     },
     {
+      "label": "getServerSnapshot()",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-mobile.tsx",
+      "source_location": "L26",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_mobile_getserversnapshot",
+      "community": 9,
+      "community_name": "dropdown-menu.tsx",
+      "norm_label": "getserversnapshot()"
+    },
+    {
+      "label": "isSmallerThanBreakpoint()",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-mobile.tsx",
+      "source_location": "L22",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_mobile_issmallerthanbreakpoint",
+      "community": 9,
+      "community_name": "dropdown-menu.tsx",
+      "norm_label": "issmallerthanbreakpoint()"
+    },
+    {
+      "label": "mediaQueryListener()",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-mobile.tsx",
+      "source_location": "L10",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_mobile_mediaquerylistener",
+      "community": 9,
+      "community_name": "dropdown-menu.tsx",
+      "norm_label": "mediaquerylistener()"
+    },
+    {
       "label": "useMobileNavigation()",
       "file_type": "code",
       "source_file": "resources/js/hooks/use-mobile-navigation.ts",
@@ -9193,6 +9181,18 @@
       "community": 9,
       "community_name": "dropdown-menu.tsx",
       "norm_label": "usemobilenavigation()"
+    },
+    {
+      "label": "useIsMobile()",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-mobile.tsx",
+      "source_location": "L30",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_mobile_useismobile",
+      "community": 9,
+      "community_name": "dropdown-menu.tsx",
+      "norm_label": "useismobile()"
     },
     {
       "label": "down()",
@@ -9608,6 +9608,17 @@
       "norm_label": "use markdown mailables for transactional emails"
     },
     {
+      "label": "StoreOptimizedImage.php",
+      "file_type": "code",
+      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_actions_images_storeoptimizedimage",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": "storeoptimizedimage.php"
+    },
+    {
       "label": "Api/Admin/StorefrontBannerController.php",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/StorefrontBannerController.php",
@@ -9641,6 +9652,17 @@
       "norm_label": "updatestorefrontbannerrequest.php"
     },
     {
+      "label": "GdImage",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "gdimage",
+      "community": 1,
+      "community_name": "StorefrontBanner",
+      "norm_label": "gdimage"
+    },
+    {
       "label": "Api/Admin/ProductController.php",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/ProductController.php",
@@ -9652,26 +9674,15 @@
       "norm_label": "api/admin/productcontroller.php"
     },
     {
-      "label": "ProductCampaignPrice.php",
-      "file_type": "code",
-      "source_file": "app/Services/ProductCampaignPrice.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_services_productcampaignprice",
-      "community": 10,
-      "community_name": "Product",
-      "norm_label": "productcampaignprice.php"
-    },
-    {
-      "label": "Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany",
+      "label": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
       "file_type": "code",
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "illuminate_database_eloquent_relations_belongstomany",
+      "id": "illuminate_database_eloquent_relations_hasmany",
       "community": 10,
       "community_name": "Product",
-      "norm_label": "illuminate\\database\\eloquent\\relations\\belongstomany"
+      "norm_label": "illuminate\\database\\eloquent\\relations\\hasmany"
     },
     {
       "label": "checkbox.tsx",
@@ -9696,6 +9707,28 @@
       "norm_label": "products/index.tsx"
     },
     {
+      "label": "Api/Admin/DashboardController.php",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Api/Admin/DashboardController.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_http_controllers_api_admin_dashboardcontroller",
+      "community": 101,
+      "community_name": "Api/Admin/DashboardController.php",
+      "norm_label": "api/admin/dashboardcontroller.php"
+    },
+    {
+      "label": "OrderItem.php",
+      "file_type": "code",
+      "source_file": "app/Models/OrderItem.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_models_orderitem",
+      "community": 101,
+      "community_name": "Api/Admin/DashboardController.php",
+      "norm_label": "orderitem.php"
+    },
+    {
       "label": "Carbon\\CarbonInterface",
       "file_type": "code",
       "source_file": "",
@@ -9703,7 +9736,7 @@
       "_origin": "ast",
       "id": "carbon_carboninterface",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": "carbon\\carboninterface"
     },
     {
@@ -9714,7 +9747,7 @@
       "_origin": "ast",
       "id": "illuminate_database_eloquent_builder",
       "community": 101,
-      "community_name": "DashboardController",
+      "community_name": "Api/Admin/DashboardController.php",
       "norm_label": "illuminate\\database\\eloquent\\builder"
     },
     {
@@ -9850,92 +9883,48 @@
       "norm_label": "sidebarmenubuttonvariants"
     },
     {
-      "label": "skeleton.tsx",
+      "label": "Campaign.php",
       "file_type": "code",
-      "source_file": "resources/js/components/ui/skeleton.tsx",
+      "source_file": "app/Models/Campaign.php",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "resources_js_components_ui_skeleton",
-      "community": 103,
-      "community_name": "sidebar.tsx",
-      "norm_label": "skeleton.tsx"
-    },
-    {
-      "label": "use-mobile.tsx",
-      "file_type": "code",
-      "source_file": "resources/js/hooks/use-mobile.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "resources_js_hooks_use_mobile",
-      "community": 103,
-      "community_name": "sidebar.tsx",
-      "norm_label": "use-mobile.tsx"
-    },
-    {
-      "label": "StoreOptimizedImage.php",
-      "file_type": "code",
-      "source_file": "app/Actions/Images/StoreOptimizedImage.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_actions_images_storeoptimizedimage",
+      "id": "app_models_campaign",
       "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "storeoptimizedimage.php"
+      "community_name": "Campaign.php",
+      "norm_label": "campaign.php"
     },
     {
-      "label": "StoreProductRequest.php",
+      "label": "ProductCampaignPrice.php",
       "file_type": "code",
-      "source_file": "app/Http/Requests/Admin/StoreProductRequest.php",
+      "source_file": "app/Services/ProductCampaignPrice.php",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_http_requests_admin_storeproductrequest",
+      "id": "app_services_productcampaignprice",
       "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "storeproductrequest.php"
+      "community_name": "Campaign.php",
+      "norm_label": "productcampaignprice.php"
     },
     {
-      "label": "UpdateProductRequest.php",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/Admin/UpdateProductRequest.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_http_requests_admin_updateproductrequest",
-      "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "updateproductrequest.php"
-    },
-    {
-      "label": "SafeImageUrl.php",
-      "file_type": "code",
-      "source_file": "app/Rules/SafeImageUrl.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_rules_safeimageurl",
-      "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "safeimageurl.php"
-    },
-    {
-      "label": "GdImage",
+      "label": "Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany",
       "file_type": "code",
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "gdimage",
+      "id": "illuminate_database_eloquent_relations_belongstomany",
       "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "gdimage"
+      "community_name": "Campaign.php",
+      "norm_label": "illuminate\\database\\eloquent\\relations\\belongstomany"
     },
     {
-      "label": "Illuminate\\Http\\UploadedFile",
+      "label": "CampaignManagementTest.php",
       "file_type": "code",
-      "source_file": "",
-      "source_location": "",
+      "source_file": "tests/Feature/CampaignManagementTest.php",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "illuminate_http_uploadedfile",
+      "id": "tests_feature_campaignmanagementtest",
       "community": 104,
-      "community_name": "StoreOptimizedImage",
-      "norm_label": "illuminate\\http\\uploadedfile"
+      "community_name": "Campaign.php",
+      "norm_label": "campaignmanagementtest.php"
     },
     {
       "label": "@radix-ui/react-avatar",
@@ -10785,6 +10774,17 @@
       "norm_label": "navigationmenutriggerstyle"
     },
     {
+      "label": "skeleton.tsx",
+      "file_type": "code",
+      "source_file": "resources/js/components/ui/skeleton.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "resources_js_components_ui_skeleton",
+      "community": 122,
+      "community_name": "cn",
+      "norm_label": "skeleton.tsx"
+    },
+    {
       "label": "toggle.tsx",
       "file_type": "code",
       "source_file": "resources/js/components/ui/toggle.tsx",
@@ -11489,37 +11489,48 @@
       "norm_label": "eslint"
     },
     {
-      "label": "avatar.tsx",
+      "label": "app-logo.tsx",
       "file_type": "code",
-      "source_file": "resources/js/components/ui/avatar.tsx",
+      "source_file": "resources/js/components/app-logo.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "resources_js_components_ui_avatar",
+      "id": "resources_js_components_app_logo",
       "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "avatar.tsx"
+      "community_name": "app-logo-icon.tsx",
+      "norm_label": "app-logo.tsx"
     },
     {
-      "label": "user-info.tsx",
+      "label": "app-logo-icon.tsx",
       "file_type": "code",
-      "source_file": "resources/js/components/user-info.tsx",
+      "source_file": "resources/js/components/app-logo-icon.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "resources_js_components_user_info",
+      "id": "resources_js_components_app_logo_icon",
       "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "user-info.tsx"
+      "community_name": "app-logo-icon.tsx",
+      "norm_label": "app-logo-icon.tsx"
     },
     {
-      "label": "use-initials.tsx",
+      "label": "auth-simple-layout.tsx",
       "file_type": "code",
-      "source_file": "resources/js/hooks/use-initials.tsx",
+      "source_file": "resources/js/layouts/auth/auth-simple-layout.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "resources_js_hooks_use_initials",
+      "id": "resources_js_layouts_auth_auth_simple_layout",
       "community": 142,
-      "community_name": "user-info.tsx",
-      "norm_label": "use-initials.tsx"
+      "community_name": "app-logo-icon.tsx",
+      "norm_label": "auth-simple-layout.tsx"
+    },
+    {
+      "label": "auth-split-layout.tsx",
+      "file_type": "code",
+      "source_file": "resources/js/layouts/auth/auth-split-layout.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "resources_js_layouts_auth_auth_split_layout",
+      "community": 142,
+      "community_name": "app-logo-icon.tsx",
+      "norm_label": "auth-split-layout.tsx"
     },
     {
       "label": "vite-env.d.ts",
@@ -11984,37 +11995,26 @@
       "norm_label": "keep product variants as the inventory source of truth"
     },
     {
-      "label": "@radix-ui/react-toggle",
+      "label": "clsx",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L45",
+      "source_location": "L53",
       "_origin": "ast",
-      "id": "package_dependencies_radix_ui_react_toggle",
+      "id": "package_dependencies_clsx",
       "community": 155,
-      "community_name": "@radix-ui/react-toggle",
-      "norm_label": "@radix-ui/react-toggle"
+      "community_name": "clsx",
+      "norm_label": "clsx"
     },
     {
-      "label": "@radix-ui/react-toggle",
+      "label": "clsx",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L45",
+      "source_location": "L53",
       "_origin": "ast",
-      "id": "radix_ui_react_toggle",
+      "id": "clsx",
       "community": 155,
-      "community_name": "@radix-ui/react-toggle",
-      "norm_label": "@radix-ui/react-toggle"
-    },
-    {
-      "label": "CreateCheckoutOrder.php",
-      "file_type": "code",
-      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_actions_checkout_createcheckoutorder",
-      "community": 156,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "norm_label": "createcheckoutorder.php"
+      "community_name": "clsx",
+      "norm_label": "clsx"
     },
     {
       "label": "Api/Admin/CustomerController.php",
@@ -12028,17 +12028,6 @@
       "norm_label": "api/admin/customercontroller.php"
     },
     {
-      "label": "Api/Admin/DashboardController.php",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/Api/Admin/DashboardController.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_http_controllers_api_admin_dashboardcontroller",
-      "community": 156,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "norm_label": "api/admin/dashboardcontroller.php"
-    },
-    {
       "label": "Api/Admin/OrderController.php",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/Admin/OrderController.php",
@@ -12048,61 +12037,6 @@
       "community": 156,
       "community_name": "Illuminate\\Http\\JsonResponse",
       "norm_label": "api/admin/ordercontroller.php"
-    },
-    {
-      "label": "UpdateOrderRequest.php",
-      "file_type": "code",
-      "source_file": "app/Http/Requests/Admin/UpdateOrderRequest.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_http_requests_admin_updateorderrequest",
-      "community": 156,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "norm_label": "updateorderrequest.php"
-    },
-    {
-      "label": "Order.php",
-      "file_type": "code",
-      "source_file": "app/Models/Order.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_models_order",
-      "community": 156,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "norm_label": "order.php"
-    },
-    {
-      "label": "OrderStatus.php",
-      "file_type": "code",
-      "source_file": "app/OrderStatus.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_orderstatus",
-      "community": 156,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "norm_label": "orderstatus.php"
-    },
-    {
-      "label": "PaymentStatus.php",
-      "file_type": "code",
-      "source_file": "app/PaymentStatus.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_paymentstatus",
-      "community": 156,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "norm_label": "paymentstatus.php"
-    },
-    {
-      "label": "OrderFactory.php",
-      "file_type": "code",
-      "source_file": "database/factories/OrderFactory.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "database_factories_orderfactory",
-      "community": 156,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "norm_label": "orderfactory.php"
     },
     {
       "label": "Illuminate\\Http\\JsonResponse",
@@ -12578,26 +12512,26 @@
       "norm_label": "breadcrumb.tsx"
     },
     {
-      "label": "globals",
+      "label": "@radix-ui/react-toggle",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L55",
+      "source_location": "L45",
       "_origin": "ast",
-      "id": "package_dependencies_globals",
+      "id": "package_dependencies_radix_ui_react_toggle",
       "community": 166,
-      "community_name": "globals",
-      "norm_label": "globals"
+      "community_name": "@radix-ui/react-toggle",
+      "norm_label": "@radix-ui/react-toggle"
     },
     {
-      "label": "globals",
+      "label": "@radix-ui/react-toggle",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L55",
+      "source_location": "L45",
       "_origin": "ast",
-      "id": "globals",
+      "id": "radix_ui_react_toggle",
       "community": 166,
-      "community_name": "globals",
-      "norm_label": "globals"
+      "community_name": "@radix-ui/react-toggle",
+      "norm_label": "@radix-ui/react-toggle"
     },
     {
       "label": "@radix-ui/react-label",
@@ -13005,6 +12939,50 @@
       "community": 176,
       "community_name": "@types/node",
       "norm_label": "@types/node"
+    },
+    {
+      "label": "StoreProductRequest.php",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/Admin/StoreProductRequest.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_http_requests_admin_storeproductrequest",
+      "community": 177,
+      "community_name": "SafeImageUrl",
+      "norm_label": "storeproductrequest.php"
+    },
+    {
+      "label": "UpdateProductRequest.php",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/Admin/UpdateProductRequest.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_http_requests_admin_updateproductrequest",
+      "community": 177,
+      "community_name": "SafeImageUrl",
+      "norm_label": "updateproductrequest.php"
+    },
+    {
+      "label": "SafeImageUrl.php",
+      "file_type": "code",
+      "source_file": "app/Rules/SafeImageUrl.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_rules_safeimageurl",
+      "community": 177,
+      "community_name": "SafeImageUrl",
+      "norm_label": "safeimageurl.php"
+    },
+    {
+      "label": "Illuminate\\Http\\UploadedFile",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "illuminate_http_uploadedfile",
+      "community": 177,
+      "community_name": "SafeImageUrl",
+      "norm_label": "illuminate\\http\\uploadedfile"
     },
     {
       "label": "images.md",
@@ -13667,15 +13645,81 @@
       "norm_label": "@radix-ui/react-checkbox"
     },
     {
-      "label": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
+      "label": "CreateCheckoutOrder.php",
       "file_type": "code",
-      "source_file": "",
-      "source_location": "",
+      "source_file": "app/Actions/Checkout/CreateCheckoutOrder.php",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "illuminate_database_eloquent_relations_hasmany",
+      "id": "app_actions_checkout_createcheckoutorder",
       "community": 19,
-      "community_name": "ProductVariant",
-      "norm_label": "illuminate\\database\\eloquent\\relations\\hasmany"
+      "community_name": "AdminPanelTest.php",
+      "norm_label": "createcheckoutorder.php"
+    },
+    {
+      "label": "UpdateOrderRequest.php",
+      "file_type": "code",
+      "source_file": "app/Http/Requests/Admin/UpdateOrderRequest.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_http_requests_admin_updateorderrequest",
+      "community": 19,
+      "community_name": "AdminPanelTest.php",
+      "norm_label": "updateorderrequest.php"
+    },
+    {
+      "label": "Order.php",
+      "file_type": "code",
+      "source_file": "app/Models/Order.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_models_order",
+      "community": 19,
+      "community_name": "AdminPanelTest.php",
+      "norm_label": "order.php"
+    },
+    {
+      "label": "OrderStatus.php",
+      "file_type": "code",
+      "source_file": "app/OrderStatus.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_orderstatus",
+      "community": 19,
+      "community_name": "AdminPanelTest.php",
+      "norm_label": "orderstatus.php"
+    },
+    {
+      "label": "PaymentStatus.php",
+      "file_type": "code",
+      "source_file": "app/PaymentStatus.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_paymentstatus",
+      "community": 19,
+      "community_name": "AdminPanelTest.php",
+      "norm_label": "paymentstatus.php"
+    },
+    {
+      "label": "OrderFactory.php",
+      "file_type": "code",
+      "source_file": "database/factories/OrderFactory.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "database_factories_orderfactory",
+      "community": 19,
+      "community_name": "AdminPanelTest.php",
+      "norm_label": "orderfactory.php"
+    },
+    {
+      "label": "AdminPanelTest.php",
+      "file_type": "code",
+      "source_file": "tests/Feature/AdminPanelTest.php",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_feature_adminpaneltest",
+      "community": 19,
+      "community_name": "AdminPanelTest.php",
+      "norm_label": "adminpaneltest.php"
     },
     {
       "label": "index.php",
@@ -14239,26 +14283,15 @@
       "norm_label": "rightnavitems"
     },
     {
-      "label": "app-logo.tsx",
+      "label": "avatar.tsx",
       "file_type": "code",
-      "source_file": "resources/js/components/app-logo.tsx",
+      "source_file": "resources/js/components/ui/avatar.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "resources_js_components_app_logo",
+      "id": "resources_js_components_ui_avatar",
       "community": 24,
       "community_name": "app-header.tsx",
-      "norm_label": "app-logo.tsx"
-    },
-    {
-      "label": "app-logo-icon.tsx",
-      "file_type": "code",
-      "source_file": "resources/js/components/app-logo-icon.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "resources_js_components_app_logo_icon",
-      "community": 24,
-      "community_name": "app-header.tsx",
-      "norm_label": "app-logo-icon.tsx"
+      "norm_label": "avatar.tsx"
     },
     {
       "label": "sheet.tsx",
@@ -14283,26 +14316,26 @@
       "norm_label": "tooltip.tsx"
     },
     {
-      "label": "auth-simple-layout.tsx",
+      "label": "user-info.tsx",
       "file_type": "code",
-      "source_file": "resources/js/layouts/auth/auth-simple-layout.tsx",
+      "source_file": "resources/js/components/user-info.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "resources_js_layouts_auth_auth_simple_layout",
+      "id": "resources_js_components_user_info",
       "community": 24,
       "community_name": "app-header.tsx",
-      "norm_label": "auth-simple-layout.tsx"
+      "norm_label": "user-info.tsx"
     },
     {
-      "label": "auth-split-layout.tsx",
+      "label": "use-initials.tsx",
       "file_type": "code",
-      "source_file": "resources/js/layouts/auth/auth-split-layout.tsx",
+      "source_file": "resources/js/hooks/use-initials.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "resources_js_layouts_auth_auth_split_layout",
+      "id": "resources_js_hooks_use_initials",
       "community": 24,
       "community_name": "app-header.tsx",
-      "norm_label": "auth-split-layout.tsx"
+      "norm_label": "use-initials.tsx"
     },
     {
       "label": "Controllers/Admin/CampaignController.php",
@@ -17297,15 +17330,15 @@
       "norm_label": "class-variance-authority"
     },
     {
-      "label": "clsx",
+      "label": "globals",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L53",
+      "source_location": "L55",
       "_origin": "ast",
-      "id": "package_dependencies_clsx",
+      "id": "package_dependencies_globals",
       "community": 49,
       "community_name": "dependencies",
-      "norm_label": "clsx"
+      "norm_label": "globals"
     },
     {
       "label": "@inertiajs/vite",
@@ -17341,15 +17374,15 @@
       "norm_label": "class-variance-authority"
     },
     {
-      "label": "clsx",
+      "label": "globals",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L53",
+      "source_location": "L55",
       "_origin": "ast",
-      "id": "clsx",
+      "id": "globals",
       "community": 49,
       "community_name": "dependencies",
-      "norm_label": "clsx"
+      "norm_label": "globals"
     },
     {
       "label": "@inertiajs/vite",
@@ -19750,28 +19783,6 @@
       "norm_label": "laravel"
     },
     {
-      "label": "Campaign.php",
-      "file_type": "code",
-      "source_file": "app/Models/Campaign.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_models_campaign",
-      "community": 8,
-      "community_name": "ProductCategory",
-      "norm_label": "campaign.php"
-    },
-    {
-      "label": "OrderItem.php",
-      "file_type": "code",
-      "source_file": "app/Models/OrderItem.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_models_orderitem",
-      "community": 8,
-      "community_name": "ProductCategory",
-      "norm_label": "orderitem.php"
-    },
-    {
       "label": "Product.php",
       "file_type": "code",
       "source_file": "app/Models/Product.php",
@@ -19880,28 +19891,6 @@
       "community": 8,
       "community_name": "ProductCategory",
       "norm_label": "illuminate\\database\\eloquent\\model"
-    },
-    {
-      "label": "AdminPanelTest.php",
-      "file_type": "code",
-      "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "tests_feature_adminpaneltest",
-      "community": 8,
-      "community_name": "ProductCategory",
-      "norm_label": "adminpaneltest.php"
-    },
-    {
-      "label": "CampaignManagementTest.php",
-      "file_type": "code",
-      "source_file": "tests/Feature/CampaignManagementTest.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "tests_feature_campaignmanagementtest",
-      "community": 8,
-      "community_name": "ProductCategory",
-      "norm_label": "campaignmanagementtest.php"
     },
     {
       "label": "EcommerceDatabaseTest.php",
@@ -20078,6 +20067,17 @@
       "community": 9,
       "community_name": "dropdown-menu.tsx",
       "norm_label": "user-menu-content.tsx"
+    },
+    {
+      "label": "use-mobile.tsx",
+      "file_type": "code",
+      "source_file": "resources/js/hooks/use-mobile.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "resources_js_hooks_use_mobile",
+      "community": 9,
+      "community_name": "dropdown-menu.tsx",
+      "norm_label": "use-mobile.tsx"
     },
     {
       "label": "use-mobile-navigation.ts",
@@ -23638,7 +23638,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L1417",
+      "source_location": "L1445",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23650,7 +23650,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L1420",
+      "source_location": "L1448",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23733,7 +23733,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L508",
+      "source_location": "L536",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -59038,5 +59038,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6bffae83667588a83129e39fc0b013c47428ef62"
+  "built_at_commit": "a7c745921bab50657bbc7625063e615551928ab5"
 }

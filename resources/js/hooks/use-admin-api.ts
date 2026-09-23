@@ -16,15 +16,23 @@ export function useAdminApi<T>(url: string) {
     const fetchData = useCallback(async () => {
         try {
             await get(url, {
-                onSuccess: (response) => setData(response.data),
+                onSuccess: (response) => {
+                    setData(response.data);
+                    setError(null);
+                },
                 onHttpException: () => {
                     setError('The admin data could not be loaded.');
                 },
                 onNetworkError: () => {
                     setError('The server could not be reached.');
                 },
+                onCancel: () => undefined,
             });
-        } catch {
+        } catch (error) {
+            if (error instanceof Error && error.name === 'HttpCancelledError') {
+                return;
+            }
+
             setError(
                 (current) => current ?? 'The admin data could not be loaded.',
             );
@@ -32,20 +40,10 @@ export function useAdminApi<T>(url: string) {
     }, [get, url]);
 
     useEffect(() => {
-        void get(url, {
-            onSuccess: (response: ApiEnvelope<T>) => setData(response.data),
-            onHttpException: () => {
-                setError('The admin data could not be loaded.');
-            },
-            onNetworkError: () => {
-                setError('The server could not be reached.');
-            },
-        }).catch(() => {
-            setError('The admin data could not be loaded.');
-        });
+        void fetchData();
 
         return cancel;
-    }, [cancel, get, url]);
+    }, [cancel, fetchData]);
 
     const reload = useCallback(async () => {
         setError(null);

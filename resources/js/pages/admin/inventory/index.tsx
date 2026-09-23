@@ -181,12 +181,18 @@ export default function AdminInventoryIndex() {
     const form = useHttp<MovementFormData>(emptyMovement);
 
     useEffect(() => {
+        const nextUrl = inventoryListingUrl(search, stockFilter);
+
+        if (nextUrl === listingUrl) {
+            return;
+        }
+
         const timeout = window.setTimeout(() => {
-            setListingUrl(inventoryListingUrl(search, stockFilter));
+            setListingUrl(nextUrl);
         }, realtimeSearchDelay);
 
         return () => window.clearTimeout(timeout);
-    }, [search, stockFilter]);
+    }, [listingUrl, search, stockFilter]);
 
     const applyFilters = (nextSearch: string, nextStatus: string) => {
         setListingUrl(inventoryListingUrl(nextSearch, nextStatus));

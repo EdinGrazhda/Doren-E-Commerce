@@ -1,16 +1,16 @@
 # Graph Report - doren  (2026-09-23)
 
 ## Corpus Check
-- 328 files · ~231,477 words
+- 328 files · ~231,473 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1760 nodes · 3343 edges · 196 communities (130 shown, 66 thin omitted)
+- 1760 nodes · 3343 edges · 195 communities (130 shown, 65 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 35 edges (avg confidence: 0.76)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `01b36dbe`
+- Built from commit: `a7c74592`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -101,10 +101,10 @@
 - DashboardController
 - Requests Admin
 - sidebar.tsx
-- StoreOptimizedImage
+- user-info.tsx
 - @radix-ui/react-avatar
 - eslint-plugin-import
-- @inertiajs/react
+- StoreCartItemRequest
 - @radix-ui/react-dialog
 - @radix-ui/react-dropdown-menu
 - lucide-react
@@ -112,7 +112,7 @@
 - RoleController
 - @radix-ui/react-separator
 - @radix-ui/react-slot
-- PasswordValidationRules.php
+- Illuminate\Contracts\Validation\ValidationRule
 - @radix-ui/react-tooltip
 - index.ts
 - react-dom
@@ -128,7 +128,7 @@
 - @vitejs/plugin-react
 - @radix-ui/react-collapsible
 - ProfileValidationRules.php
-- user-info.tsx
+- globals
 - StoreProductRequest
 - UpdateProductRequest
 - thank-you.tsx
@@ -140,11 +140,10 @@
 - @eslint/js
 - Products
 - RTK - Rust Token Killer
-- Illuminate\Contracts\Validation\ValidationRule
 - ProductCampaignPrice
 - eslint-plugin-react
 - breadcrumbs.tsx
-- globals
+- @radix-ui/react-toggle
 - @radix-ui/react-label
 - ResetUserPassword.php
 - react
@@ -194,15 +193,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (196 total, 66 thin omitted)
+## Communities (195 total, 65 thin omitted)
 
 ### Community 0 - "Mail Best Practices"
 Cohesion: 0.29
 Nodes (6): Implement `ShouldQueue` on the Mailable Class, Mail Best Practices, Separate Content Tests from Sending Tests, Use `afterCommit()` on Mailables Inside Transactions, Use `assertQueued()` Not `assertSent()` for Queued Mailables, Use Markdown Mailables for Transactional Emails
 
 ### Community 1 - "StorefrontBanner"
-Cohesion: 0.18
-Nodes (4): StorefrontBannerController, StoreStorefrontBannerRequest, UpdateStorefrontBannerRequest, StorefrontBanner
+Cohesion: 0.13
+Nodes (6): StoreOptimizedImage, StorefrontBannerController, StoreStorefrontBannerRequest, UpdateStorefrontBannerRequest, StorefrontBanner, GdImage
 
 ### Community 2 - "utils.ts"
 Cohesion: 0.23
@@ -358,7 +357,7 @@ Nodes (10): Configuration Best Practices, `env()` Only in Config Files, Use `App
 
 ### Community 49 - "dependencies"
 Cohesion: 0.22
-Nodes (9): class-variance-authority, @inertiajs/vite, laravel-vite-plugin, dependencies, class-variance-authority, @inertiajs/vite, laravel-vite-plugin, @radix-ui/react-toggle (+1 more)
+Nodes (9): class-variance-authority, @inertiajs/react, @inertiajs/vite, laravel-vite-plugin, dependencies, class-variance-authority, @inertiajs/react, @inertiajs/vite (+1 more)
 
 ### Community 50 - "scripts"
 Cohesion: 0.22
@@ -417,8 +416,8 @@ Cohesion: 0.29
 Nodes (7): pestphp/pest-plugin, php-http/discovery, config, allow-plugins, optimize-autoloader, preferred-install, sort-packages
 
 ### Community 64 - "Illuminate\Foundation\Http\FormRequest"
-Cohesion: 0.10
-Nodes (7): StoreInventoryMovementRequest, StorePermissionRequest, StoreRoleRequest, UpdatePermissionRequest, UpdateRoleRequest, StoreCartItemRequest, Illuminate\Foundation\Http\FormRequest
+Cohesion: 0.12
+Nodes (6): StoreInventoryMovementRequest, StorePermissionRequest, StoreRoleRequest, UpdatePermissionRequest, UpdateRoleRequest, Illuminate\Foundation\Http\FormRequest
 
 ### Community 65 - "FortifyServiceProvider.php"
 Cohesion: 0.20
@@ -472,13 +471,17 @@ Nodes (4): DashboardController, OrderItem, Carbon\CarbonInterface, Illuminate\Da
 Cohesion: 0.09
 Nodes (40): AdminNavSection, adminNavSections, AdminSidebar(), AppLogo(), AppSidebar(), footerNavItems, mainNavItems, NavMain() (+32 more)
 
-### Community 104 - "StoreOptimizedImage"
-Cohesion: 0.25
-Nodes (3): StoreOptimizedImage, GdImage, Illuminate\Http\UploadedFile
+### Community 104 - "user-info.tsx"
+Cohesion: 0.33
+Nodes (7): Avatar(), AvatarFallback(), AvatarImage(), UserInfo(), getInitial(), GetInitialsFn, useInitials()
 
 ### Community 111 - "Campaign"
 Cohesion: 0.16
 Nodes (5): SaveCampaign, CampaignController, StoreCampaignRequest, UpdateCampaignRequest, Campaign
+
+### Community 115 - "Illuminate\Contracts\Validation\ValidationRule"
+Cohesion: 0.18
+Nodes (4): PasswordUpdateRequest, ProfileDeleteRequest, SafeActionUrl, Illuminate\Contracts\Validation\ValidationRule
 
 ### Community 117 - "index.ts"
 Cohesion: 0.19
@@ -499,10 +502,6 @@ Nodes (5): DashboardController, CartItemController, ProfileController, SecurityC
 ### Community 131 - "ProfileValidationRules.php"
 Cohesion: 0.27
 Nodes (6): CreateNewUser, emailRules(), nameRules(), profileRules(), ProfileUpdateRequest, Laravel\Fortify\Contracts\CreatesNewUsers
-
-### Community 142 - "user-info.tsx"
-Cohesion: 0.33
-Nodes (7): Avatar(), AvatarFallback(), AvatarImage(), UserInfo(), getInitial(), GetInitialsFn, useInitials()
 
 ### Community 151 - "thank-you.tsx"
 Cohesion: 0.50
@@ -539,7 +538,7 @@ Nodes (10): CampaignFactory, InventoryMovementFactory, static, OrderFactory, Ord
 ## Knowledge Gaps
 - **560 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+555 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **66 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **65 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -548,13 +547,13 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.077) - this node is a cross-community bridge._
 - **Why does `Role` connect `RoleController` to `access-control/index.tsx`?**
   _High betweenness centrality (0.077) - this node is a cross-community bridge._
-- **Why does `cn()` connect `cn` to `access-control/index.tsx`, `welcome.tsx`, `campaigns/index.tsx`, `products/index.tsx`, `breadcrumbs.tsx`, `admin/dashboard.tsx`, `utils.ts`, `sidebar.tsx`, `dropdown-menu.tsx`, `use-appearance.tsx`, `user-info.tsx`, `button.tsx`, `index.ts`, `banners/index.tsx`, `app-header.tsx`, `categories/index.tsx`?**
+- **Why does `cn()` connect `cn` to `access-control/index.tsx`, `welcome.tsx`, `campaigns/index.tsx`, `products/index.tsx`, `breadcrumbs.tsx`, `admin/dashboard.tsx`, `utils.ts`, `user-info.tsx`, `dropdown-menu.tsx`, `sidebar.tsx`, `use-appearance.tsx`, `button.tsx`, `index.ts`, `banners/index.tsx`, `app-header.tsx`, `categories/index.tsx`?**
   _High betweenness centrality (0.076) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
   _560 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `StorefrontBanner` be split into smaller, more focused modules?**
+  _Cohesion score 0.12681159420289856 - nodes in this community are weakly interconnected._
 - **Should `scripts` be split into smaller, more focused modules?**
   _Cohesion score 0.052564102564102565 - nodes in this community are weakly interconnected._
 - **Should `AGENTS.md` be split into smaller, more focused modules?**
   _Cohesion score 0.06060606060606061 - nodes in this community are weakly interconnected._
-- **Should `Inertia React Development` be split into smaller, more focused modules?**
-  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._

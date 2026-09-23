@@ -730,8 +730,8 @@
     "semantic_hash": ""
   },
   "resources/js/pages/admin/products/index.tsx": {
-    "mtime": 1790126848.2394352,
-    "ast_hash": "f5f7ed14b37608ad4ae893ad18b690b1",
+    "mtime": 1790129565.1722293,
+    "ast_hash": "a5412efb5839566a655a044807ca6660",
     "semantic_hash": ""
   },
   "resources/js/pages/auth/confirm-password.tsx": {
@@ -1300,8 +1300,8 @@
     "semantic_hash": ""
   },
   "resources/js/hooks/use-admin-api.ts": {
-    "mtime": 1786714749.4358552,
-    "ast_hash": "bd447f756dfe9b77e80b95e79b46e314",
+    "mtime": 1790200242.5825002,
+    "ast_hash": "9fb55596a467d48fd96f8ad728b61376",
     "semantic_hash": ""
   },
   "routes/api.php": {
@@ -1405,8 +1405,8 @@
     "semantic_hash": ""
   },
   "resources/js/pages/admin/inventory/index.tsx": {
-    "mtime": 1790026807.5831509,
-    "ast_hash": "3a61b9ba24d8294e0283073a5492327a",
+    "mtime": 1790200242.8514955,
+    "ast_hash": "66dc458e7da6cc86f57a47ea25cfa4ef",
     "semantic_hash": ""
   },
   "tests/Feature/InventoryManagementTest.php": {

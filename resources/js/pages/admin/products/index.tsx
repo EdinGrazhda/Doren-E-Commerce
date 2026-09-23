@@ -360,7 +360,9 @@ export default function AdminProductsIndex() {
 
         const handleSaveFailure = () => {
             setSaveError(
-                'The save could not be confirmed. Close this dialog and refresh the product list before retrying to avoid duplicates. If the product appears without colors, contact support.',
+                (current) =>
+                    current ??
+                    'The save could not be confirmed. Close this dialog and refresh the product list before retrying to avoid duplicates. If the product appears without colors, contact support.',
             );
         };
 
@@ -379,7 +381,7 @@ export default function AdminProductsIndex() {
                     typeof payload.message === 'string' &&
                     payload.message.trim() !== ''
                 ) {
-                    message = payload.message;
+                    message = `HTTP ${response.status}: ${payload.message}`;
                 }
             } catch {
                 // Keep the status-based message when the server did not return JSON.
