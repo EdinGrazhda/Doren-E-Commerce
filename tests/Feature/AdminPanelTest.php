@@ -1,5 +1,7 @@
 <?php
 
+use App\Actions\Images\ImageUploadFailed;
+use App\Actions\Images\StoreOptimizedImage;
 use App\InventoryMovementType;
 use App\Models\InventoryMovement;
 use App\Models\Order;
@@ -11,9 +13,12 @@ use App\Models\StorefrontBanner;
 use App\Models\User;
 use App\OrderStatus;
 use App\PaymentStatus;
+use Database\Seeders\ProductCatalogSeeder;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -751,6 +756,75 @@ test('admins can create update and delete products without order history', funct
         ->assertSuccessful();
 
     $this->assertModelMissing($product);
+});
+
+test('product upload failures report a safe reason and roll back database changes', function (bool $updating, string $reason) {
+    $admin = User::factory()->admin()->create();
+    $product = $updating ? Product::factory()->has(ProductVariant::factory(), 'variants')->create() : null;
+    $original = $product?->fresh()->getAttributes();
+    $productCount = Product::count();
+    $variantCount = ProductVariant::count();
+    $exception = new ImageUploadFailed($reason, 'Internal diagnostic with private server details');
+
+    $this->mock(StoreOptimizedImage::class)
+        ->shouldReceive('handle')->once()->andThrow($exception);
+    Log::spy();
+
+    $payload = productPayload(['color_image_uploads' => [colorUploadSet('olive')]]);
+    $this->actingAs($admin);
+    $response = $updating
+        ? $this->post(route('api.admin.products.update', $product), [...$payload, '_method' => 'put'], ['Accept' => 'application/json'])
+        : $this->post(route('api.admin.products.store'), $payload, ['Accept' => 'application/json']);
+
+    $response->assertInternalServerError()
+        ->assertJsonPath('code', $reason)
+        ->assertJsonPath('reference', fn (string $value): bool => Str::isUuid($value))
+        ->assertDontSee('private server details');
+
+    Log::shouldHaveReceived('error')->withArgs(fn (string $message, array $context): bool => $message === 'Product save failed'
+        && $context['reference'] === $response->json('reference')
+        && $context['exception'] === $exception
+    )->once();
+
+    expect(Product::count())->toBe($productCount)
+        ->and(ProductVariant::count())->toBe($variantCount);
+
+    if ($product !== null) {
+        expect($product->fresh()->getAttributes())->toBe($original);
+    }
+})->with([false, true])->with(['image_processing_unavailable', 'image_storage_failed']);
+
+test('unexpected product save failures do not disclose internal exception details', function (bool $databaseFailure) {
+    $admin = User::factory()->admin()->create();
+    $exception = $databaseFailure
+        ? new QueryException('mysql', 'insert into products values (?)', ['private value'], new PDOException('private database error'))
+        : new RuntimeException('private filesystem path');
+    $this->mock(StoreOptimizedImage::class)
+        ->shouldReceive('handle')->once()->andThrow($exception);
+
+    $this->actingAs($admin)
+        ->post(route('api.admin.products.store'), productPayload([
+            'image_uploads' => colorUploadSet('product'),
+        ]), ['Accept' => 'application/json'])
+        ->assertInternalServerError()
+        ->assertJsonPath('code', $databaseFailure ? 'product_database_failed' : 'product_save_failed')
+        ->assertDontSee('private')
+        ->assertDontSee('insert into');
+
+    expect(Product::count())->toBe(0);
+})->with([false, true]);
+
+test('seeded product SKUs return validation errors rather than save exceptions', function () {
+    $this->seed(ProductCatalogSeeder::class);
+    $admin = User::factory()->admin()->create();
+    $count = Product::count();
+
+    $this->actingAs($admin)
+        ->postJson(route('api.admin.products.store'), productPayload(['sku' => 'DRN-KNIT-CARDIGAN']))
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('sku');
+
+    expect(Product::count())->toBe($count);
 });
 
 test('conflicting inventory SKUs are rejected before saving products or images', function (bool $updating) {

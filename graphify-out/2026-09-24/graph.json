@@ -5264,7 +5264,7 @@
       "label": "colorImageUrls()",
       "file_type": "code",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L1032",
+      "source_location": "L1027",
       "_callable": true,
       "_origin": "ast",
       "id": "tests_feature_adminpaneltest_colorimageurls",
@@ -5276,7 +5276,7 @@
       "label": "colorUploadSet()",
       "file_type": "code",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L1022",
+      "source_location": "L1017",
       "_callable": true,
       "_origin": "ast",
       "id": "tests_feature_adminpaneltest_coloruploadset",
@@ -5288,7 +5288,7 @@
       "label": "productPayload()",
       "file_type": "code",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L1045",
+      "source_location": "L1040",
       "_callable": true,
       "_origin": "ast",
       "id": "tests_feature_adminpaneltest_productpayload",
@@ -5300,7 +5300,7 @@
       "label": "variantsPayload()",
       "file_type": "code",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L1003",
+      "source_location": "L998",
       "_callable": true,
       "_origin": "ast",
       "id": "tests_feature_adminpaneltest_variantspayload",
@@ -5679,18 +5679,6 @@
       "community": 179,
       "community_name": "2026_09_08_213440_add_catalog_listing_indexes_to_products_table.php",
       "norm_label": "up()"
-    },
-    {
-      "label": "DeleteUser()",
-      "file_type": "code",
-      "source_file": "resources/js/components/delete-user.tsx",
-      "source_location": "L19",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "resources_js_components_delete_user_deleteuser",
-      "community": 18,
-      "community_name": "button.tsx",
-      "norm_label": "deleteuser()"
     },
     {
       "label": "Heading()",
@@ -6567,6 +6555,18 @@
       "community": 20,
       "community_name": "2026_08_11_190752_create_storefront_banners_table.php",
       "norm_label": "up()"
+    },
+    {
+      "label": "DeleteUser()",
+      "file_type": "code",
+      "source_file": "resources/js/components/delete-user.tsx",
+      "source_location": "L19",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "resources_js_components_delete_user_deleteuser",
+      "community": 23,
+      "community_name": "banners/index.tsx",
+      "norm_label": "deleteuser()"
     },
     {
       "label": "Dialog()",
@@ -11705,28 +11705,6 @@
       "norm_label": "vite.config.ts"
     },
     {
-      "label": "concurrently",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L54",
-      "_origin": "ast",
-      "id": "package_dependencies_concurrently",
-      "community": 149,
-      "community_name": "concurrently",
-      "norm_label": "concurrently"
-    },
-    {
-      "label": "concurrently",
-      "file_type": "concept",
-      "source_file": "package.json",
-      "source_location": "L54",
-      "_origin": "ast",
-      "id": "concurrently",
-      "community": 149,
-      "community_name": "concurrently",
-      "norm_label": "concurrently"
-    },
-    {
       "label": "ResetUserPassword.php",
       "file_type": "code",
       "source_file": "app/Actions/Fortify/ResetUserPassword.php",
@@ -12275,6 +12253,28 @@
       "community": 154,
       "community_name": "Inventory",
       "norm_label": "keep product variants as the inventory source of truth"
+    },
+    {
+      "label": "clsx",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "package_dependencies_clsx",
+      "community": 155,
+      "community_name": "clsx",
+      "norm_label": "clsx"
+    },
+    {
+      "label": "clsx",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "clsx",
+      "community": 155,
+      "community_name": "clsx",
+      "norm_label": "clsx"
     },
     {
       "label": "CreateCheckoutOrder.php",
@@ -17535,15 +17535,15 @@
       "norm_label": "class-variance-authority"
     },
     {
-      "label": "clsx",
+      "label": "concurrently",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L53",
+      "source_location": "L54",
       "_origin": "ast",
-      "id": "package_dependencies_clsx",
+      "id": "package_dependencies_concurrently",
       "community": 49,
       "community_name": "dependencies",
-      "norm_label": "clsx"
+      "norm_label": "concurrently"
     },
     {
       "label": "@inertiajs/vite",
@@ -17579,15 +17579,15 @@
       "norm_label": "class-variance-authority"
     },
     {
-      "label": "clsx",
+      "label": "concurrently",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L53",
+      "source_location": "L54",
       "_origin": "ast",
-      "id": "clsx",
+      "id": "concurrently",
       "community": 49,
       "community_name": "dependencies",
-      "norm_label": "clsx"
+      "norm_label": "concurrently"
     },
     {
       "label": "@inertiajs/vite",
@@ -24231,7 +24231,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L1057",
+      "source_location": "L1052",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_feature_adminpaneltest_productpayload",
@@ -24243,7 +24243,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L1005",
+      "source_location": "L1000",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_feature_adminpaneltest_variantspayload",
@@ -36255,7 +36255,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L19",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_feature_adminpaneltest",
@@ -54706,18 +54706,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L1003",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "tests_feature_adminpaneltest",
-      "target": "tests_feature_adminpaneltest_variantspayload",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L1022",
+      "source_location": "L1017",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_feature_adminpaneltest",
@@ -54728,7 +54717,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L1032",
+      "source_location": "L1027",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_feature_adminpaneltest",
@@ -54739,11 +54728,22 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/Feature/AdminPanelTest.php",
-      "source_location": "L1045",
+      "source_location": "L1040",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tests_feature_adminpaneltest",
       "target": "tests_feature_adminpaneltest_productpayload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/Feature/AdminPanelTest.php",
+      "source_location": "L998",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_feature_adminpaneltest",
+      "target": "tests_feature_adminpaneltest_variantspayload",
       "confidence_score": 1.0
     },
     {

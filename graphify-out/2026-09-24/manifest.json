@@ -845,8 +845,8 @@
     "semantic_hash": ""
   },
   "tests/Feature/AdminPanelTest.php": {
-    "mtime": 1790204489.3319218,
-    "ast_hash": "eee5fc0767bf736acdb03c212610b4f4",
+    "mtime": 1790204360.7248056,
+    "ast_hash": "4477af874fd1dd9b13be203edc5c563c",
     "semantic_hash": ""
   },
   "tests/Feature/Auth/AuthenticationTest.php": {

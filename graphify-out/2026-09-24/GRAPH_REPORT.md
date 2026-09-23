@@ -1,7 +1,7 @@
 # Graph Report - doren  (2026-09-24)
 
 ## Corpus Check
-- 332 files · ~232,472 words
+- 332 files · ~232,445 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -129,11 +129,11 @@
 - @radix-ui/react-collapsible
 - ProfileValidationRules.php
 - globals
-- concurrently
 - thank-you.tsx
 - Illuminate\Http\Request
 - package.json
 - Inventory
+- clsx
 - AdminPanelTest.php
 - @eslint/js
 - Products
@@ -256,7 +256,7 @@ Nodes (16): Available Features, Best Practices, Custom Authentication Logic, Doc
 
 ### Community 18 - "button.tsx"
 Cohesion: 0.11
-Nodes (22): DeleteUser(), Heading(), InputError(), ManagePasskeys(), Props, PasskeyItem(), PasskeyRegistration(), Props (+14 more)
+Nodes (21): Heading(), InputError(), ManagePasskeys(), Props, PasskeyItem(), PasskeyRegistration(), Props, PasskeyVerify() (+13 more)
 
 ### Community 19 - "ProductVariant"
 Cohesion: 0.13
@@ -271,8 +271,8 @@ Cohesion: 0.14
 Nodes (13): Basic Usage, Common Patterns, Common Pitfalls, CSS-First Configuration, Dark Mode, Documentation, Flexbox Layout, Grid Layout (+5 more)
 
 ### Community 23 - "banners/index.tsx"
-Cohesion: 0.17
-Nodes (20): Props, Dialog(), DialogClose(), DialogContent(), DialogDescription(), DialogFooter(), DialogTitle(), DialogTrigger() (+12 more)
+Cohesion: 0.16
+Nodes (21): DeleteUser(), Props, Dialog(), DialogClose(), DialogContent(), DialogDescription(), DialogFooter(), DialogTitle() (+13 more)
 
 ### Community 24 - "cn"
 Cohesion: 0.11
@@ -360,7 +360,7 @@ Nodes (5): Configuration Best Practices, `env()` Only in Config Files, Use `App:
 
 ### Community 49 - "dependencies"
 Cohesion: 0.22
-Nodes (9): class-variance-authority, clsx, @inertiajs/vite, laravel-vite-plugin, dependencies, class-variance-authority, clsx, @inertiajs/vite (+1 more)
+Nodes (9): class-variance-authority, concurrently, @inertiajs/vite, laravel-vite-plugin, dependencies, class-variance-authority, concurrently, @inertiajs/vite (+1 more)
 
 ### Community 50 - "scripts"
 Cohesion: 0.22

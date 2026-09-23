@@ -30,6 +30,10 @@ import {
 } from '@/components/ui/select';
 import { useAdminApi } from '@/hooks/use-admin-api';
 import { formatDate, formatMoney } from '@/lib/admin-format';
+import {
+    productSaveHttpError,
+    productSaveRequestError,
+} from '@/lib/product-save-error';
 import { dashboard } from '@/routes';
 import {
     destroy as destroyProduct,
@@ -358,11 +362,9 @@ export default function AdminProductsIndex() {
 
         setSaveError(null);
 
-        const handleSaveFailure = () => {
+        const handleSaveFailure = (error: unknown) => {
             setSaveError(
-                (current) =>
-                    current ??
-                    'The save could not be confirmed. Close this dialog and refresh the product list before retrying to avoid duplicates. If the product appears without colors, contact support.',
+                (current) => current ?? productSaveRequestError(error),
             );
         };
 
@@ -370,24 +372,7 @@ export default function AdminProductsIndex() {
             status: number;
             data: string;
         }) => {
-            let message = `The server could not save this product (HTTP ${response.status}).`;
-
-            try {
-                const payload = JSON.parse(response.data) as {
-                    message?: unknown;
-                };
-
-                if (
-                    typeof payload.message === 'string' &&
-                    payload.message.trim() !== ''
-                ) {
-                    message = `HTTP ${response.status}: ${payload.message}`;
-                }
-            } catch {
-                // Keep the status-based message when the server did not return JSON.
-            }
-
-            setSaveError(message);
+            setSaveError(productSaveHttpError(response));
         };
 
         const options = {

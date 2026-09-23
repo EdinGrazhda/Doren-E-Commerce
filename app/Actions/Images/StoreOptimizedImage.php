@@ -6,7 +6,6 @@ use GdImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use RuntimeException;
 
 class StoreOptimizedImage
 {
@@ -17,14 +16,14 @@ class StoreOptimizedImage
     public function handle(UploadedFile $uploadedImage, string $directory): string
     {
         if (! function_exists('imagewebp') || (imagetypes() & IMG_WEBP) === 0) {
-            throw new RuntimeException('The GD WebP extension is required to optimize image uploads.');
+            throw new ImageUploadFailed('image_processing_unavailable', 'The GD WebP extension is required to optimize image uploads.');
         }
 
         $sourceContents = file_get_contents($uploadedImage->getRealPath());
         $sourceImage = $sourceContents === false ? false : imagecreatefromstring($sourceContents);
 
         if (! $sourceImage instanceof GdImage) {
-            throw new RuntimeException('The uploaded image could not be decoded.');
+            throw new ImageUploadFailed('image_decode_failed', 'The uploaded image could not be decoded.');
         }
 
         $optimizedImage = $this->resize($sourceImage);
@@ -39,13 +38,13 @@ class StoreOptimizedImage
         imagedestroy($sourceImage);
 
         if (! $encoded || ! is_string($webpContents)) {
-            throw new RuntimeException('The uploaded image could not be encoded as WebP.');
+            throw new ImageUploadFailed('image_encode_failed', 'The uploaded image could not be encoded as WebP.');
         }
 
         $path = Str::finish($directory, '/').Str::uuid().'.webp';
 
         if (! Storage::disk('public')->put($path, $webpContents)) {
-            throw new RuntimeException('The optimized image could not be stored.');
+            throw new ImageUploadFailed('image_storage_failed', 'The optimized image could not be stored.');
         }
 
         return Storage::disk('public')->url($path);
@@ -65,7 +64,7 @@ class StoreOptimizedImage
         $resizedImage = imagecreatetruecolor($targetWidth, $targetHeight);
 
         if (! $resizedImage instanceof GdImage) {
-            throw new RuntimeException('Memory allocation failed while resizing an uploaded image.');
+            throw new ImageUploadFailed('image_resize_failed', 'Memory allocation failed while resizing an uploaded image.');
         }
 
         imagealphablending($resizedImage, false);
