@@ -11984,26 +11984,26 @@
       "norm_label": "keep product variants as the inventory source of truth"
     },
     {
-      "label": "clsx",
+      "label": "@radix-ui/react-toggle",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L53",
+      "source_location": "L45",
       "_origin": "ast",
-      "id": "package_dependencies_clsx",
+      "id": "package_dependencies_radix_ui_react_toggle",
       "community": 155,
-      "community_name": "clsx",
-      "norm_label": "clsx"
+      "community_name": "@radix-ui/react-toggle",
+      "norm_label": "@radix-ui/react-toggle"
     },
     {
-      "label": "clsx",
+      "label": "@radix-ui/react-toggle",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L53",
+      "source_location": "L45",
       "_origin": "ast",
-      "id": "clsx",
+      "id": "radix_ui_react_toggle",
       "community": 155,
-      "community_name": "clsx",
-      "norm_label": "clsx"
+      "community_name": "@radix-ui/react-toggle",
+      "norm_label": "@radix-ui/react-toggle"
     },
     {
       "label": "CreateCheckoutOrder.php",
@@ -17297,6 +17297,17 @@
       "norm_label": "class-variance-authority"
     },
     {
+      "label": "clsx",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "package_dependencies_clsx",
+      "community": 49,
+      "community_name": "dependencies",
+      "norm_label": "clsx"
+    },
+    {
       "label": "@inertiajs/vite",
       "file_type": "code",
       "source_file": "package.json",
@@ -17319,17 +17330,6 @@
       "norm_label": "laravel-vite-plugin"
     },
     {
-      "label": "@radix-ui/react-toggle",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "package_dependencies_radix_ui_react_toggle",
-      "community": 49,
-      "community_name": "dependencies",
-      "norm_label": "@radix-ui/react-toggle"
-    },
-    {
       "label": "class-variance-authority",
       "file_type": "concept",
       "source_file": "package.json",
@@ -17339,6 +17339,17 @@
       "community": 49,
       "community_name": "dependencies",
       "norm_label": "class-variance-authority"
+    },
+    {
+      "label": "clsx",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "clsx",
+      "community": 49,
+      "community_name": "dependencies",
+      "norm_label": "clsx"
     },
     {
       "label": "@inertiajs/vite",
@@ -17361,17 +17372,6 @@
       "community": 49,
       "community_name": "dependencies",
       "norm_label": "laravel-vite-plugin"
-    },
-    {
-      "label": "@radix-ui/react-toggle",
-      "file_type": "concept",
-      "source_file": "package.json",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "radix_ui_react_toggle",
-      "community": 49,
-      "community_name": "dependencies",
-      "norm_label": "@radix-ui/react-toggle"
     },
     {
       "label": "inertia-react-development/SKILL.md",
@@ -23638,7 +23638,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L1443",
+      "source_location": "L1417",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23650,7 +23650,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L1446",
+      "source_location": "L1420",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -23733,7 +23733,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "resources/js/pages/admin/products/index.tsx",
-      "source_location": "L534",
+      "source_location": "L508",
       "weight": 1.0,
       "_origin": "ast",
       "source": "resources_js_pages_admin_products_index_adminproductsindex",
@@ -59038,5 +59038,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "01b36dbe89825db1b7c3225749017c5fd4e1ffb3"
+  "built_at_commit": "6bffae83667588a83129e39fc0b013c47428ef62"
 }

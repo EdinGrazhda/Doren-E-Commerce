@@ -730,8 +730,8 @@
     "semantic_hash": ""
   },
   "resources/js/pages/admin/products/index.tsx": {
-    "mtime": 1790126848.2394352,
-    "ast_hash": "f5f7ed14b37608ad4ae893ad18b690b1",
+    "mtime": 1790026807.5831509,
+    "ast_hash": "b9dae33e9637a0795bfb5de70ed3979d",
     "semantic_hash": ""
   },
   "resources/js/pages/auth/confirm-password.tsx": {

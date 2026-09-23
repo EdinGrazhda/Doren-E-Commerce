@@ -364,6 +364,30 @@ export default function AdminProductsIndex() {
             );
         };
 
+        const handleHttpException = (response: {
+            status: number;
+            data: string;
+        }) => {
+            let message = `The server could not save this product (HTTP ${response.status}).`;
+
+            try {
+                const payload = JSON.parse(response.data) as {
+                    message?: unknown;
+                };
+
+                if (
+                    typeof payload.message === 'string' &&
+                    payload.message.trim() !== ''
+                ) {
+                    message = payload.message;
+                }
+            } catch {
+                // Keep the status-based message when the server did not return JSON.
+            }
+
+            setSaveError(message);
+        };
+
         const options = {
             onSuccess: () => {
                 setOpen(false);
@@ -371,6 +395,8 @@ export default function AdminProductsIndex() {
                 form.reset();
                 void listing.reload();
             },
+            onHttpException: handleHttpException,
+            onNetworkError: handleSaveFailure,
         };
 
         if (editingProduct) {

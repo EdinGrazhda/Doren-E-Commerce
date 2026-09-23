@@ -154,7 +154,7 @@
   "152": "Illuminate\\Http\\Request",
   "153": "package.json",
   "154": "Inventory",
-  "155": "clsx",
+  "155": "@radix-ui/react-toggle",
   "156": "Illuminate\\Http\\JsonResponse",
   "157": "2026_08_26_201215_create_inventory_movements_table.php",
   "158": "@eslint/js",

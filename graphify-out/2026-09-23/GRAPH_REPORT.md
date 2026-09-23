@@ -1,7 +1,7 @@
-# Graph Report - doren  (2026-09-23)
+# Graph Report - doren  (2026-09-21)
 
 ## Corpus Check
-- 328 files · ~231,477 words
+- 328 files · ~231,404 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `01b36dbe`
+- Built from commit: `6bffae83`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -135,7 +135,7 @@
 - Illuminate\Http\Request
 - package.json
 - Inventory
-- clsx
+- @radix-ui/react-toggle
 - Illuminate\Http\JsonResponse
 - @eslint/js
 - Products
@@ -358,7 +358,7 @@ Nodes (10): Configuration Best Practices, `env()` Only in Config Files, Use `App
 
 ### Community 49 - "dependencies"
 Cohesion: 0.22
-Nodes (9): class-variance-authority, @inertiajs/vite, laravel-vite-plugin, dependencies, class-variance-authority, @inertiajs/vite, laravel-vite-plugin, @radix-ui/react-toggle (+1 more)
+Nodes (9): class-variance-authority, clsx, @inertiajs/vite, laravel-vite-plugin, dependencies, class-variance-authority, clsx, @inertiajs/vite (+1 more)
 
 ### Community 50 - "scripts"
 Cohesion: 0.22
