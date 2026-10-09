@@ -9,6 +9,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | {app/Models/{Campaign,Product}.php,app/Services/*Campaign*.php,app/Actions/Checkout/**,app/Actions/Campaigns/**,app/Http/Controllers/**/CampaignController.php,resources/js/pages/admin/campaigns/**} | .ai/rules/campaigns.md |
 | {app/Http/Controllers/Api/Admin/{ProductController,StorefrontBannerController}.php,app/Actions/Images/**} | .ai/rules/images.md |
 | {app/Actions/Inventory/**,app/Http/Controllers/Api/Admin/InventoryController.php,resources/js/pages/admin/inventory/**} | .ai/rules/inventory.md |
+| {app/Http/Middleware/HandleInertiaRequests.php,app/Http/Controllers/HomeController.php,resources/js/components/storefront-navigation.tsx,resources/js/pages/{welcome,cart}.tsx,resources/js/pages/products/show.tsx} | .ai/rules/js-pages-products.md |
 | {app/Actions/Checkout/**,app/Http/Controllers/CheckoutController.php,app/Mail/**,resources/views/mail/**} | .ai/rules/mail.md |
 | {bootstrap/app.php,app/Actions/Images/**,resources/js/lib/product-save-error.ts,resources/js/pages/admin/products/**} | .ai/rules/pages-admin-products.md |
 | app/Http/Controllers/Api/Admin/ProductController.php,app/Http/Requests/Admin/*ProductRequest.php,app/Models/ProductVariant*.php,resources/js/pages/admin/products/**,resources/js/pages/products/show.tsx | .ai/rules/pages-products.md |

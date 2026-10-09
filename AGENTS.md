@@ -138,7 +138,7 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 # Do Things the Laravel Way
 
-- Use `php artisan make:` commands to create new files (i.e. migrations, controllers, models, etc.). You can list available Artisan commands using `php artisan list` and check their parameters with `php artisan [command] --help`.
+- Use `php artisan make:` commands to create new files (i.e. mietions, controllers, models, etc.). You can list available Artisan commands using `php artisan list` and check their parameters with `php artisan [command] --help`.
 - If you're creating a generic PHP class, use `php artisan make:class`.
 - Pass `--no-interaction` to all Artisan commands to ensure they work without user input. You should also pass the correct `--options` to ensure correct behavior.
 
@@ -206,3 +206,12 @@ Rules:
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+## Shared Agent Workflow
+
+- `RTK.md` is the companion command-output policy for this file. Read it when choosing how to run shell, npm, Artisan, test, build, search, or inspection commands.
+- Use Graphify first for codebase understanding and source-change planning: run `graphify query`, `graphify path`, or `graphify explain` when the task calls for scoped repository context. Keep Graphify commands native; do not wrap them with `rtk`.
+- After every task that modifies repository files, run `graphify update .` from the repository root so `graphify-out/` stays synchronized. This includes changes to `AGENTS.md`, application code, tests, and configuration. Do not wrap `graphify update .` with `rtk`.
+- Run every `npm ...` and `php artisan ...` command through `rtk` by default to reduce noisy output, including tests, builds, route/config inspection, and diagnostics. Preserve the underlying command and arguments; for tests use the RTK test form documented in `RTK.md` when applicable.
+- If an npm or Artisan command creates files, mutates application or database state, requires exact interactive output, or cannot be safely wrapped by RTK, use the native command as an explicit exception and follow the corresponding guidance in `RTK.md`.
+- When both Graphify and shell commands are needed, run Graphify before the RTK-wrapped follow-up commands. Use `rtk` for other noisy shell commands when supported, while keeping exact file reads and diagnostics native when truncation could hide important information.

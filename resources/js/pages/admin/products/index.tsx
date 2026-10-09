@@ -87,6 +87,7 @@ type ProductVariantImage = {
 type CategoryOption = {
     id: number;
     name: string;
+    size_options: string[];
 };
 
 type Props = {
@@ -231,17 +232,23 @@ export default function AdminProductsIndex() {
     );
     const [search, setSearch] = useState('');
     const listing = useAdminApi<Props>(productsPageUrl);
-    const sizeOptions = listing.data?.sizeOptions ?? [
+    const defaultSizeOptions = listing.data?.sizeOptions ?? [
         'S',
         'M',
         'L',
         'XL',
         'XXL',
     ];
-    const form = useHttp<ProductFormData>(makeEmptyProduct(sizeOptions));
+    const form = useHttp<ProductFormData>(makeEmptyProduct(defaultSizeOptions));
     const deleteRequest = useHttp<Record<string, never>>({});
     const editRequest = useHttp<Record<string, never>, { data: Product }>({});
     const formErrors = form.errors as Record<string, string>;
+    const categories = listing.data?.categories ?? [];
+    const sizeOptions =
+        categories.find(
+            (category) =>
+                category.id.toString() === form.data.product_category_id,
+        )?.size_options ?? defaultSizeOptions;
 
     useEffect(() => {
         const timeout = window.setTimeout(() => {
@@ -273,24 +280,31 @@ export default function AdminProductsIndex() {
         );
     }
 
-    const { products, categories } = listing.data;
+    const { products } = listing.data;
+
+    const sizeOptionsForCategory = (categoryId: string): string[] =>
+        categories.find((category) => category.id.toString() === categoryId)
+            ?.size_options ?? defaultSizeOptions;
 
     const openCreateDialog = () => {
         setEditingProduct(null);
         setSaveError(null);
         form.clearErrors();
-        form.setData(makeEmptyProduct(sizeOptions));
+        form.setData(makeEmptyProduct(defaultSizeOptions));
         setOpen(true);
     };
 
     const openEditDialog = async (product: ProductSummary) => {
         await editRequest.get(showProduct.url(product.id), {
             onSuccess: ({ data }) => {
+                const categoryId = data.category?.id.toString() ?? '0';
+                const productSizeOptions = sizeOptionsForCategory(categoryId);
+
                 setSaveError(null);
                 setEditingProduct(data);
                 form.clearErrors();
                 form.setData({
-                    product_category_id: data.category?.id.toString() ?? '0',
+                    product_category_id: categoryId,
                     name: data.name,
                     slug: data.slug,
                     sku: data.sku ?? '',
@@ -307,7 +321,10 @@ export default function AdminProductsIndex() {
                     color_image_uploads: [],
                     is_active: data.is_active,
                     is_featured: data.is_featured,
-                    colors: colorsFromVariants(data.variants, sizeOptions),
+                    colors: colorsFromVariants(
+                        data.variants,
+                        productSizeOptions,
+                    ),
                     variants: [],
                 });
                 setOpen(true);
@@ -515,6 +532,25 @@ export default function AdminProductsIndex() {
         );
     };
 
+    const updateCategory = (categoryId: string) => {
+        const nextSizeOptions = sizeOptionsForCategory(categoryId);
+
+        form.clearErrors('product_category_id', 'variants');
+        form.setData({
+            ...form.data,
+            product_category_id: categoryId,
+            colors: form.data.colors.map((color) => ({
+                ...color,
+                stockBySize: Object.fromEntries(
+                    nextSizeOptions.map((size) => [
+                        size,
+                        color.stockBySize[size] ?? '0',
+                    ]),
+                ),
+            })),
+        });
+    };
+
     const addColor = () => {
         form.setData('colors', [
             ...form.data.colors,
@@ -694,12 +730,7 @@ export default function AdminProductsIndex() {
                                                     form.data
                                                         .product_category_id
                                                 }
-                                                onValueChange={(value) =>
-                                                    form.setData(
-                                                        'product_category_id',
-                                                        value,
-                                                    )
-                                                }
+                                                onValueChange={updateCategory}
                                             >
                                                 <SelectTrigger className="w-full">
                                                     <SelectValue />

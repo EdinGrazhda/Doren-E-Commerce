@@ -40,7 +40,7 @@ class HomeController extends Controller
                     ->limit(1),
             ])
             ->orderBy('sort_order')
-            ->limit(4)
+            ->orderBy('id')
             ->get()
             ->map(fn (ProductCategory $category): array => [
                 'id' => $category->id,
@@ -49,6 +49,15 @@ class HomeController extends Controller
                 'description' => $category->description,
                 'image_url' => $category->products->first()?->primary_image_url,
             ]);
+
+        $storefrontCategories = $categories
+            ->map(fn (array $category): array => [
+                'id' => $category['id'],
+                'name' => $category['name'],
+                'slug' => $category['slug'],
+            ]);
+
+        $categories = $categories->take(4)->values();
 
         $productQuery = Product::query()
             ->select([
@@ -139,6 +148,7 @@ class HomeController extends Controller
                 'bottom' => $bannerGroups->get('bottom')->first(),
             ],
             'categories' => $categories,
+            'storefrontCategories' => $storefrontCategories,
             'newInProducts' => $products,
             'bestSellerProducts' => $bestSellerProducts,
         ]);

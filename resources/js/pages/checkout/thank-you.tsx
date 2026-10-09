@@ -27,11 +27,7 @@ export default function ThankYou({ order }: Props) {
             <Head title="Order Placed | Doren" />
 
             <div className="min-h-screen bg-[#f5f1e9] text-[#151513] antialiased">
-                <div className="bg-[#12110f] px-4 py-2 text-center text-[12px] leading-none text-[#f6f1e9]">
-                    Complimentary shipping on orders over $150
-                </div>
-
-                <main className="mx-auto grid min-h-[calc(100vh-28px)] max-w-[760px] place-items-center px-6 py-12">
+                <main className="mx-auto grid min-h-screen max-w-[760px] place-items-center px-6 py-12">
                     <section className="w-full border border-[#d6cec0] bg-[#f8f4ed] p-7 text-center">
                         <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-[#151513] text-white">
                             <Check className="h-6 w-6" />

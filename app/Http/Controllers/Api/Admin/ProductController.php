@@ -19,8 +19,6 @@ use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
-    private const array Sizes = ['S', 'M', 'L', 'XL', 'XXL'];
-
     public function __construct(private StoreOptimizedImage $storeOptimizedImage) {}
 
     public function index(Request $request): JsonResponse
@@ -84,16 +82,21 @@ class ProductController extends Controller
             ]);
 
         $categories = ProductCategory::query()
-            ->select(['id', 'name'])
+            ->select(['id', 'name', 'slug'])
             ->where('is_visible', true)
             ->orderBy('name')
-            ->get();
+            ->get()
+            ->map(fn (ProductCategory $category): array => [
+                'id' => $category->id,
+                'name' => $category->name,
+                'size_options' => $category->sizeOptions(),
+            ]);
 
         return response()->json([
             'data' => [
                 'products' => $products,
                 'categories' => $categories,
-                'sizeOptions' => self::Sizes,
+                'sizeOptions' => ProductCategory::StandardSizes,
             ],
         ]);
     }

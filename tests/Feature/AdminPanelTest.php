@@ -758,6 +758,88 @@ test('admins can create update and delete products without order history', funct
     $this->assertModelMissing($product);
 });
 
+test('pants and underwear products use numeric sizes from 28 through 40', function (string $categorySlug) {
+    $admin = User::factory()->admin()->create();
+    $category = ProductCategory::factory()->create([
+        'name' => Str::headline($categorySlug),
+        'slug' => $categorySlug,
+    ]);
+
+    $this->actingAs($admin)
+        ->postJson(route('api.admin.products.store'), productPayload([
+            'product_category_id' => $category->id,
+            'name' => "Numeric {$categorySlug}",
+            'sku' => 'DRN-'.Str::upper($categorySlug),
+            'variants' => numericVariantsPayload('Black', '#111111'),
+        ]))
+        ->assertCreated()
+        ->assertJsonCount(13, 'data.variants');
+
+    $product = Product::query()->where('sku', 'DRN-'.Str::upper($categorySlug))->firstOrFail();
+
+    expect($product->variants()->orderBy('sort_order')->pluck('size')->all())
+        ->toBe(collect(range(28, 40))->map(fn (int $size): string => (string) $size)->all());
+
+    $this->actingAs($admin)
+        ->putJson(route('api.admin.products.update', $product), productPayload([
+            'product_category_id' => $category->id,
+            'name' => "Updated numeric {$categorySlug}",
+            'sku' => 'DRN-'.Str::upper($categorySlug),
+            'variants' => numericVariantsPayload('Black', '#111111'),
+        ]))
+        ->assertSuccessful()
+        ->assertJsonCount(13, 'data.variants');
+})->with(['trousers', 'underwear']);
+
+test('product size validation follows the selected category', function () {
+    $admin = User::factory()->admin()->create();
+    $trousers = ProductCategory::factory()->create([
+        'name' => 'Trousers',
+        'slug' => 'trousers',
+    ]);
+    $shirts = ProductCategory::factory()->create([
+        'name' => 'Shirts',
+        'slug' => 'shirts',
+    ]);
+
+    $this->actingAs($admin)
+        ->postJson(route('api.admin.products.store'), productPayload([
+            'product_category_id' => $trousers->id,
+        ]))
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['variants.0.size', 'variants']);
+
+    $this->actingAs($admin)
+        ->postJson(route('api.admin.products.store'), productPayload([
+            'product_category_id' => $shirts->id,
+            'variants' => numericVariantsPayload('Black', '#111111'),
+        ]))
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['variants.0.size', 'variants']);
+});
+
+test('admin product categories include their supported size options', function () {
+    $admin = User::factory()->admin()->create();
+    ProductCategory::factory()->create([
+        'name' => 'Shirts',
+        'slug' => 'shirts',
+    ]);
+    ProductCategory::factory()->create([
+        'name' => 'Trousers',
+        'slug' => 'trousers',
+    ]);
+
+    $categories = $this->actingAs($admin)
+        ->getJson(route('api.admin.products.index'))
+        ->assertSuccessful()
+        ->json('data.categories');
+
+    expect(collect($categories)->firstWhere('name', 'Shirts')['size_options'])
+        ->toBe(['S', 'M', 'L', 'XL', 'XXL'])
+        ->and(collect($categories)->firstWhere('name', 'Trousers')['size_options'])
+        ->toBe(collect(range(28, 40))->map(fn (int $size): string => (string) $size)->all());
+});
+
 test('product upload failures report a safe reason and roll back database changes', function (bool $updating, string $reason) {
     $admin = User::factory()->admin()->create();
     $product = $updating ? Product::factory()->has(ProductVariant::factory(), 'variants')->create() : null;
@@ -1012,6 +1094,23 @@ function variantsPayload(string $colorName, string $colorHex, array $quantities,
             'image_urls' => $imageUrls,
             'color_image_upload_index' => $colorImageUploadIndex,
             'stock_quantity' => $quantities[$index],
+        ])
+        ->all();
+}
+
+/**
+ * @return array<int, array{size: string, color_name: string, color_hex: string, image_urls: array<int, string>, color_image_upload_index: int, stock_quantity: int}>
+ */
+function numericVariantsPayload(string $colorName, string $colorHex): array
+{
+    return collect(range(28, 40))
+        ->map(fn (int $size): array => [
+            'size' => (string) $size,
+            'color_name' => $colorName,
+            'color_hex' => $colorHex,
+            'image_urls' => colorImageUrls($colorName),
+            'color_image_upload_index' => 0,
+            'stock_quantity' => 0,
         ])
         ->all();
 }

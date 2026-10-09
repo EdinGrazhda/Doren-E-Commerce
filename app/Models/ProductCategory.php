@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -25,6 +26,22 @@ class ProductCategory extends Model
     /** @use HasFactory<ProductCategoryFactory> */
     use HasFactory;
 
+    public const array StandardSizes = ['S', 'M', 'L', 'XL', 'XXL'];
+
+    public const array NumericSizes = [
+        '28', '29', '30', '31', '32', '33', '34',
+        '35', '36', '37', '38', '39', '40',
+    ];
+
+    private const array NumericSizeCategoryTerms = [
+        'pants',
+        'trouser',
+        'underwear',
+        'boxer',
+        'jean',
+        'chino',
+    ];
+
     protected $attributes = [
         'sort_order' => 0,
         'is_visible' => true,
@@ -36,6 +53,16 @@ class ProductCategory extends Model
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function sizeOptions(): array
+    {
+        return Str::contains($this->slug, self::NumericSizeCategoryTerms)
+            ? self::NumericSizes
+            : self::StandardSizes;
     }
 
     /**

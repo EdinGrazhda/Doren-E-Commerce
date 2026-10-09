@@ -15,6 +15,11 @@ declare module '@inertiajs/core' {
             cart: {
                 count: number;
             };
+            storefrontCategories: {
+                id: number;
+                name: string;
+                slug: string;
+            }[];
             dashboard: {
                 orders: {
                     pending_count: number;

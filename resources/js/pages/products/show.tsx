@@ -17,6 +17,7 @@ import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 
 import BrandLogo from '@/components/brand-logo';
+import StorefrontNavigation from '@/components/storefront-navigation';
 import { cart as cartRoute, home } from '@/routes';
 import { store as storeCartItem } from '@/routes/cart-items';
 import { show as showProduct } from '@/routes/products';
@@ -76,16 +77,6 @@ type Props = {
     product: Product;
     relatedProducts: RelatedProduct[];
 };
-
-const navigationItems = [
-    { label: 'New In', slug: null },
-    { label: 'Polos', slug: 'polos' },
-    { label: 'Knitwear', slug: 'knitwear' },
-    { label: 'Shirts', slug: 'shirts' },
-    { label: 'Trousers', slug: 'trousers' },
-    { label: 'Jackets', slug: 'jackets' },
-    { label: 'Sale', slug: 'sale' },
-];
 
 const fallbackImages = [
     'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=85',
@@ -329,33 +320,9 @@ export default function Show({ product, relatedProducts }: Props) {
                         >
                             <BrandLogo className="h-12 w-full object-cover object-center" />
                         </Link>
-                        <nav className="hidden items-center gap-11 text-[11px] font-bold tracking-[0.12em] uppercase lg:flex">
-                            {navigationItems.map((item) => {
-                                const isActive =
-                                    item.slug === product.category?.slug;
-
-                                return (
-                                    <Link
-                                        key={item.label}
-                                        href={
-                                            item.slug
-                                                ? home({
-                                                      query: {
-                                                          category: item.slug,
-                                                      },
-                                                  })
-                                                : `${home.url()}#new-in`
-                                        }
-                                        aria-current={
-                                            isActive ? 'page' : undefined
-                                        }
-                                        className={`relative py-2 transition-colors after:absolute after:right-0 after:bottom-0 after:left-0 after:h-px after:bg-[#8d6b35] after:transition-transform ${isActive ? 'text-[#8d6b35] after:scale-x-100' : 'after:scale-x-0 hover:text-[#8d6b35] hover:after:scale-x-100'}`}
-                                    >
-                                        {item.label}
-                                    </Link>
-                                );
-                            })}
-                        </nav>
+                        <StorefrontNavigation
+                            activeCategorySlug={product.category?.slug}
+                        />
                         <div className="flex items-center gap-3">
                             <button
                                 type="button"

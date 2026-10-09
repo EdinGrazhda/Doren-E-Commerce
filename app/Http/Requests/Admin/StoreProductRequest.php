@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\ProductCategory;
 use App\Rules\SafeImageUrl;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\UploadedFile;
@@ -11,7 +12,8 @@ use Illuminate\Validation\Validator;
 
 class StoreProductRequest extends FormRequest
 {
-    private const array Sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+    /** @var array<int, string>|null */
+    private ?array $resolvedSizeOptions = null;
 
     public function authorize(): bool
     {
@@ -42,8 +44,8 @@ class StoreProductRequest extends FormRequest
             'color_image_uploads.*.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'mimetypes:image/jpeg,image/png,image/webp', 'extensions:jpg,jpeg,png,webp', 'max:5120'],
             'is_active' => ['required', 'boolean'],
             'is_featured' => ['required', 'boolean'],
-            'variants' => ['required', 'array', 'min:5', 'max:100'],
-            'variants.*.size' => ['required', 'string', Rule::in(self::Sizes)],
+            'variants' => ['required', 'array', 'min:5', 'max:260'],
+            'variants.*.size' => ['required', 'string', Rule::in($this->sizeOptions())],
             'variants.*.color_name' => ['required', 'string', 'max:80'],
             'variants.*.color_hex' => ['nullable', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'variants.*.image_url' => ['nullable', 'max:2048', new SafeImageUrl],
@@ -62,6 +64,8 @@ class StoreProductRequest extends FormRequest
         return [
             function (Validator $validator): void {
                 $variants = collect($this->input('variants', []));
+                $sizeOptions = $this->sizeOptions();
+                $sizeOptionsLabel = implode(', ', $sizeOptions);
                 $variantKeys = $variants->map(fn (array $variant): string => Str::lower(Str::squish((string) ($variant['color_name'] ?? '')))
                     .'|'.Str::upper((string) ($variant['size'] ?? ''))
                 );
@@ -74,13 +78,13 @@ class StoreProductRequest extends FormRequest
                     ->groupBy(fn (array $variant): string => Str::lower(
                         Str::squish((string) ($variant['color_name'] ?? '')),
                     ))
-                    ->each(function ($colorVariants) use ($validator): void {
+                    ->each(function ($colorVariants) use ($sizeOptions, $sizeOptionsLabel, $validator): void {
                         $sizes = $colorVariants->pluck('size')->map(
                             fn (mixed $size): string => Str::upper((string) $size),
                         );
 
-                        if ($sizes->sort()->values()->all() !== collect(self::Sizes)->sort()->values()->all()) {
-                            $validator->errors()->add('variants', 'Each color must include stock for S, M, L, XL, and XXL.');
+                        if ($sizes->sort()->values()->all() !== collect($sizeOptions)->sort()->values()->all()) {
+                            $validator->errors()->add('variants', "Each color must include stock for {$sizeOptionsLabel}.");
                         }
 
                         if ($colorVariants->pluck('color_hex')->unique()->count() > 1) {
@@ -156,6 +160,23 @@ class StoreProductRequest extends FormRequest
     private function moneyToCents(string|int|float $amount): int
     {
         return (int) round(((float) $amount) * 100);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function sizeOptions(): array
+    {
+        if ($this->resolvedSizeOptions !== null) {
+            return $this->resolvedSizeOptions;
+        }
+
+        $categoryId = $this->input('product_category_id');
+        $category = is_numeric($categoryId)
+            ? ProductCategory::query()->find((int) $categoryId)
+            : null;
+
+        return $this->resolvedSizeOptions = $category?->sizeOptions() ?? ProductCategory::StandardSizes;
     }
 
     private function normalizeColorHex(mixed $colorHex): ?string

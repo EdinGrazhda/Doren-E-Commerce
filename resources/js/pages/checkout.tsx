@@ -98,10 +98,6 @@ export default function Checkout({ items, subtotal_cents, currency }: Props) {
             <Head title="Checkout | Doren" />
 
             <div className="min-h-screen bg-[#f5f1e9] text-[#151513] antialiased">
-                <div className="bg-[#12110f] px-4 py-2 text-center text-[12px] leading-none text-[#f6f1e9]">
-                    Complimentary shipping on orders over $150
-                </div>
-
                 <header className="sticky top-0 z-40 border-b border-[#dfd8cc] bg-[#f8f4ed]/95 backdrop-blur">
                     <div className="mx-auto flex h-[68px] max-w-[1158px] items-center justify-between px-6">
                         <Link

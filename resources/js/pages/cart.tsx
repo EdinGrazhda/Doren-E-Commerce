@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 
 import BrandLogo from '@/components/brand-logo';
+import StorefrontNavigation from '@/components/storefront-navigation';
 import { checkout, home, login } from '@/routes';
 import { cart as cartRoute } from '@/routes';
 import { destroy as destroyCartItem } from '@/routes/cart-items';
@@ -59,10 +60,6 @@ export default function Cart({ items, subtotal_cents, currency }: Props) {
             <Head title="Cart | Doren" />
 
             <div className="min-h-screen bg-[#f5f1e9] text-[#151513] antialiased">
-                <div className="bg-[#12110f] px-4 py-2 text-center text-[12px] leading-none text-[#f6f1e9]">
-                    Complimentary shipping on orders over $150
-                </div>
-
                 <header className="sticky top-0 z-40 border-b border-[#dfd8cc] bg-[#f8f4ed]/95 backdrop-blur">
                     <div className="mx-auto flex h-[68px] max-w-[1158px] items-center justify-between px-6">
                         <Link
@@ -71,15 +68,7 @@ export default function Cart({ items, subtotal_cents, currency }: Props) {
                         >
                             <BrandLogo className="h-12 w-full object-cover object-center" />
                         </Link>
-                        <nav className="hidden items-center gap-11 text-[11px] font-bold tracking-[0.12em] uppercase lg:flex">
-                            {['New In', 'Polos', 'Knitwear', 'Shirts'].map(
-                                (item) => (
-                                    <Link key={item} href={home()}>
-                                        {item}
-                                    </Link>
-                                ),
-                            )}
-                        </nav>
+                        <StorefrontNavigation />
                         <div className="flex items-center gap-3">
                             <button
                                 type="button"

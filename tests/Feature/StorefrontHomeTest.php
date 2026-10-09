@@ -25,6 +25,11 @@ test('storefront home renders real catalog data', function () {
             ->where('banners.top.body', 'Complimentary shipping on orders over $150')
             ->where('banners.hero.0.title', 'Timeless style. Modern man.')
             ->where('banners.bottom.title', 'Elevated Essentials For Every Day')
+            ->has('storefrontCategories', 4)
+            ->where('storefrontCategories.0.name', 'Polos')
+            ->where('storefrontCategories.1.name', 'Knitwear')
+            ->where('storefrontCategories.2.name', 'Shirts')
+            ->where('storefrontCategories.3.name', 'Trousers')
             ->has('categories', 4)
             ->has('categories.0', fn (Assert $page) => $page
                 ->where('name', 'Polos')
@@ -47,6 +52,35 @@ test('storefront home renders real catalog data', function () {
             )
             ->has('bestSellerProducts', 6)
             ->where('bestSellerProducts.0.is_featured', true)
+        );
+});
+
+test('storefront navigation uses visible categories in catalog order', function () {
+    ProductCategory::factory()->create([
+        'name' => 'Trousers',
+        'slug' => 'trousers',
+        'sort_order' => 20,
+    ]);
+    ProductCategory::factory()->create([
+        'name' => 'Polos',
+        'slug' => 'polos',
+        'sort_order' => 10,
+    ]);
+    ProductCategory::factory()->create([
+        'name' => 'Hidden',
+        'slug' => 'hidden',
+        'sort_order' => 5,
+        'is_visible' => false,
+    ]);
+
+    $this->get(route('home'))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('storefrontCategories', 2)
+            ->where('storefrontCategories.0.name', 'Polos')
+            ->where('storefrontCategories.0.slug', 'polos')
+            ->where('storefrontCategories.1.name', 'Trousers')
+            ->where('storefrontCategories.1.slug', 'trousers')
         );
 });
 

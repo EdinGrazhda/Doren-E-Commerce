@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Order;
+use App\Models\ProductCategory;
 use App\OrderStatus;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -50,6 +51,12 @@ class HandleInertiaRequests extends Middleware
             'cart' => [
                 'count' => collect($request->session()->get('cart.items', []))->sum('quantity'),
             ],
+            'storefrontCategories' => fn () => ProductCategory::query()
+                ->select(['id', 'name', 'slug'])
+                ->where('is_visible', true)
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->get(),
             'dashboard' => [
                 'orders' => [
                     'pending_count' => $this->pendingOrdersCount($request),

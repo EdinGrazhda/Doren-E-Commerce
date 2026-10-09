@@ -17,6 +17,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 
 import BrandLogo from '@/components/brand-logo';
+import StorefrontNavigation from '@/components/storefront-navigation';
 import { cart as cartRoute } from '@/routes';
 import { home } from '@/routes';
 import { show as showProduct } from '@/routes/products';
@@ -89,16 +90,6 @@ type Props = {
     newInProducts: PaginatedProducts;
     bestSellerProducts: StoreProduct[];
 };
-
-const navigationItems = [
-    { label: 'New In', slug: null },
-    { label: 'Polos', slug: 'polos' },
-    { label: 'Knitwear', slug: 'knitwear' },
-    { label: 'Shirts', slug: 'shirts' },
-    { label: 'Trousers', slug: 'trousers' },
-    { label: 'Jackets', slug: 'jackets' },
-    { label: 'Sale', slug: 'sale' },
-];
 
 const fallbackImages = [
     'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=900&q=85',
@@ -206,10 +197,6 @@ function categoryHref(categorySlug: string) {
     });
 }
 
-function navigationHref(slug: string | null) {
-    return slug ? categoryHref(slug) : `${home.url()}#new-in`;
-}
-
 function productPageHref(
     page: number,
     categorySlug?: string,
@@ -297,21 +284,6 @@ function CarouselDots({
                     onClick={() => onSelect(index)}
                 />
             ))}
-        </div>
-    );
-}
-
-function TopAnnouncement({ banner }: { banner: StorefrontBanner | null }) {
-    const content =
-        banner?.body ?? 'Complimentary shipping on orders over $150';
-
-    return (
-        <div className="bg-[#12110f] px-4 py-2 text-center text-[12px] leading-none text-[#f6f1e9]">
-            {banner?.primary_action_url ? (
-                <a href={banner.primary_action_url}>{content}</a>
-            ) : (
-                content
-            )}
         </div>
     );
 }
@@ -744,8 +716,6 @@ export default function Welcome({
             <Head title="Doren Menswear" />
 
             <div className="min-h-screen bg-[#f5f1e9] text-[#151513] antialiased">
-                <TopAnnouncement banner={banners.top} />
-
                 <header className="sticky top-0 z-40 border-b border-[#dfd8cc] bg-[#f8f4ed]/95 backdrop-blur">
                     <div className="mx-auto flex h-[68px] max-w-[1158px] items-center justify-between px-6">
                         <button
@@ -763,27 +733,11 @@ export default function Welcome({
                             <BrandLogo className="h-12 w-full object-cover object-center" />
                         </Link>
 
-                        <nav className="hidden items-center gap-11 text-[11px] font-bold tracking-[0.12em] uppercase lg:flex">
-                            {navigationItems.map((item) => {
-                                const isActive = item.slug
-                                    ? activeCategory?.slug === item.slug
-                                    : !activeCategory && !search;
-
-                                return (
-                                    <Link
-                                        key={item.label}
-                                        href={navigationHref(item.slug)}
-                                        preserveScroll
-                                        aria-current={
-                                            isActive ? 'page' : undefined
-                                        }
-                                        className={`relative py-2 transition-colors after:absolute after:right-0 after:bottom-0 after:left-0 after:h-px after:bg-[#8d6b35] after:transition-transform ${isActive ? 'text-[#8d6b35] after:scale-x-100' : 'after:scale-x-0 hover:text-[#8d6b35] hover:after:scale-x-100'}`}
-                                    >
-                                        {item.label}
-                                    </Link>
-                                );
-                            })}
-                        </nav>
+                        <StorefrontNavigation
+                            activeCategorySlug={activeCategory?.slug}
+                            isNewInActive={!activeCategory && !search}
+                            preserveScroll
+                        />
 
                         <div className="flex items-center gap-3">
                             <button
