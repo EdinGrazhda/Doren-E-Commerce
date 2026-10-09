@@ -751,11 +751,23 @@ test('admins can create update and delete products without order history', funct
 
     Storage::disk('public')->assertExists(Str::after($product->primary_image_url, '/storage/'));
 
+    $movement = InventoryMovement::factory()->create([
+        'product_variant_id' => $navyLargeVariant->id,
+        'user_id' => $admin->id,
+        'product_name' => $product->name,
+        'variant_name' => 'Navy / L',
+        'sku' => $navyLargeVariant->sku,
+    ]);
+
     $this->actingAs($admin)
         ->deleteJson(route('api.admin.products.destroy', $product))
         ->assertSuccessful();
 
     $this->assertModelMissing($product);
+    $this->assertModelMissing($navyLargeVariant);
+    expect($movement->fresh()->product_variant_id)->toBeNull()
+        ->and($movement->product_name)->toBe('Cotton Work Shirt')
+        ->and($movement->variant_name)->toBe('Navy / L');
 });
 
 test('pants and underwear products use numeric sizes from 28 through 40', function (string $categorySlug) {

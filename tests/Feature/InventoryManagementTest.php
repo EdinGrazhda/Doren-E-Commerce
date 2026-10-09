@@ -5,6 +5,7 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('only admins can access inventory management', function () {
@@ -92,6 +93,25 @@ test('received variants keep a stable position in the inventory listing', functi
         ->assertSuccessful()
         ->assertJsonPath('data.variants.data.0.id', $receivedVariant->id)
         ->assertJsonPath('data.variants.data.0.stock_quantity', 15);
+});
+
+test('inventory excludes variants whose products no longer exist', function () {
+    $admin = User::factory()->admin()->create();
+    $validVariant = ProductVariant::factory()->create(['stock_quantity' => 7]);
+    $orphanVariant = ProductVariant::factory()->create(['stock_quantity' => 12]);
+
+    DB::statement('PRAGMA defer_foreign_keys = ON');
+    DB::table('product_variants')
+        ->where('id', $orphanVariant->id)
+        ->update(['product_id' => 999999]);
+
+    $this->actingAs($admin)
+        ->getJson(route('api.admin.inventory.index'))
+        ->assertSuccessful()
+        ->assertJsonPath('data.variants.total', 1)
+        ->assertJsonPath('data.variants.data.0.id', $validVariant->id)
+        ->assertJsonPath('data.metrics.sku_count', 1)
+        ->assertJsonPath('data.metrics.unit_count', 7);
 });
 
 test('admins can record a sale with revenue and decrement stock', function () {
@@ -188,7 +208,7 @@ test('inactive variants cannot be sold but can receive stock', function () {
 test('inventory listing supports stock filters and independent pagination', function () {
     $admin = User::factory()->admin()->create();
 
-    ProductVariant::factory()->count(16)->create(['stock_quantity' => 20]);
+    ProductVariant::factory()->count(26)->create(['stock_quantity' => 20]);
     ProductVariant::factory()->count(3)->create(['stock_quantity' => 3]);
     ProductVariant::factory()->count(2)->create(['stock_quantity' => 0]);
     $movementVariant = ProductVariant::factory()->create(['stock_quantity' => 20]);
@@ -211,6 +231,22 @@ test('inventory listing supports stock filters and independent pagination', func
         ->assertJsonCount(1, 'data.movements.data')
         ->assertJsonPath('data.metrics.low_stock_count', 3)
         ->assertJsonPath('data.metrics.out_of_stock_count', 2);
+
+    $this->actingAs($admin)
+        ->getJson(route('api.admin.inventory.index', [
+            'variant_page' => 2,
+        ]))
+        ->assertSuccessful()
+        ->assertJsonPath('data.variants.current_page', 2)
+        ->assertJsonCount(15, 'data.variants.data');
+
+    $this->actingAs($admin)
+        ->getJson(route('api.admin.inventory.index', [
+            'variant_page' => 3,
+        ]))
+        ->assertSuccessful()
+        ->assertJsonPath('data.variants.current_page', 3)
+        ->assertJsonCount(2, 'data.variants.data');
 });
 
 test('inventory movements can be filtered to counter sales', function () {

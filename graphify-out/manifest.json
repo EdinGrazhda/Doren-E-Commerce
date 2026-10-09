@@ -845,8 +845,8 @@
     "semantic_hash": ""
   },
   "tests/Feature/AdminPanelTest.php": {
-    "mtime": 1791549828.4189491,
-    "ast_hash": "ed460112d87b2e168eaa3d038da1198c",
+    "mtime": 1791557020.8822584,
+    "ast_hash": "ac93fe1fb881fc3ae12cf5980733b672",
     "semantic_hash": ""
   },
   "tests/Feature/Auth/AuthenticationTest.php": {
@@ -1275,8 +1275,8 @@
     "semantic_hash": ""
   },
   "app/Http/Controllers/Api/Admin/ProductController.php": {
-    "mtime": 1791549734.3573506,
-    "ast_hash": "1ee73377f751973d3316ff7afddac598",
+    "mtime": 1791556966.472319,
+    "ast_hash": "c68e39aed969457aab1fb5c0e58fb925",
     "semantic_hash": ""
   },
   "app/Http/Controllers/Api/Admin/StorefrontBannerController.php": {
@@ -1375,8 +1375,8 @@
     "semantic_hash": ""
   },
   "app/Http/Controllers/Api/Admin/InventoryController.php": {
-    "mtime": 1789909404.0652497,
-    "ast_hash": "0c6ae5febacc9eaae03de46d4b929350",
+    "mtime": 1791556966.6793149,
+    "ast_hash": "b23f47ed7be9119dd661a5112ae7ce1a",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/StoreInventoryMovementRequest.php": {
@@ -1405,13 +1405,13 @@
     "semantic_hash": ""
   },
   "resources/js/pages/admin/inventory/index.tsx": {
-    "mtime": 1790200242.8514955,
-    "ast_hash": "66dc458e7da6cc86f57a47ea25cfa4ef",
+    "mtime": 1791558315.2683506,
+    "ast_hash": "558954c2e163e3e0653dbcefc9e76859",
     "semantic_hash": ""
   },
   "tests/Feature/InventoryManagementTest.php": {
-    "mtime": 1789909404.1334965,
-    "ast_hash": "c9bf1cff26763fda08d88a8d9c3d1002",
+    "mtime": 1791558315.465351,
+    "ast_hash": "ffd7d4645d881128c707082f6992c980",
     "semantic_hash": ""
   },
   ".ai/rules/inventory.md": {
@@ -1712,6 +1712,11 @@
   ".ai/rules/js-pages-products.md": {
     "mtime": 1791549174.763349,
     "ast_hash": "21280abac9d02ac513df8c502926cc1b",
+    "semantic_hash": ""
+  },
+  "app/Actions/Products/DeleteProduct.php": {
+    "mtime": 1791556966.256323,
+    "ast_hash": "be0e4f4640b8647106ef393a9488a462",
     "semantic_hash": ""
   }
 }

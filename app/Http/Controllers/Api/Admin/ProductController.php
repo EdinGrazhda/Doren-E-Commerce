@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Actions\Images\StoreOptimizedImage;
+use App\Actions\Products\DeleteProduct;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProductRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
@@ -19,7 +20,10 @@ use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
-    public function __construct(private StoreOptimizedImage $storeOptimizedImage) {}
+    public function __construct(
+        private StoreOptimizedImage $storeOptimizedImage,
+        private DeleteProduct $deleteProduct,
+    ) {}
 
     public function index(Request $request): JsonResponse
     {
@@ -155,7 +159,7 @@ class ProductController extends Controller
             ], 422);
         }
 
-        $product->delete();
+        $this->deleteProduct->execute($product);
 
         return response()->json(['message' => 'Product deleted.']);
     }

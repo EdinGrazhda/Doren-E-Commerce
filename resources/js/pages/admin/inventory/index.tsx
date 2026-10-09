@@ -171,7 +171,9 @@ function formatDateTime(value: string): string {
 }
 
 export default function AdminInventoryIndex() {
-    const [listingUrl, setListingUrl] = useState(inventoryApiIndex.url());
+    const [listingUrl, setListingUrl] = useState(() =>
+        inventoryListingUrl('', 'all'),
+    );
     const [search, setSearch] = useState('');
     const [stockFilter, setStockFilter] = useState('all');
     const [saveError, setSaveError] = useState<string | null>(null);
@@ -183,16 +185,12 @@ export default function AdminInventoryIndex() {
     useEffect(() => {
         const nextUrl = inventoryListingUrl(search, stockFilter);
 
-        if (nextUrl === listingUrl) {
-            return;
-        }
-
         const timeout = window.setTimeout(() => {
             setListingUrl(nextUrl);
         }, realtimeSearchDelay);
 
         return () => window.clearTimeout(timeout);
-    }, [listingUrl, search, stockFilter]);
+    }, [search, stockFilter]);
 
     const applyFilters = (nextSearch: string, nextStatus: string) => {
         setListingUrl(inventoryListingUrl(nextSearch, nextStatus));

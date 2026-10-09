@@ -37,6 +37,7 @@ class InventoryController extends Controller
                 'is_active',
                 'updated_at',
             ])
+            ->whereHas('product')
             ->with('product:id,name,sku,price_cents,currency,primary_image_url,is_active')
             ->when($search !== '', function ($query) use ($search): void {
                 $query->where(function ($query) use ($search): void {
@@ -76,6 +77,7 @@ class InventoryController extends Controller
             ->withQueryString();
 
         $metrics = ProductVariant::query()
+            ->whereHas('product')
             ->selectRaw('COUNT(*) as sku_count')
             ->selectRaw('COALESCE(SUM(stock_quantity), 0) as unit_count')
             ->selectRaw('SUM(CASE WHEN stock_quantity BETWEEN 1 AND 5 THEN 1 ELSE 0 END) as low_stock_count')
