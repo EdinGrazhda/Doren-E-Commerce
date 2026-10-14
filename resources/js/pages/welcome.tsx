@@ -2,7 +2,6 @@ import { Head, Link, router, usePage } from '@inertiajs/react';
 import {
     ArrowLeft,
     ArrowRight,
-    ChevronDown,
     Heart,
     Instagram,
     Mail,
@@ -20,6 +19,7 @@ import BrandLogo from '@/components/brand-logo';
 import StorefrontNavigation from '@/components/storefront-navigation';
 import { cart as cartRoute } from '@/routes';
 import { home } from '@/routes';
+import { show as showCollection } from '@/routes/collections';
 import { show as showProduct } from '@/routes/products';
 
 type StoreCategory = {
@@ -80,6 +80,7 @@ type Props = {
         id: number;
         name: string;
         slug: string;
+        description: string | null;
     } | null;
     banners: {
         top: StorefrontBanner | null;
@@ -190,11 +191,7 @@ function bannerTitleLines(title: string, fallback: string): string[] {
 }
 
 function categoryHref(categorySlug: string) {
-    return home({
-        query: {
-            category: categorySlug,
-        },
-    });
+    return showCollection.url(categorySlug);
 }
 
 function productPageHref(
@@ -202,13 +199,14 @@ function productPageHref(
     categorySlug?: string,
     search?: string,
 ): string {
-    return `${home.url({
+    const options = {
         query: {
-            page,
-            ...(categorySlug ? { category: categorySlug } : {}),
+            ...(page > 1 ? { page } : {}),
             ...(search ? { search } : {}),
         },
-    })}#new-in`;
+    };
+
+    return `${categorySlug ? showCollection.url(categorySlug, options) : home.url(options)}#new-in`;
 }
 
 function productColorHref(product: StoreProduct, colorName: string): string {
@@ -684,11 +682,10 @@ export default function Welcome({
         const normalizedSearch = searchValue.trim();
 
         router.get(
-            home.url(),
-            {
-                ...(normalizedSearch ? { search: normalizedSearch } : {}),
-                ...(activeCategory ? { category: activeCategory.slug } : {}),
-            },
+            activeCategory
+                ? showCollection.url(activeCategory.slug)
+                : home.url(),
+            normalizedSearch ? { search: normalizedSearch } : {},
             {
                 preserveState: true,
                 replace: true,
@@ -705,15 +702,23 @@ export default function Welcome({
         setSearchValue('');
 
         router.get(
-            home.url(),
-            activeCategory ? { category: activeCategory.slug } : {},
+            activeCategory
+                ? showCollection.url(activeCategory.slug)
+                : home.url(),
+            {},
             { preserveState: true, replace: true },
         );
     };
 
     return (
         <>
-            <Head title="Doren Menswear" />
+            <Head
+                title={
+                    activeCategory
+                        ? `Men's ${activeCategory.name} in Kosovo | Doren`
+                        : "Men's Clothing in Prizren, Kosovo | Doren"
+                }
+            />
 
             <div className="min-h-screen bg-[#f5f1e9] text-[#151513] antialiased">
                 <header className="sticky top-0 z-40 border-b border-[#dfd8cc] bg-[#f8f4ed]/95 backdrop-blur">
@@ -815,7 +820,31 @@ export default function Welcome({
                 </header>
 
                 <main>
-                    <HeroCarousel banners={heroBanners} />
+                    {!activeCategory && !search && (
+                        <HeroCarousel banners={heroBanners} />
+                    )}
+
+                    {activeCategory && !search && (
+                        <section className="mx-auto max-w-[1158px] px-6 pt-12 pb-6">
+                            <p className="text-[10px] font-bold tracking-[0.14em] text-[#8d6b35] uppercase">
+                                Doren · Prizren, Kosovo
+                            </p>
+                            <h1 className="mt-3 [font-family:Georgia,_serif] text-[38px] leading-tight sm:text-[48px]">
+                                Men's {activeCategory.name}
+                            </h1>
+                            <p className="mt-3 max-w-2xl text-sm leading-6 text-[#655f55]">
+                                {activeCategory.description ??
+                                    `Explore Doren men's ${activeCategory.name.toLowerCase()}.`}{' '}
+                                Delivery to Kosovo, Albania and North Macedonia.
+                            </p>
+                        </section>
+                    )}
+
+                    {search && (
+                        <h1 className="mx-auto max-w-[1158px] px-6 pt-10 [font-family:Georgia,_serif] text-[32px]">
+                            Search results for “{search}”
+                        </h1>
+                    )}
 
                     {categories.length > 0 && (
                         <section
@@ -825,6 +854,13 @@ export default function Welcome({
                             <h2 className="text-center text-[14px] font-bold tracking-[0.08em] uppercase">
                                 Shop By Category
                             </h2>
+                            {!activeCategory && !search && (
+                                <p className="mt-3 text-center text-sm text-[#655f55]">
+                                    Doren menswear from Prizren, Kosovo, with
+                                    delivery to Kosovo, Albania and North
+                                    Macedonia.
+                                </p>
+                            )}
                             {activeCategory && (
                                 <div className="mt-3 flex justify-center">
                                     <Link
@@ -1012,13 +1048,9 @@ export default function Welcome({
                     </div>
                     <div className="mx-auto flex max-w-[1158px] flex-col gap-4 border-t border-white/10 px-6 py-4 text-[10px] text-[#c9c5bb] sm:flex-row sm:items-center sm:justify-between">
                         <span>© 2026 DOREN. All rights reserved.</span>
-                        <button
-                            type="button"
-                            className="inline-flex items-center gap-2 self-start sm:self-auto"
-                        >
-                            Kosovo (EUR €)
-                            <ChevronDown className="h-4 w-4" />
-                        </button>
+                        <span>
+                            Delivery: Kosovo · Albania · North Macedonia
+                        </span>
                     </div>
                 </footer>
             </div>

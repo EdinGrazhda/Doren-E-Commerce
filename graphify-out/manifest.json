@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "config/app.php": {
-    "mtime": 1785422079.0,
-    "ast_hash": "e2660cb4518ec799b540ad0b3b2982f3",
+    "mtime": 1791984346.9091287,
+    "ast_hash": "a1b5d586d6d08bb0f08f42ef0dfbb402",
     "semantic_hash": ""
   },
   "config/auth.php": {
@@ -205,13 +205,13 @@
     "semantic_hash": ""
   },
   "config/logging.php": {
-    "mtime": 1785422079.0,
-    "ast_hash": "53d833ca3a672127b7298d17271050f9",
+    "mtime": 1791984347.3121243,
+    "ast_hash": "2adc41f6e956d5a88a7e672328d16eff",
     "semantic_hash": ""
   },
   "config/mail.php": {
-    "mtime": 1785422079.0,
-    "ast_hash": "18601a927b48d38337ba2077426a7d60",
+    "mtime": 1791984347.1331263,
+    "ast_hash": "afacc8be89106303c2890dd36955d4ff",
     "semantic_hash": ""
   },
   "config/queue.php": {
@@ -340,8 +340,8 @@
     "semantic_hash": ""
   },
   "resources/js/app.tsx": {
-    "mtime": 1786664748.9826398,
-    "ast_hash": "948db9c4a2e6a49472145edb05817ce3",
+    "mtime": 1791984520.4165213,
+    "ast_hash": "bbf79b4ec61c122be5b60ea51f969eab",
     "semantic_hash": ""
   },
   "resources/js/components/admin-sidebar.tsx": {
@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "resources/js/components/app-logo.tsx": {
-    "mtime": 1789909404.1298227,
-    "ast_hash": "fd2f7677e943a67852d449501071b4d5",
+    "mtime": 1791986536.2321334,
+    "ast_hash": "7a01231d661b9b468f316f51ee77860b",
     "semantic_hash": ""
   },
   "resources/js/components/app-shell.tsx": {
@@ -790,8 +790,8 @@
     "semantic_hash": ""
   },
   "resources/js/pages/welcome.tsx": {
-    "mtime": 1791549020.0709631,
-    "ast_hash": "972c449e31d7fc1b7758bdf2e4287d94",
+    "mtime": 1791985273.9676437,
+    "ast_hash": "f77457493b4715a15650f2abd78ba17d",
     "semantic_hash": ""
   },
   "resources/js/types/auth.ts": {
@@ -825,8 +825,8 @@
     "semantic_hash": ""
   },
   "resources/views/app.blade.php": {
-    "mtime": 1791549736.28425,
-    "ast_hash": "45fcddd930368203757944bbc597a395",
+    "mtime": 1791985360.1141205,
+    "ast_hash": "3e703a8f2f9c2052030fc622e939b865",
     "semantic_hash": ""
   },
   "routes/console.php": {
@@ -840,13 +840,13 @@
     "semantic_hash": ""
   },
   "routes/web.php": {
-    "mtime": 1789993682.19811,
-    "ast_hash": "fa08fa28349cfd6078a6eaef6366f422",
+    "mtime": 1791985028.0471902,
+    "ast_hash": "3133482033b0d34640d93b7eda3dd3c7",
     "semantic_hash": ""
   },
   "tests/Feature/AdminPanelTest.php": {
-    "mtime": 1791557020.8822584,
-    "ast_hash": "ac93fe1fb881fc3ae12cf5980733b672",
+    "mtime": 1791986273.1421735,
+    "ast_hash": "dfcbe8081d419c804b89237aae36ee0f",
     "semantic_hash": ""
   },
   "tests/Feature/Auth/AuthenticationTest.php": {
@@ -1130,18 +1130,18 @@
     "semantic_hash": ""
   },
   "app/Http/Controllers/HomeController.php": {
-    "mtime": 1791549078.4177325,
-    "ast_hash": "f4d18a3091d01f53d8e7af3d04f93ea0",
+    "mtime": 1791985016.471519,
+    "ast_hash": "9528f304a9316bdf4127664f4b502ff3",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/StoreStorefrontBannerRequest.php": {
-    "mtime": 1789909404.0687354,
-    "ast_hash": "1b10f70bf3d27e19089de9b4cc308bcf",
+    "mtime": 1791985897.65035,
+    "ast_hash": "83faa633f2e4101a01ec215ffbd2f03f",
     "semantic_hash": ""
   },
   "app/Http/Requests/Admin/UpdateStorefrontBannerRequest.php": {
-    "mtime": 1789909404.0694015,
-    "ast_hash": "3295a794b9df047401f44bc8e5158b61",
+    "mtime": 1791985897.9283464,
+    "ast_hash": "e246868aee28497e714a67b52eacf968",
     "semantic_hash": ""
   },
   "app/Models/StorefrontBanner.php": {
@@ -1170,13 +1170,13 @@
     "semantic_hash": ""
   },
   "resources/js/pages/admin/banners/index.tsx": {
-    "mtime": 1789909404.130587,
-    "ast_hash": "565d82e885c77fc9d22277667f779a3e",
+    "mtime": 1791986295.346922,
+    "ast_hash": "2bc84796728204052728d5d38286b12f",
     "semantic_hash": ""
   },
   "tests/Feature/StorefrontHomeTest.php": {
-    "mtime": 1791549021.2039557,
-    "ast_hash": "bad253d90346708075d332e5175ce44e",
+    "mtime": 1791985404.619384,
+    "ast_hash": "579722c667ddfa9b277739c8e980acc8",
     "semantic_hash": ""
   },
   "references/ecommerce2.png": {
@@ -1190,13 +1190,13 @@
     "semantic_hash": ""
   },
   "resources/js/pages/products/show.tsx": {
-    "mtime": 1791549020.274962,
-    "ast_hash": "196c2792528bb92ae63f58fbc7de33c1",
+    "mtime": 1791985274.0816414,
+    "ast_hash": "2e74427a4cff69c2c7ac115121330d17",
     "semantic_hash": ""
   },
   "tests/Feature/StorefrontProductShowTest.php": {
-    "mtime": 1789909404.133891,
-    "ast_hash": "ac65b38e0c6acdf49b3dc8fc8e795736",
+    "mtime": 1791985353.9502249,
+    "ast_hash": "9f4e08694f66bc51d4de56f38d66e6b8",
     "semantic_hash": ""
   },
   "app/Http/Controllers/CartItemController.php": {
@@ -1280,8 +1280,8 @@
     "semantic_hash": ""
   },
   "app/Http/Controllers/Api/Admin/StorefrontBannerController.php": {
-    "mtime": 1789909404.0662494,
-    "ast_hash": "ddb3b2cf21228fae0775e81ff23538e7",
+    "mtime": 1791985977.1884017,
+    "ast_hash": "466ab4ccacb3a34b6d97cc687e66e52d",
     "semantic_hash": ""
   },
   "config/sanctum.php": {
@@ -1650,8 +1650,8 @@
     "semantic_hash": ""
   },
   "public/robots.txt": {
-    "mtime": 1785422079.0,
-    "ast_hash": "b6216d61c03e6ce0c9aea6ca7808f7ca",
+    "mtime": 1791985060.8803005,
+    "ast_hash": "2f1103f97b7a77657c0397a80fb6fd5b",
     "semantic_hash": ""
   },
   "public/Images/doren-black-logo.jpeg": {
@@ -1665,13 +1665,13 @@
     "semantic_hash": ""
   },
   "public/apple-touch-icon.png": {
-    "mtime": 1785422079.0,
-    "ast_hash": "4ec34bfee5050d402638888ce2e9a968",
+    "mtime": 1791984373.4318476,
+    "ast_hash": "d568cbebb3a2b32fb891e75a3d5470d8",
     "semantic_hash": ""
   },
   "public/favicon.svg": {
-    "mtime": 1785422079.0,
-    "ast_hash": "6d65603fc671e2ab354f3ff070494594",
+    "mtime": 1791984414.83644,
+    "ast_hash": "946f7212b68e4051be0cfa1c4afd31cd",
     "semantic_hash": ""
   },
   "public/logo/doren-black-logo-removebg-preview.png": {
@@ -1705,8 +1705,8 @@
     "semantic_hash": ""
   },
   "resources/js/components/storefront-navigation.tsx": {
-    "mtime": 1791549019.7249656,
-    "ast_hash": "3e3c96a3ea695e9a7e65fb6502064886",
+    "mtime": 1791985153.4260776,
+    "ast_hash": "c130b09913379d848ed4229db0e3ae43",
     "semantic_hash": ""
   },
   ".ai/rules/js-pages-products.md": {
@@ -1717,6 +1717,31 @@
   "app/Actions/Products/DeleteProduct.php": {
     "mtime": 1791556966.256323,
     "ast_hash": "be0e4f4640b8647106ef393a9488a462",
+    "semantic_hash": ""
+  },
+  "public/icon-192.png": {
+    "mtime": 1791984373.4444208,
+    "ast_hash": "8e94a79e31d3f8a6c0471df1392afdf6",
+    "semantic_hash": ""
+  },
+  "public/icon-512.png": {
+    "mtime": 1791984373.5353453,
+    "ast_hash": "f3da0ed57eff4c2b295de1d950e6ea11",
+    "semantic_hash": ""
+  },
+  "public/social-preview.png": {
+    "mtime": 1791984373.739433,
+    "ast_hash": "dbcfcaad975db1a3ffbd80a701e58384",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/SitemapController.php": {
+    "mtime": 1791985237.474372,
+    "ast_hash": "a1ae59ca4028ffaff11ddf57cefab653",
+    "semantic_hash": ""
+  },
+  "tests/Feature/SitemapTest.php": {
+    "mtime": 1791985259.9999053,
+    "ast_hash": "39dc36c58ea30d7099beaefd92ce5e4e",
     "semantic_hash": ""
   }
 }

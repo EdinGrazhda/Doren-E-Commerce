@@ -518,7 +518,6 @@ test('admins can create update and delete storefront banners', function () {
             'title' => 'Quiet luxury essentials',
             'subtitle' => 'Refined pieces for every day.',
             'image_upload' => UploadedFile::fake()->image('hero.JPG', 1600, 700),
-            'position' => 'bottom',
             'is_active' => false,
             'sort_order' => 500,
         ], ['Accept' => 'application/json'])
@@ -566,7 +565,7 @@ test('admins can create update and delete storefront banners', function () {
     $this->assertModelMissing($banner);
 });
 
-test('admin banners only lists main hero carousel slides', function () {
+test('admin banners lists carousel slides and the lower banner separately', function () {
     $admin = User::factory()->admin()->create();
     $heroBanner = StorefrontBanner::factory()->create([
         'position' => 'hero',
@@ -576,7 +575,7 @@ test('admin banners only lists main hero carousel slides', function () {
         'position' => 'top',
         'title' => 'Top announcement',
     ]);
-    StorefrontBanner::factory()->create([
+    $bottomBanner = StorefrontBanner::factory()->create([
         'position' => 'bottom',
         'title' => 'Bottom campaign',
     ]);
@@ -586,7 +585,94 @@ test('admin banners only lists main hero carousel slides', function () {
         ->assertSuccessful()
         ->assertJsonPath('data.banners.total', 1)
         ->assertJsonPath('data.banners.data.0.id', $heroBanner->id)
+        ->assertJsonPath('data.banners.data.0.position', 'hero')
+        ->assertJsonPath('data.bottomBanner.id', $bottomBanner->id)
+        ->assertJsonPath('data.bottomBanner.position', 'bottom')
+        ->assertJsonPath('data.bottomBanner.title', 'Bottom campaign')
         ->assertJsonMissingPath('data.positions');
+});
+
+test('admins can create and edit the lower homepage banner', function () {
+    Storage::fake('public');
+
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->post(route('api.admin.banners.store'), [
+            'position' => 'bottom',
+            'eyebrow' => 'New season',
+            'title' => 'Everyday Essentials',
+            'body' => 'Designed in Prizren for every day.',
+            'primary_action_label' => 'Shop shirts',
+            'primary_action_url' => '/collections/shirts',
+            'image_upload' => UploadedFile::fake()->image('campaign.jpg', 1600, 700),
+        ], ['Accept' => 'application/json'])
+        ->assertCreated()
+        ->assertJsonPath('data.position', 'bottom');
+
+    $banner = StorefrontBanner::query()->where('position', 'bottom')->firstOrFail();
+    $originalImageUrl = $banner->image_url;
+
+    expect($banner->image_url)->toContain('/storage/storefront-banners/')
+        ->and($banner->image_url)->toEndWith('.webp');
+
+    $this->actingAs($admin)
+        ->post(route('api.admin.banners.update', $banner), [
+            '_method' => 'put',
+            'eyebrow' => 'Autumn / Winter',
+            'title' => 'Made for the Moment',
+            'body' => 'Modern menswear from Prizren.',
+            'primary_action_label' => 'Explore knitwear',
+            'primary_action_url' => '#new-in',
+            'image_upload' => UploadedFile::fake()->image('new-campaign.png', 1600, 700),
+            'position' => 'hero',
+        ], ['Accept' => 'application/json'])
+        ->assertSuccessful()
+        ->assertJsonPath('data.title', 'Made for the Moment');
+
+    $banner->refresh();
+
+    expect($banner->position)->toBe('bottom')
+        ->and($banner->eyebrow)->toBe('Autumn / Winter')
+        ->and($banner->body)->toBe('Modern menswear from Prizren.')
+        ->and($banner->primary_action_label)->toBe('Explore knitwear')
+        ->and($banner->primary_action_url)->toBe('#new-in')
+        ->and($banner->image_url)->not->toBe($originalImageUrl);
+
+    $this->get(route('home'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('welcome')
+            ->where('banners.bottom.title', 'Made for the Moment')
+            ->where('banners.bottom.body', 'Modern menswear from Prizren.'));
+
+    $this->actingAs($admin)
+        ->post(route('api.admin.banners.store'), [
+            'position' => 'bottom',
+            'eyebrow' => 'Another season',
+            'title' => 'Duplicate campaign',
+            'body' => 'Duplicate body',
+            'primary_action_label' => 'Shop',
+            'primary_action_url' => '#new-in',
+            'image_upload' => UploadedFile::fake()->image('duplicate.jpg', 1600, 700),
+        ], ['Accept' => 'application/json'])
+        ->assertConflict();
+});
+
+test('lower banner links must stay on the storefront', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->post(route('api.admin.banners.store'), [
+            'position' => 'bottom',
+            'eyebrow' => 'New season',
+            'title' => 'Everyday Essentials',
+            'body' => 'Designed in Prizren for every day.',
+            'primary_action_label' => 'Shop now',
+            'primary_action_url' => 'javascript:alert(1)',
+            'image_upload' => UploadedFile::fake()->image('campaign.jpg', 1600, 700),
+        ], ['Accept' => 'application/json'])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('primary_action_url');
 });
 
 test('admins must provide the carousel image and text', function () {

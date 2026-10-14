@@ -15,15 +15,17 @@ class HomeController extends Controller
 {
     public function __construct(private readonly ProductCampaignPrice $campaignPrice) {}
 
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request, ?ProductCategory $category = null): Response
     {
-        $activeCategory = null;
+        abort_if($category && ! $category->is_visible, 404);
+
+        $activeCategory = $category;
         $categorySlug = $request->string('category')->toString();
         $search = $request->string('search')->squish()->limit(100)->toString();
 
-        if ($categorySlug !== '') {
+        if (! $activeCategory && $categorySlug !== '') {
             $activeCategory = ProductCategory::query()
-                ->select(['id', 'name', 'slug'])
+                ->select(['id', 'name', 'slug', 'description'])
                 ->where('is_visible', true)
                 ->where('slug', $categorySlug)
                 ->first();
@@ -141,6 +143,7 @@ class HomeController extends Controller
                 'id' => $activeCategory->id,
                 'name' => $activeCategory->name,
                 'slug' => $activeCategory->slug,
+                'description' => $activeCategory->description,
             ] : null,
             'banners' => [
                 'top' => $bannerGroups->get('top')->first(),

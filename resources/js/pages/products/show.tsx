@@ -2,7 +2,6 @@ import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import {
     ArrowLeft,
     ArrowRight,
-    ChevronDown,
     Heart,
     Instagram,
     Mail,
@@ -20,6 +19,7 @@ import BrandLogo from '@/components/brand-logo';
 import StorefrontNavigation from '@/components/storefront-navigation';
 import { cart as cartRoute, home } from '@/routes';
 import { store as storeCartItem } from '@/routes/cart-items';
+import { show as showCollection } from '@/routes/collections';
 import { show as showProduct } from '@/routes/products';
 
 type ProductColor = {
@@ -309,7 +309,7 @@ export default function Show({ product, relatedProducts }: Props) {
 
     return (
         <>
-            <Head title={`${product.name} | Doren`} />
+            <Head title={`${product.name} | Doren Menswear`} />
 
             <div className="min-h-screen bg-[#f5f1e9] text-[#151513] antialiased">
                 <header className="sticky top-0 z-40 border-b border-[#dfd8cc] bg-[#f8f4ed]/95 backdrop-blur">
@@ -461,7 +461,9 @@ export default function Show({ product, relatedProducts }: Props) {
                                 {product.category && (
                                     <>
                                         <Link
-                                            href={`${home.url()}#${product.category.slug}`}
+                                            href={showCollection(
+                                                product.category.slug,
+                                            )}
                                         >
                                             {product.category.name}
                                         </Link>
@@ -731,13 +733,9 @@ export default function Show({ product, relatedProducts }: Props) {
                             <ArrowLeft className="h-4 w-4" />
                             Back to shop
                         </Link>
-                        <button
-                            type="button"
-                            className="inline-flex items-center gap-2 self-start sm:self-auto"
-                        >
-                            Kosovo (EUR €)
-                            <ChevronDown className="h-4 w-4" />
-                        </button>
+                        <span>
+                            Delivery: Kosovo · Albania · North Macedonia
+                        </span>
                     </div>
                 </footer>
             </div>

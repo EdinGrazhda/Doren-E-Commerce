@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 
 import { home } from '@/routes';
+import { show as showCollection } from '@/routes/collections';
 
 type Props = {
     activeCategorySlug?: string | null;
@@ -36,7 +37,7 @@ export default function StorefrontNavigation({
                         key={item.id}
                         href={
                             item.slug
-                                ? home({ query: { category: item.slug } })
+                                ? showCollection(item.slug)
                                 : `${home.url()}#new-in`
                         }
                         preserveScroll={preserveScroll}

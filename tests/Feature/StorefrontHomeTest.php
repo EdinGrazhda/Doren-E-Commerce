@@ -9,6 +9,61 @@ use Database\Seeders\StorefrontBannerSeeder;
 use Illuminate\Support\Facades\DB;
 use Inertia\Testing\AssertableInertia as Assert;
 
+test('storefront exposes Doren branding for shared links and installed apps', function () {
+    $this->get(route('home'))
+        ->assertSuccessful()
+        ->assertSee('Clothing in Prizren, Kosovo | Doren</title>', false)
+        ->assertSee('rel="canonical" href="'.route('home').'"', false)
+        ->assertSee('property="og:site_name" content="Doren Menswear"', false)
+        ->assertSee('property="og:image" content="'.url('/social-preview.png').'"', false)
+        ->assertSee('name="twitter:card" content="summary_large_image"', false)
+        ->assertSee('rel="apple-touch-icon" href="/apple-touch-icon.png?v=doren"', false)
+        ->assertSee('rel="manifest" href="/site.webmanifest"', false);
+
+    $manifest = json_decode(file_get_contents(public_path('site.webmanifest')), true, 512, JSON_THROW_ON_ERROR);
+
+    expect($manifest['name'])->toBe('Doren Menswear')
+        ->and($manifest['short_name'])->toBe('Doren')
+        ->and(getimagesize(public_path('icon-192.png'))[0])->toBe(192)
+        ->and(getimagesize(public_path('icon-512.png'))[0])->toBe(512)
+        ->and(getimagesize(public_path('apple-touch-icon.png'))[0])->toBe(180)
+        ->and(getimagesize(public_path('social-preview.png'))[0])->toBe(1200);
+});
+
+test('visible collections have crawlable pages and distinct metadata', function () {
+    $category = ProductCategory::factory()->create([
+        'name' => 'Polos',
+        'slug' => 'polos',
+        'description' => 'Refined polo shirts for everyday wear.',
+    ]);
+    Product::factory()->for($category, 'category')->create();
+
+    $this->get(route('collections.show', ['category' => $category->slug]))
+        ->assertSuccessful()
+        ->assertSee('Men&#039;s Polos in Kosovo | Doren</title>', false)
+        ->assertSee('rel="canonical" href="'.route('collections.show', ['category' => $category->slug]).'"', false)
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('welcome')
+            ->where('activeCategory.name', 'Polos')
+            ->where('activeCategory.description', 'Refined polo shirts for everyday wear.')
+            ->where('newInProducts.total', 1)
+        );
+
+    $this->get(route('home', ['category' => $category->slug]))
+        ->assertSuccessful()
+        ->assertSee('rel="canonical" href="'.route('collections.show', ['category' => $category->slug]).'"', false);
+
+    $category->update(['is_visible' => false]);
+
+    $this->get(route('collections.show', ['category' => $category->slug]))->assertNotFound();
+});
+
+test('catalog searches are excluded from indexing', function () {
+    $this->get(route('home', ['search' => 'polo']))
+        ->assertSuccessful()
+        ->assertSee('name="robots" content="noindex,follow"', false);
+});
+
 test('storefront home renders real catalog data', function () {
     $this->seed([
         StorefrontBannerSeeder::class,

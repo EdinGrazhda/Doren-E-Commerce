@@ -6,6 +6,31 @@ use App\Models\ProductVariant;
 use App\Models\ProductVariantImage;
 use Inertia\Testing\AssertableInertia as Assert;
 
+test('product page exposes unique metadata and a current product offer', function () {
+    $product = Product::factory()->create([
+        'name' => 'Pima Cotton Polo',
+        'slug' => 'pima-cotton-polo',
+        'description' => 'A soft cotton polo for daily wear.',
+        'price_cents' => 8900,
+        'currency' => 'EUR',
+        'primary_image_url' => '/storage/products/pima-polo.jpg',
+    ]);
+
+    $response = $this->get(route('products.show', ['product' => $product->slug]))
+        ->assertSuccessful()
+        ->assertSee('<title>Pima Cotton Polo | Doren Menswear</title>', false)
+        ->assertSee('rel="canonical" href="'.route('products.show', ['product' => $product->slug]).'"', false)
+        ->assertSee('property="og:image" content="'.url('/storage/products/pima-polo.jpg').'"', false);
+
+    preg_match('/<script type="application\/ld\+json">(.*?)<\/script>/s', $response->getContent(), $matches);
+    $structuredData = json_decode($matches[1] ?? '', true, 512, JSON_THROW_ON_ERROR);
+
+    expect($structuredData['@type'])->toBe('Product')
+        ->and($structuredData['name'])->toBe('Pima Cotton Polo')
+        ->and($structuredData['offers']['price'])->toBe(89)
+        ->and($structuredData['offers']['priceCurrency'])->toBe('EUR');
+});
+
 test('storefront product detail renders active product data', function () {
     $category = ProductCategory::factory()->create([
         'name' => 'Polos',

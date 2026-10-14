@@ -19,6 +19,13 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useAdminApi } from '@/hooks/use-admin-api';
 import { formatDate } from '@/lib/admin-format';
@@ -33,25 +40,41 @@ import { index as bannersIndex } from '@/routes/dashboard/banners';
 
 type Banner = {
     id: number;
+    position: 'hero' | 'bottom';
+    eyebrow: string | null;
     title: string | null;
     subtitle: string | null;
+    body: string | null;
+    primary_action_label: string | null;
+    primary_action_url: string | null;
     image_url: string | null;
     updated_at: string;
 };
 
 type Props = {
     banners: AdminPaginationMeta<Banner>;
+    bottomBanner: Banner | null;
 };
 
 type BannerFormData = {
+    position: 'hero' | 'bottom';
+    eyebrow: string;
     title: string;
     subtitle: string;
+    body: string;
+    primary_action_label: string;
+    primary_action_url: string;
     image_upload: File | null;
 };
 
 const emptyBanner: BannerFormData = {
+    position: 'hero',
+    eyebrow: '',
     title: '',
     subtitle: '',
+    body: '',
+    primary_action_label: '',
+    primary_action_url: '',
     image_upload: null,
 };
 
@@ -205,6 +228,10 @@ async function preparedBannerUpload(file: File): Promise<File> {
 export default function AdminBannersIndex() {
     const [open, setOpen] = useState(false);
     const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
+    const [editingPosition, setEditingPosition] = useState<'hero' | 'bottom'>(
+        'hero',
+    );
+    const [showPlacementSelector, setShowPlacementSelector] = useState(false);
     const [bannersPageUrl, setBannersPageUrl] = useState(bannersApiIndex.url());
     const [imagePreparationError, setImagePreparationError] = useState('');
     const [isPreparingImage, setIsPreparingImage] = useState(false);
@@ -221,25 +248,76 @@ export default function AdminBannersIndex() {
         );
     }
 
-    const { banners } = listing.data;
+    const { banners, bottomBanner } = listing.data;
 
     const openCreateDialog = () => {
         setEditingBanner(null);
+        setEditingPosition('hero');
+        setShowPlacementSelector(true);
         setImagePreparationError('');
         form.clearErrors();
         form.setData(emptyBanner);
         setOpen(true);
     };
 
-    const openEditDialog = (banner: Banner) => {
+    const fillFormFromBanner = (banner: Banner) => {
         setEditingBanner(banner);
+        setEditingPosition(banner.position);
         setImagePreparationError('');
         form.clearErrors();
         form.setData({
+            position: banner.position,
+            eyebrow: banner.eyebrow ?? '',
             title: banner.title ?? '',
             subtitle: banner.subtitle ?? '',
+            body: banner.body ?? '',
+            primary_action_label: banner.primary_action_label ?? '',
+            primary_action_url: banner.primary_action_url ?? '',
             image_upload: null,
         });
+    };
+
+    const openEditDialog = (banner: Banner) => {
+        fillFormFromBanner(banner);
+        setShowPlacementSelector(false);
+        setOpen(true);
+    };
+
+    const choosePlacement = (position: 'hero' | 'bottom') => {
+        if (position === 'bottom' && bottomBanner) {
+            fillFormFromBanner(bottomBanner);
+
+            return;
+        }
+
+        setEditingBanner(null);
+        setEditingPosition(position);
+        setImagePreparationError('');
+        form.clearErrors();
+        form.setData(
+            position === 'bottom'
+                ? {
+                      ...emptyBanner,
+                      position: 'bottom',
+                      eyebrow: 'Spring / Summer 2026',
+                      title: 'Elevated Essentials For Every Day',
+                      body: 'Versatile pieces. Timeless appeal. Designed for wherever life takes you.',
+                      primary_action_label: 'Explore The Collection',
+                      primary_action_url: '#new-in',
+                  }
+                : emptyBanner,
+        );
+    };
+
+    const openBottomDialog = () => {
+        if (bottomBanner) {
+            openEditDialog(bottomBanner);
+
+            return;
+        }
+
+        choosePlacement('bottom');
+        setShowPlacementSelector(false);
         setOpen(true);
     };
 
@@ -313,34 +391,96 @@ export default function AdminBannersIndex() {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 className="text-2xl font-semibold tracking-tight">
-                            Main page carousel
+                            Homepage banners
                         </h1>
                         <p className="text-sm text-muted-foreground">
-                            Change the image, title, and description shown in
-                            the homepage hero.
+                            Choose where each banner appears on the homepage.
                         </p>
                     </div>
                     <Dialog open={open} onOpenChange={setOpen}>
                         <DialogTrigger asChild>
                             <Button onClick={openCreateDialog}>
                                 <Plus />
-                                New slide
+                                Add banner
                             </Button>
                         </DialogTrigger>
-                        <DialogContent className="sm:max-w-xl">
+                        <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-xl">
                             <DialogHeader>
                                 <DialogTitle>
-                                    {editingBanner
-                                        ? 'Edit carousel slide'
-                                        : 'New carousel slide'}
+                                    {editingPosition === 'bottom'
+                                        ? editingBanner
+                                            ? 'Edit lower banner'
+                                            : 'Create lower banner'
+                                        : editingBanner
+                                          ? 'Edit carousel slide'
+                                          : 'Add banner'}
                                 </DialogTitle>
                                 <DialogDescription>
-                                    These are the only details that change in
-                                    the main homepage banner.
+                                    {editingPosition === 'bottom'
+                                        ? 'Change the campaign shown near the bottom of the homepage.'
+                                        : 'Change the image, title, and description in the main homepage carousel.'}
                                 </DialogDescription>
                             </DialogHeader>
 
                             <form className="grid gap-4" onSubmit={submit}>
+                                {showPlacementSelector && (
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="banner-placement">
+                                            Where should this appear?
+                                        </Label>
+                                        <Select
+                                            value={editingPosition}
+                                            onValueChange={choosePlacement}
+                                        >
+                                            <SelectTrigger
+                                                id="banner-placement"
+                                                className="w-full"
+                                            >
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="hero">
+                                                    Main carousel (top)
+                                                </SelectItem>
+                                                <SelectItem value="bottom">
+                                                    Lower homepage banner (end)
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        {editingPosition === 'bottom' &&
+                                            bottomBanner && (
+                                                <p className="text-xs text-muted-foreground">
+                                                    The lower section has one
+                                                    banner. Saving here replaces
+                                                    its current content.
+                                                </p>
+                                            )}
+                                    </div>
+                                )}
+                                {editingPosition === 'bottom' && (
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="banner-eyebrow">
+                                            Small heading
+                                        </Label>
+                                        <Input
+                                            id="banner-eyebrow"
+                                            value={form.data.eyebrow}
+                                            onChange={(event) =>
+                                                form.setData(
+                                                    'eyebrow',
+                                                    event.target.value,
+                                                )
+                                            }
+                                            placeholder="Spring / Summer 2026"
+                                            required
+                                        />
+                                        {form.errors.eyebrow && (
+                                            <p className="text-sm text-destructive">
+                                                {form.errors.eyebrow}
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
                                 <div className="grid gap-2">
                                     <Label htmlFor="banner-title">Title</Label>
                                     <Input
@@ -353,6 +493,7 @@ export default function AdminBannersIndex() {
                                             )
                                         }
                                         placeholder="Timeless style. Modern man."
+                                        required
                                     />
                                     {form.errors.title && (
                                         <p className="text-sm text-destructive">
@@ -361,27 +502,109 @@ export default function AdminBannersIndex() {
                                     )}
                                 </div>
 
-                                <div className="grid gap-2">
-                                    <Label htmlFor="banner-subtitle">
-                                        Description
-                                    </Label>
-                                    <Textarea
-                                        id="banner-subtitle"
-                                        value={form.data.subtitle}
-                                        onChange={(event) =>
-                                            form.setData(
-                                                'subtitle',
-                                                event.target.value,
-                                            )
-                                        }
-                                        placeholder="Refined essentials, masterfully crafted."
-                                    />
-                                    {form.errors.subtitle && (
-                                        <p className="text-sm text-destructive">
-                                            {form.errors.subtitle}
-                                        </p>
-                                    )}
-                                </div>
+                                {editingPosition === 'hero' ? (
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="banner-subtitle">
+                                            Description
+                                        </Label>
+                                        <Textarea
+                                            id="banner-subtitle"
+                                            value={form.data.subtitle}
+                                            onChange={(event) =>
+                                                form.setData(
+                                                    'subtitle',
+                                                    event.target.value,
+                                                )
+                                            }
+                                            placeholder="Refined essentials, masterfully crafted."
+                                            required
+                                        />
+                                        {form.errors.subtitle && (
+                                            <p className="text-sm text-destructive">
+                                                {form.errors.subtitle}
+                                            </p>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="banner-body">
+                                                Description
+                                            </Label>
+                                            <Textarea
+                                                id="banner-body"
+                                                value={form.data.body}
+                                                onChange={(event) =>
+                                                    form.setData(
+                                                        'body',
+                                                        event.target.value,
+                                                    )
+                                                }
+                                                required
+                                            />
+                                            {form.errors.body && (
+                                                <p className="text-sm text-destructive">
+                                                    {form.errors.body}
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="banner-action-label">
+                                                Button text
+                                            </Label>
+                                            <Input
+                                                id="banner-action-label"
+                                                value={
+                                                    form.data
+                                                        .primary_action_label
+                                                }
+                                                onChange={(event) =>
+                                                    form.setData(
+                                                        'primary_action_label',
+                                                        event.target.value,
+                                                    )
+                                                }
+                                                required
+                                            />
+                                            {form.errors
+                                                .primary_action_label && (
+                                                <p className="text-sm text-destructive">
+                                                    {
+                                                        form.errors
+                                                            .primary_action_label
+                                                    }
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="banner-action-url">
+                                                Button link
+                                            </Label>
+                                            <Input
+                                                id="banner-action-url"
+                                                value={
+                                                    form.data.primary_action_url
+                                                }
+                                                onChange={(event) =>
+                                                    form.setData(
+                                                        'primary_action_url',
+                                                        event.target.value,
+                                                    )
+                                                }
+                                                placeholder="#new-in or /collections/shirts"
+                                                required
+                                            />
+                                            {form.errors.primary_action_url && (
+                                                <p className="text-sm text-destructive">
+                                                    {
+                                                        form.errors
+                                                            .primary_action_url
+                                                    }
+                                                </p>
+                                            )}
+                                        </div>
+                                    </>
+                                )}
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="banner-image-upload">
@@ -401,6 +624,7 @@ export default function AdminBannersIndex() {
                                         </div>
                                     )}
                                     <Input
+                                        key={editingPosition}
                                         id="banner-image-upload"
                                         type="file"
                                         accept="image/jpeg,image/png,image/webp"
@@ -456,7 +680,9 @@ export default function AdminBannersIndex() {
                                     >
                                         {editingBanner
                                             ? 'Save changes'
-                                            : 'Add slide'}
+                                            : editingPosition === 'bottom'
+                                              ? 'Create banner'
+                                              : 'Add slide'}
                                     </Button>
                                 </DialogFooter>
                             </form>
@@ -467,7 +693,8 @@ export default function AdminBannersIndex() {
                 <Card className="rounded-lg">
                     <CardHeader>
                         <CardTitle>
-                            {banners.total.toLocaleString()} carousel slides
+                            Main page carousel ·{' '}
+                            {banners.total.toLocaleString()} slides
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-4">
@@ -535,6 +762,70 @@ export default function AdminBannersIndex() {
                             pagination={banners}
                             onPageChange={setBannersPageUrl}
                         />
+                    </CardContent>
+                </Card>
+
+                <Card className="rounded-lg">
+                    <CardHeader className="flex flex-col items-start justify-between gap-4 sm:flex-row">
+                        <div>
+                            <CardTitle>Lower homepage banner</CardTitle>
+                            <p className="mt-2 text-sm text-muted-foreground">
+                                Edit the image, text, and button shown below the
+                                product sections.
+                            </p>
+                        </div>
+                        <Button variant="outline" onClick={openBottomDialog}>
+                            {bottomBanner ? <Edit /> : <Plus />}
+                            {bottomBanner ? 'Edit banner' : 'Create banner'}
+                        </Button>
+                    </CardHeader>
+                    <CardContent>
+                        {bottomBanner ? (
+                            <div className="grid gap-4 rounded-lg border p-4 md:grid-cols-[160px_1fr]">
+                                <div className="aspect-video overflow-hidden rounded-md bg-muted">
+                                    {bottomBanner.image_url ? (
+                                        <img
+                                            src={bottomBanner.image_url}
+                                            alt={
+                                                bottomBanner.title ??
+                                                'Lower banner'
+                                            }
+                                            loading="lazy"
+                                            decoding="async"
+                                            className="h-full w-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="grid h-full place-items-center text-muted-foreground">
+                                            <Image className="h-6 w-6" />
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-xs font-medium text-muted-foreground uppercase">
+                                        {bottomBanner.eyebrow}
+                                    </p>
+                                    <h2 className="mt-1 text-base font-semibold">
+                                        {bottomBanner.title}
+                                    </h2>
+                                    <p className="mt-1 text-sm text-muted-foreground">
+                                        {bottomBanner.body}
+                                    </p>
+                                    <p className="mt-2 text-xs text-muted-foreground">
+                                        {bottomBanner.primary_action_label} →{' '}
+                                        {bottomBanner.primary_action_url}
+                                    </p>
+                                    <p className="mt-3 text-xs text-muted-foreground">
+                                        Updated{' '}
+                                        {formatDate(bottomBanner.updated_at)}
+                                    </p>
+                                </div>
+                            </div>
+                        ) : (
+                            <p className="text-sm text-muted-foreground">
+                                The homepage currently uses its default lower
+                                banner. Create one to manage it here.
+                            </p>
+                        )}
                     </CardContent>
                 </Card>
             </div>
