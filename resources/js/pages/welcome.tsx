@@ -95,8 +95,10 @@ const fallbackImages = [
     'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=900&q=85',
     'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=900&q=85',
     'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?auto=format&fit=crop&w=900&q=85',
-    'https://images.unsplash.com/photo-1593032465175-481ac7f401f0?auto=format&fit=crop&w=900&q=85',
+    '/Images/bluza-category.webp',
 ];
+
+const bluzaCategoryImage = '/Images/bluza-category.webp';
 
 const heroImage =
     'https://images.unsplash.com/photo-1516826957135-700dedea698c?auto=format&fit=crop&w=1800&q=90';
@@ -139,6 +141,39 @@ const footerColumns = [
 
 function imageFor(value: string | null, index: number): string {
     return value || fallbackImages[index % fallbackImages.length];
+}
+
+function CategoryCardImage({
+    category,
+    index,
+}: {
+    category: StoreCategory;
+    index: number;
+}) {
+    const fallbackImage =
+        category.slug === 'sweatshirts'
+            ? bluzaCategoryImage
+            : imageFor(null, index);
+    const [source, setSource] = useState<string | null>(
+        category.image_url || fallbackImage,
+    );
+
+    if (!source) {
+        return null;
+    }
+
+    return (
+        <img
+            src={source}
+            alt={`${category.name} collection`}
+            loading="lazy"
+            decoding="async"
+            onError={() =>
+                setSource(source === fallbackImage ? null : fallbackImage)
+            }
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.035]"
+        />
+    );
 }
 
 function formatPrice(product: StoreProduct): string {
@@ -879,15 +914,10 @@ export default function Welcome({
                                         preserveScroll
                                         className={`group relative aspect-[1.27] overflow-hidden bg-[#ded7cc] ring-offset-2 ring-offset-[#f5f1e9] ${activeCategory?.slug === category.slug ? 'ring-2 ring-[#151513]' : ''}`}
                                     >
-                                        <img
-                                            src={imageFor(
-                                                category.image_url,
-                                                index,
-                                            )}
-                                            alt={`${category.name} collection`}
-                                            loading="lazy"
-                                            decoding="async"
-                                            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.035]"
+                                        <CategoryCardImage
+                                            key={category.image_url ?? ''}
+                                            category={category}
+                                            index={index}
                                         />
                                         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent" />
                                         <div className="absolute bottom-5 left-4 text-white">

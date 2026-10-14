@@ -139,6 +139,25 @@ test('storefront navigation uses visible categories in catalog order', function 
         );
 });
 
+test('empty Bluza collection has a bundled category image fallback', function () {
+    ProductCategory::factory()->create([
+        'name' => 'Bluza',
+        'slug' => 'sweatshirts',
+    ]);
+
+    $this->get(route('home'))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('categories.0.slug', 'sweatshirts')
+            ->where('categories.0.image_url', null)
+        );
+
+    $image = public_path('Images/bluza-category.webp');
+
+    expect(is_file($image))->toBeTrue()
+        ->and(getimagesize($image)[0])->toBeGreaterThanOrEqual(900);
+});
+
 test('storefront navigation categories are available on product and cart pages', function () {
     $category = ProductCategory::factory()->create([
         'name' => 'Polos',

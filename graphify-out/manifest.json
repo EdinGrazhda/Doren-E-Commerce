@@ -790,8 +790,8 @@
     "semantic_hash": ""
   },
   "resources/js/pages/welcome.tsx": {
-    "mtime": 1791994156.6087894,
-    "ast_hash": "820d1553091956b2bba0159ca0141d53",
+    "mtime": 1791995025.3928363,
+    "ast_hash": "da79f62621bb44c6a85db63d70353b92",
     "semantic_hash": ""
   },
   "resources/js/types/auth.ts": {
@@ -1175,8 +1175,8 @@
     "semantic_hash": ""
   },
   "tests/Feature/StorefrontHomeTest.php": {
-    "mtime": 1791994169.2231042,
-    "ast_hash": "da85273c79904c8053f11169da0aa455",
+    "mtime": 1791995015.8178182,
+    "ast_hash": "dc3e6f485f797f189a36da81a5389d92",
     "semantic_hash": ""
   },
   "references/ecommerce2.png": {
@@ -1742,6 +1742,11 @@
   "tests/Feature/SitemapTest.php": {
     "mtime": 1791985259.9999053,
     "ast_hash": "39dc36c58ea30d7099beaefd92ce5e4e",
+    "semantic_hash": ""
+  },
+  "public/Images/bluza-category.webp": {
+    "mtime": 1791994986.8037572,
+    "ast_hash": "9c200ed10d56e6e465bc1b050470dbb7",
     "semantic_hash": ""
   }
 }
