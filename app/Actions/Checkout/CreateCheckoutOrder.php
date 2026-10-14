@@ -7,6 +7,7 @@ use App\Models\ProductVariant;
 use App\OrderStatus;
 use App\PaymentStatus;
 use App\Services\ProductCampaignPrice;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use RuntimeException;
@@ -50,9 +51,12 @@ class CreateCheckoutOrder
             });
             $subtotalCents = $pricedItems->sum(fn (array $item): int => $item['base_price_cents'] * (int) $item['quantity']);
             $totalCents = $pricedItems->sum(fn (array $item): int => $item['unit_price_cents'] * (int) $item['quantity']);
+            [$firstName, $lastName] = array_pad(explode(' ', Str::squish($customerData['customer_name']), 2), 2, '');
 
             $order = Order::query()->create([
-                ...$customerData,
+                ...Arr::except($customerData, 'customer_name'),
+                'customer_first_name' => $firstName,
+                'customer_last_name' => $lastName,
                 'shipping_country_code' => Str::upper((string) $customerData['shipping_country_code']),
                 'order_number' => $this->orderNumber(),
                 'status' => OrderStatus::Pending,

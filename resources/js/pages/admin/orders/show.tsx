@@ -66,6 +66,12 @@ type Props = {
     orderId: number;
 };
 
+const countryNames: Record<string, string> = {
+    XK: 'Kosovo',
+    AL: 'Albania',
+    MK: 'North Macedonia',
+};
+
 function PanelHeading({
     icon: Icon,
     title,
@@ -386,7 +392,9 @@ export default function AdminOrderShow({ orderId }: Props) {
                                     {order.shipping_postal_code}{' '}
                                     {order.shipping_city}
                                     <br />
-                                    {order.shipping_country_code}
+                                    {countryNames[
+                                        order.shipping_country_code
+                                    ] ?? order.shipping_country_code}
                                 </address>
                             </CardContent>
                         </Card>

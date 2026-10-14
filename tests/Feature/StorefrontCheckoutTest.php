@@ -59,8 +59,12 @@ test('storefront checkout creates pending order from cart', function () {
     $order = Order::query()->with('items')->firstOrFail();
 
     expect($order->customer_first_name)->toBe('Ada')
+        ->and($order->customer_last_name)->toBe('Lovelace')
         ->and($order->customer_email)->toBe('ada@example.com')
-        ->and($order->shipping_country_code)->toBe('EU')
+        ->and($order->customer_phone)->toBe('555-0100')
+        ->and($order->shipping_country_code)->toBe('XK')
+        ->and($order->shipping_address_line_two)->toBeNull()
+        ->and($order->customer_note)->toBeNull()
         ->and($order->total_cents)->toBe(8800)
         ->and($order->items)->toHaveCount(1)
         ->and($order->items->first()->sku)->toBe('DRN-POLO-OLV-M')
@@ -80,8 +84,23 @@ test('storefront checkout creates pending order from cart', function () {
         ->toContain('Organic Cotton Polo')
         ->toContain('Olive Green / M')
         ->toContain('https://example.com/polo.jpg')
-        ->toContain('10 Computing Lane')
-        ->toContain('Leave at reception.');
+        ->toContain('10 Computing Lane');
+});
+
+test('storefront checkout requires contact and shipping details from supported countries', function () {
+    $this->withSession(['cart.items' => ['12' => cartItem()]]);
+
+    $this->from(route('checkout'))
+        ->post(route('checkout.store'), [
+            ...checkoutData(),
+            'customer_name' => '',
+            'customer_phone' => '',
+            'shipping_country_code' => 'EU',
+        ])
+        ->assertRedirect(route('checkout'))
+        ->assertSessionHasErrors(['customer_name', 'customer_phone', 'shipping_country_code']);
+
+    expect(Order::query()->count())->toBe(0);
 });
 
 test('storefront checkout requires a cart', function () {
@@ -119,15 +138,12 @@ function cartItem(array $overrides = []): array
 function checkoutData(): array
 {
     return [
-        'customer_first_name' => 'Ada',
-        'customer_last_name' => 'Lovelace',
+        'customer_name' => 'Ada Lovelace',
         'customer_email' => 'ada@example.com',
         'customer_phone' => '555-0100',
         'shipping_street_address' => '10 Computing Lane',
-        'shipping_address_line_two' => 'Apt 1',
-        'shipping_city' => 'New York',
-        'shipping_postal_code' => '10001',
-        'shipping_country_code' => 'EU',
-        'customer_note' => 'Leave at reception.',
+        'shipping_city' => 'Prizren',
+        'shipping_postal_code' => '20000',
+        'shipping_country_code' => 'XK',
     ];
 }

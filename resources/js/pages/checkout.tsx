@@ -36,17 +36,49 @@ type Props = {
 };
 
 type CheckoutForm = {
-    customer_first_name: string;
-    customer_last_name: string;
+    customer_name: string;
     customer_email: string;
     customer_phone: string;
     shipping_street_address: string;
-    shipping_address_line_two: string;
     shipping_city: string;
     shipping_postal_code: string;
     shipping_country_code: string;
-    customer_note: string;
 };
+
+const contactFields = [
+    {
+        name: 'customer_name',
+        label: 'Full name',
+        type: 'text',
+        autoComplete: 'name',
+    },
+    {
+        name: 'customer_email',
+        label: 'Email',
+        type: 'email',
+        autoComplete: 'email',
+    },
+    {
+        name: 'customer_phone',
+        label: 'Phone number',
+        type: 'tel',
+        autoComplete: 'tel',
+    },
+] as const;
+
+const addressFields = [
+    {
+        name: 'shipping_street_address',
+        label: 'Street address',
+        autoComplete: 'address-line1',
+    },
+    { name: 'shipping_city', label: 'City', autoComplete: 'address-level2' },
+    {
+        name: 'shipping_postal_code',
+        label: 'Postal code',
+        autoComplete: 'postal-code',
+    },
+] as const;
 
 const fallbackImage =
     'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=900&q=85';
@@ -58,27 +90,17 @@ function formatPrice(cents: number, currency: string): string {
     }).format(cents / 100);
 }
 
-function fieldLabel(value: string): string {
-    return value
-        .split('_')
-        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(' ');
-}
-
 export default function Checkout({ items, subtotal_cents, currency }: Props) {
     const { cart, errors } = usePage().props;
     const pageErrors = errors as Record<string, string | undefined>;
     const form = useForm<CheckoutForm>({
-        customer_first_name: '',
-        customer_last_name: '',
+        customer_name: '',
         customer_email: '',
         customer_phone: '',
         shipping_street_address: '',
-        shipping_address_line_two: '',
         shipping_city: '',
         shipping_postal_code: '',
-        shipping_country_code: 'EU',
-        customer_note: '',
+        shipping_country_code: '',
     });
 
     const submit = (event: FormEvent<HTMLFormElement>) => {
@@ -163,47 +185,33 @@ export default function Checkout({ items, subtotal_cents, currency }: Props) {
                                     Contact
                                 </h2>
                                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                                    {[
-                                        'customer_first_name',
-                                        'customer_last_name',
-                                        'customer_email',
-                                        'customer_phone',
-                                    ].map((field) => (
+                                    {contactFields.map((field) => (
                                         <label
-                                            key={field}
-                                            className="grid gap-2"
+                                            key={field.name}
+                                            className={`grid gap-2 ${field.name === 'customer_name' ? 'sm:col-span-2' : ''}`}
                                         >
                                             <span className={labelClass}>
-                                                {fieldLabel(field)}
+                                                {field.label}
                                             </span>
                                             <input
                                                 className={inputClass}
-                                                type={
-                                                    field === 'customer_email'
-                                                        ? 'email'
-                                                        : 'text'
+                                                name={field.name}
+                                                type={field.type}
+                                                autoComplete={
+                                                    field.autoComplete
                                                 }
-                                                value={
-                                                    form.data[
-                                                        field as keyof CheckoutForm
-                                                    ]
-                                                }
+                                                required
+                                                value={form.data[field.name]}
                                                 onChange={(event) =>
                                                     form.setData(
-                                                        field as keyof CheckoutForm,
+                                                        field.name,
                                                         event.target.value,
                                                     )
                                                 }
                                             />
-                                            {form.errors[
-                                                field as keyof CheckoutForm
-                                            ] && (
+                                            {form.errors[field.name] && (
                                                 <span className="text-[12px] text-red-700">
-                                                    {
-                                                        form.errors[
-                                                            field as keyof CheckoutForm
-                                                        ]
-                                                    }
+                                                    {form.errors[field.name]}
                                                 </span>
                                             )}
                                         </label>
@@ -215,109 +223,71 @@ export default function Checkout({ items, subtotal_cents, currency }: Props) {
                                 <h2 className="text-[13px] font-bold tracking-[0.1em] uppercase">
                                     Shipping
                                 </h2>
-                                <div className="mt-4 grid gap-4">
-                                    {[
-                                        'shipping_street_address',
-                                        'shipping_address_line_two',
-                                    ].map((field) => (
+                                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                                    {addressFields.map((field) => (
                                         <label
-                                            key={field}
-                                            className="grid gap-2"
+                                            key={field.name}
+                                            className={`grid gap-2 ${field.name === 'shipping_street_address' ? 'sm:col-span-2' : ''}`}
                                         >
                                             <span className={labelClass}>
-                                                {fieldLabel(field)}
+                                                {field.label}
                                             </span>
                                             <input
                                                 className={inputClass}
-                                                value={
-                                                    form.data[
-                                                        field as keyof CheckoutForm
-                                                    ]
+                                                name={field.name}
+                                                autoComplete={
+                                                    field.autoComplete
                                                 }
+                                                required
+                                                value={form.data[field.name]}
                                                 onChange={(event) =>
                                                     form.setData(
-                                                        field as keyof CheckoutForm,
+                                                        field.name,
                                                         event.target.value,
                                                     )
                                                 }
                                             />
-                                            {form.errors[
-                                                field as keyof CheckoutForm
-                                            ] && (
+                                            {form.errors[field.name] && (
                                                 <span className="text-[12px] text-red-700">
-                                                    {
-                                                        form.errors[
-                                                            field as keyof CheckoutForm
-                                                        ]
-                                                    }
+                                                    {form.errors[field.name]}
                                                 </span>
                                             )}
                                         </label>
                                     ))}
-                                    <div className="grid gap-4 sm:grid-cols-[1fr_140px_100px]">
-                                        {[
-                                            'shipping_city',
-                                            'shipping_postal_code',
-                                            'shipping_country_code',
-                                        ].map((field) => (
-                                            <label
-                                                key={field}
-                                                className="grid gap-2"
-                                            >
-                                                <span className={labelClass}>
-                                                    {fieldLabel(field)}
-                                                </span>
-                                                <input
-                                                    className={inputClass}
-                                                    maxLength={
-                                                        field ===
-                                                        'shipping_country_code'
-                                                            ? 2
-                                                            : undefined
-                                                    }
-                                                    value={
-                                                        form.data[
-                                                            field as keyof CheckoutForm
-                                                        ]
-                                                    }
-                                                    onChange={(event) =>
-                                                        form.setData(
-                                                            field as keyof CheckoutForm,
-                                                            event.target.value,
-                                                        )
-                                                    }
-                                                />
-                                                {form.errors[
-                                                    field as keyof CheckoutForm
-                                                ] && (
-                                                    <span className="text-[12px] text-red-700">
-                                                        {
-                                                            form.errors[
-                                                                field as keyof CheckoutForm
-                                                            ]
-                                                        }
-                                                    </span>
-                                                )}
-                                            </label>
-                                        ))}
-                                    </div>
-                                    <label className="grid gap-2">
+                                    <label className="grid gap-2 sm:col-span-2">
                                         <span className={labelClass}>
-                                            Customer Note
+                                            Country
                                         </span>
-                                        <textarea
-                                            className="min-h-28 w-full resize-y border border-[#d6cec0] bg-[#f8f4ed] px-3 py-3 text-[13px] outline-none focus:border-[#151513]"
-                                            value={form.data.customer_note}
+                                        <select
+                                            className={inputClass}
+                                            name="shipping_country_code"
+                                            autoComplete="country"
+                                            required
+                                            value={
+                                                form.data.shipping_country_code
+                                            }
                                             onChange={(event) =>
                                                 form.setData(
-                                                    'customer_note',
+                                                    'shipping_country_code',
                                                     event.target.value,
                                                 )
                                             }
-                                        />
-                                        {form.errors.customer_note && (
+                                        >
+                                            <option value="" disabled>
+                                                Select country
+                                            </option>
+                                            <option value="XK">Kosovo</option>
+                                            <option value="AL">Albania</option>
+                                            <option value="MK">
+                                                North Macedonia
+                                            </option>
+                                        </select>
+                                        {form.errors.shipping_country_code && (
                                             <span className="text-[12px] text-red-700">
-                                                {form.errors.customer_note}
+                                                {
+                                                    form.errors
+                                                        .shipping_country_code
+                                                }
                                             </span>
                                         )}
                                     </label>

@@ -136,15 +136,12 @@ test('checkout recalculates campaign prices and records the discount', function 
 function campaignCheckoutData(): array
 {
     return [
-        'customer_first_name' => 'Ada',
-        'customer_last_name' => 'Lovelace',
+        'customer_name' => 'Ada Lovelace',
         'customer_email' => 'ada@example.com',
         'customer_phone' => '555-0100',
         'shipping_street_address' => '10 Computing Lane',
-        'shipping_address_line_two' => '',
-        'shipping_city' => 'New York',
-        'shipping_postal_code' => '10001',
-        'shipping_country_code' => 'US',
-        'customer_note' => '',
+        'shipping_city' => 'Prizren',
+        'shipping_postal_code' => '20000',
+        'shipping_country_code' => 'XK',
     ];
 }

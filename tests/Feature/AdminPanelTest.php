@@ -1142,6 +1142,14 @@ test('admins can update and delete orders', function () {
 test('admins can view order details', function () {
     $admin = User::factory()->admin()->create();
     $order = Order::factory()->create([
+        'customer_first_name' => 'Ada',
+        'customer_last_name' => 'Lovelace',
+        'customer_email' => 'ada@example.com',
+        'customer_phone' => '+383 44 123 456',
+        'shipping_street_address' => '10 Computing Lane',
+        'shipping_city' => 'Prizren',
+        'shipping_postal_code' => '20000',
+        'shipping_country_code' => 'XK',
         'customer_note' => 'Leave the parcel with reception.',
     ]);
     $item = OrderItem::factory()->create([
@@ -1168,6 +1176,14 @@ test('admins can view order details', function () {
         ->getJson(route('api.admin.orders.show', $order))
         ->assertSuccessful()
         ->assertJsonPath('data.order_number', $order->order_number)
+        ->assertJsonPath('data.customer_first_name', 'Ada')
+        ->assertJsonPath('data.customer_last_name', 'Lovelace')
+        ->assertJsonPath('data.customer_email', 'ada@example.com')
+        ->assertJsonPath('data.customer_phone', '+383 44 123 456')
+        ->assertJsonPath('data.shipping_street_address', '10 Computing Lane')
+        ->assertJsonPath('data.shipping_city', 'Prizren')
+        ->assertJsonPath('data.shipping_postal_code', '20000')
+        ->assertJsonPath('data.shipping_country_code', 'XK')
         ->assertJsonPath('data.customer_note', 'Leave the parcel with reception.')
         ->assertJsonPath('data.items.0.id', $item->id)
         ->assertJsonPath('data.items.0.quantity', 2)
