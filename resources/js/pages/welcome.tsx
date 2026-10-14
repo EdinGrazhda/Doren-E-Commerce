@@ -5,7 +5,6 @@ import {
     Heart,
     Instagram,
     Mail,
-    Menu,
     Search,
     ShieldCheck,
     ShoppingBag,
@@ -723,13 +722,12 @@ export default function Welcome({
             <div className="min-h-screen bg-[#f5f1e9] text-[#151513] antialiased">
                 <header className="sticky top-0 z-40 border-b border-[#dfd8cc] bg-[#f8f4ed]/95 backdrop-blur">
                     <div className="mx-auto flex h-[68px] max-w-[1158px] items-center justify-between px-6">
-                        <button
-                            type="button"
-                            className="grid h-10 w-10 place-items-center lg:hidden"
-                            aria-label="Open navigation"
-                        >
-                            <Menu className="h-5 w-5" />
-                        </button>
+                        <StorefrontNavigation
+                            activeCategorySlug={activeCategory?.slug}
+                            isNewInActive={!activeCategory && !search}
+                            mobile
+                            preserveScroll
+                        />
 
                         <Link
                             href="/"

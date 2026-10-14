@@ -62,6 +62,7 @@ export default function Cart({ items, subtotal_cents, currency }: Props) {
             <div className="min-h-screen bg-[#f5f1e9] text-[#151513] antialiased">
                 <header className="sticky top-0 z-40 border-b border-[#dfd8cc] bg-[#f8f4ed]/95 backdrop-blur">
                     <div className="mx-auto flex h-[68px] max-w-[1158px] items-center justify-between px-6">
+                        <StorefrontNavigation mobile />
                         <Link
                             href={home()}
                             className="flex h-12 w-28 items-center justify-center sm:w-32"

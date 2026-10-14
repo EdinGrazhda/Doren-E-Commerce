@@ -139,6 +139,24 @@ test('storefront navigation uses visible categories in catalog order', function 
         );
 });
 
+test('storefront navigation categories are available on product and cart pages', function () {
+    $category = ProductCategory::factory()->create([
+        'name' => 'Polos',
+        'slug' => 'polos',
+    ]);
+    $product = Product::factory()->for($category, 'category')->create();
+
+    foreach ([route('products.show', $product), route('cart')] as $url) {
+        $this->get($url)
+            ->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('storefrontCategories', 1)
+                ->where('storefrontCategories.0.name', 'Polos')
+                ->where('storefrontCategories.0.slug', 'polos')
+            );
+    }
+});
+
 test('storefront home sends every active hero carousel slide and one fixed campaign per other position', function () {
     StorefrontBanner::factory()->create([
         'position' => 'hero',
