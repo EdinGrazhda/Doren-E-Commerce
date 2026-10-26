@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\StorefrontBanner;
 use App\Services\ProductCampaignPrice;
+use App\Services\SeoMetadata;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,7 +14,10 @@ use Inertia\Response;
 
 class HomeController extends Controller
 {
-    public function __construct(private readonly ProductCampaignPrice $campaignPrice) {}
+    public function __construct(
+        private readonly ProductCampaignPrice $campaignPrice,
+        private readonly SeoMetadata $seoMetadata,
+    ) {}
 
     public function __invoke(Request $request, ?ProductCategory $category = null): Response
     {
@@ -137,14 +141,16 @@ class HomeController extends Controller
                 $position => $banners->get($position, collect())->values(),
             ]);
 
-        return Inertia::render('welcome', [
+        $activeCategoryPayload = $activeCategory ? [
+            'id' => $activeCategory->id,
+            'name' => $activeCategory->name,
+            'slug' => $activeCategory->slug,
+            'description' => $activeCategory->description,
+        ] : null;
+
+        $props = [
             'search' => $search,
-            'activeCategory' => $activeCategory ? [
-                'id' => $activeCategory->id,
-                'name' => $activeCategory->name,
-                'slug' => $activeCategory->slug,
-                'description' => $activeCategory->description,
-            ] : null,
+            'activeCategory' => $activeCategoryPayload,
             'banners' => [
                 'top' => $bannerGroups->get('top')->first(),
                 'hero' => $bannerGroups->get('hero'),
@@ -154,6 +160,11 @@ class HomeController extends Controller
             'storefrontCategories' => $storefrontCategories,
             'newInProducts' => $products,
             'bestSellerProducts' => $bestSellerProducts,
+        ];
+
+        return Inertia::render('welcome', [
+            ...$props,
+            'head' => Inertia::always($this->seoMetadata->forStorefront($props)),
         ]);
     }
 

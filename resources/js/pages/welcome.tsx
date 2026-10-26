@@ -1,15 +1,13 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import {
     ArrowLeft,
     ArrowRight,
     Heart,
     Instagram,
-    Mail,
     Search,
     ShieldCheck,
     ShoppingBag,
     X,
-    Youtube,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
@@ -108,36 +106,6 @@ const bannerImage =
 
 const carouselIntervalMs = 6000;
 const instagramUrl = 'https://www.instagram.com/doren.ks/?hl=en';
-
-const footerColumns = [
-    [
-        'Shop',
-        'New In',
-        'Polos',
-        'Knitwear',
-        'Shirts',
-        'Trousers',
-        'Jackets',
-        'Sale',
-    ],
-    [
-        'About',
-        'Our Story',
-        'Craftsmanship',
-        'Sustainability',
-        'Journal',
-        'Careers',
-    ],
-    [
-        'Customer Care',
-        'Contact Us',
-        'Shipping & Delivery',
-        'Returns & Exchanges',
-        'Size Guide',
-        'FAQs',
-    ],
-    ['Legal', 'Terms & Conditions', 'Privacy Policy', 'Cookie Policy'],
-];
 
 function imageFor(value: string | null, index: number): string {
     return value || fallbackImages[index % fallbackImages.length];
@@ -746,14 +714,6 @@ export default function Welcome({
 
     return (
         <>
-            <Head
-                title={
-                    activeCategory
-                        ? `Men's ${activeCategory.name} in Kosovo | Doren`
-                        : "Men's Clothing in Prizren, Kosovo | Doren"
-                }
-            />
-
             <div className="min-h-screen bg-[#f5f1e9] text-[#151513] antialiased">
                 <header className="sticky top-0 z-40 border-b border-[#dfd8cc] bg-[#f8f4ed]/95 backdrop-blur">
                     <div className="mx-auto flex h-[68px] max-w-[1158px] items-center justify-between px-6">
@@ -1017,27 +977,23 @@ export default function Welcome({
                             Stay in style
                         </h2>
                         <p className="mt-2 text-[12px] text-[#4f493f]">
-                            Subscribe for early access to new arrivals,
-                            exclusive offers and style inspiration.
+                            Follow Doren on Instagram for new arrivals and
+                            style inspiration.
                         </p>
-                        <form className="mx-auto mt-4 flex max-w-[430px] gap-2">
-                            <input
-                                type="email"
-                                placeholder="Enter your email address"
-                                className="h-8 min-w-0 flex-1 border border-[#d6cec0] bg-white px-3 text-[11px] outline-none placeholder:text-[#8b857a]"
-                            />
-                            <button
-                                type="submit"
-                                className="h-8 bg-[#11110f] px-8 text-[10px] font-bold tracking-[0.12em] text-white uppercase"
-                            >
-                                Subscribe
-                            </button>
-                        </form>
+                        <a
+                            href={instagramUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-4 inline-flex h-9 items-center gap-2 bg-[#11110f] px-6 text-[10px] font-bold tracking-[0.12em] text-white uppercase"
+                        >
+                            <Instagram className="h-4 w-4" />
+                            Follow Doren
+                        </a>
                     </section>
                 </main>
 
                 <footer className="bg-[#11191b] text-[#f4f1ea]">
-                    <div className="mx-auto grid max-w-[1158px] grid-cols-1 gap-9 px-6 py-8 md:grid-cols-[1.35fr_repeat(4,1fr)]">
+                    <div className="mx-auto grid max-w-[1158px] grid-cols-1 gap-9 px-6 py-8 md:grid-cols-[1.35fr_1fr_1fr]">
                         <div>
                             <BrandLogo className="h-20 w-36 object-cover object-center" />
                             <p className="mt-4 max-w-[210px] text-[11px] leading-5 text-[#c9c5bb]">
@@ -1054,25 +1010,42 @@ export default function Welcome({
                                 >
                                     <Instagram className="h-4 w-4" />
                                 </a>
-                                <Youtube className="h-4 w-4" />
-                                <Mail className="h-4 w-4" />
                             </div>
                         </div>
-
-                        {footerColumns.map(([title, ...links]) => (
-                            <div key={title}>
-                                <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase">
-                                    {title}
-                                </h3>
-                                <ul className="mt-3 grid gap-1 text-[11px] leading-5 text-[#c9c5bb]">
-                                    {links.map((item) => (
-                                        <li key={item}>
-                                            <a href="#newsletter">{item}</a>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
+                        <nav aria-label="Footer shop navigation">
+                            <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase">
+                                Shop
+                            </h3>
+                            <ul className="mt-3 grid gap-1 text-[11px] leading-5 text-[#c9c5bb]">
+                                <li>
+                                    <Link href={`${home.url()}#new-in`}>New In</Link>
+                                </li>
+                                {categories.map((category) => (
+                                    <li key={category.id}>
+                                        <Link href={showCollection(category.slug)}>
+                                            {category.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                        <div>
+                            <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase">
+                                Doren Menswear
+                            </h3>
+                            <p className="mt-3 text-[11px] leading-5 text-[#c9c5bb]">
+                                Based in Prizren, Kosovo. Delivery to Kosovo,
+                                Albania and North Macedonia.
+                            </p>
+                            <a
+                                href={instagramUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-3 inline-block text-[11px] leading-5 text-[#c9c5bb] underline underline-offset-4"
+                            >
+                                Doren on Instagram
+                            </a>
+                        </div>
                     </div>
                     <div className="mx-auto flex max-w-[1158px] flex-col gap-4 border-t border-white/10 px-6 py-4 text-[10px] text-[#c9c5bb] sm:flex-row sm:items-center sm:justify-between">
                         <span>© 2026 DOREN. All rights reserved.</span>

@@ -36,7 +36,7 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         $permissions = $crudPermissions
-            ->merge(['dashboard.read', 'sales.read', 'customers.read'])
+            ->merge(['dashboard.read', 'sales.read', 'customers.read', 'seo.read', 'seo.run'])
             ->map(fn (string $name): Permission => Permission::findOrCreate($name));
 
         Role::findOrCreate('admin')->syncPermissions($permissions);

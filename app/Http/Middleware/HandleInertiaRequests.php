@@ -5,11 +5,15 @@ namespace App\Http\Middleware;
 use App\Models\Order;
 use App\Models\ProductCategory;
 use App\OrderStatus;
+use App\Services\SeoMetadata;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
+    public function __construct(private readonly SeoMetadata $seoMetadata) {}
+
     /**
      * The root template that's loaded on the first page visit.
      *
@@ -38,7 +42,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return [
+        $shared = [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
@@ -64,6 +68,12 @@ class HandleInertiaRequests extends Middleware
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
+
+        if (! in_array($request->route()?->getName(), ['home', 'collections.show', 'products.show'], true)) {
+            $shared['head'] = Inertia::always(fn (): array => $this->seoMetadata->forPrivateRoute($request->route()?->getName() ?? ''));
+        }
+
+        return $shared;
     }
 
     private function pendingOrdersCount(Request $request): int

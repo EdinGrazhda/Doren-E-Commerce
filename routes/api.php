@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Admin\PermissionController;
 use App\Http\Controllers\Api\Admin\ProductCategoryController;
 use App\Http\Controllers\Api\Admin\ProductController;
 use App\Http\Controllers\Api\Admin\RoleController;
+use App\Http\Controllers\Api\Admin\SeoController;
 use App\Http\Controllers\Api\Admin\StorefrontBannerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,8 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin|employee', 'throttle:
     ->name('api.admin.')
     ->group(function (): void {
         Route::get('/dashboard', DashboardController::class)->middleware('permission:dashboard.read')->name('dashboard');
+        Route::get('/seo', [SeoController::class, 'index'])->middleware('permission:seo.read')->name('seo.index');
+        Route::post('/seo', [SeoController::class, 'store'])->middleware(['permission:seo.run', 'throttle:6,1'])->name('seo.store');
 
         Route::apiResource('orders', OrderController::class)->only('index')->middleware('permission:orders.read');
         Route::apiResource('orders', OrderController::class)->only('show')->middleware('permission:orders.read');

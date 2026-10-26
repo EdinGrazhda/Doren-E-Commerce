@@ -10,6 +10,7 @@ import SettingsLayout from '@/layouts/settings/layout';
 const appName = 'Doren';
 
 createInertiaApp({
+    serverHead: 'head',
     title: (title) =>
         title
             ? title.includes(appName)

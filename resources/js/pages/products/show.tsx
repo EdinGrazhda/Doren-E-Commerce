@@ -1,4 +1,4 @@
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Link, useForm, usePage } from '@inertiajs/react';
 import {
     ArrowLeft,
     ArrowRight,
@@ -97,14 +97,13 @@ function formatPrice(cents: number, currency: string): string {
     }).format(cents / 100);
 }
 
-function requestedColorName(colorOptions: ProductColor[]): string | null {
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    const requestedColor = new URLSearchParams(window.location.search).get(
-        'color',
-    );
+function requestedColorName(
+    colorOptions: ProductColor[],
+    pageUrl: string,
+): string | null {
+    const requestedColor = new URLSearchParams(
+        pageUrl.split('?')[1]?.split('#')[0] ?? '',
+    ).get('color');
 
     return (
         colorOptions.find((color) => color.name === requestedColor)?.name ??
@@ -177,7 +176,8 @@ function ProductTile({
 }
 
 export default function Show({ product, relatedProducts }: Props) {
-    const { cart } = usePage().props;
+    const { props, url } = usePage();
+    const { cart } = props;
     const images = useMemo(
         () => (product.images.length ? product.images : [product.image_url]),
         [product.image_url, product.images],
@@ -211,7 +211,7 @@ export default function Show({ product, relatedProducts }: Props) {
         : ['S', 'M', 'L', 'XL'];
     const firstVariant = availableVariants[0];
     const initialColorName =
-        requestedColorName(colorOptions) ??
+        requestedColorName(colorOptions, url) ??
         firstVariant?.color_name ??
         colorOptions[0]?.name ??
         '';
@@ -309,8 +309,6 @@ export default function Show({ product, relatedProducts }: Props) {
 
     return (
         <>
-            <Head title={`${product.name} | Doren Menswear`} />
-
             <div className="min-h-screen bg-[#f5f1e9] text-[#151513] antialiased">
                 <header className="sticky top-0 z-40 border-b border-[#dfd8cc] bg-[#f8f4ed]/95 backdrop-blur">
                     <div className="mx-auto flex h-[68px] max-w-[1158px] items-center justify-between px-6">
@@ -610,26 +608,27 @@ export default function Show({ product, relatedProducts }: Props) {
                     <section className="mx-auto max-w-[1158px] border-t border-[#ddd6ca] px-6 py-7">
                         <div className="grid gap-6 border border-[#d6cec0] bg-[#f8f4ed] p-5 lg:grid-cols-[0.92fr_1.08fr]">
                             <div>
-                                <div className="flex gap-9 border-b border-[#d6cec0] pb-4 text-[10px] font-bold tracking-[0.08em] uppercase">
-                                    <span>Description</span>
-                                    <span className="text-[#756e62]">
-                                        Details
-                                    </span>
-                                    <span className="text-[#756e62]">
-                                        Care Guide
-                                    </span>
-                                </div>
-                                <p className="mt-5 text-[13px] leading-6 text-[#494238]">
-                                    {product.description ??
-                                        'A refined staple crafted for effortless everyday style.'}
-                                </p>
+                                <h2 className="border-b border-[#d6cec0] pb-4 text-[10px] font-bold tracking-[0.08em] uppercase">
+                                    Product details
+                                </h2>
+                                {product.description && (
+                                    <p className="mt-5 text-[13px] leading-6 text-[#494238]">
+                                        {product.description}
+                                    </p>
+                                )}
                                 <ul className="mt-4 grid gap-1 text-[12px] leading-5 text-[#494238]">
+                                    {product.sku && <li>SKU: {product.sku}</li>}
+                                    {product.category && (
+                                        <li>Collection: {product.category.name}</li>
+                                    )}
+                                    {product.sizes.length > 0 && (
+                                        <li>Sizes: {product.sizes.join(', ')}</li>
+                                    )}
                                     <li>
-                                        100% premium cotton or natural blend
+                                        {availableVariants.length > 0
+                                            ? 'Select an available color and size to order.'
+                                            : 'Currently out of stock.'}
                                     </li>
-                                    <li>Soft, breathable hand feel</li>
-                                    <li>Clean fit for everyday comfort</li>
-                                    <li>Finished collar and cuffs</li>
                                 </ul>
                             </div>
                             <div className="aspect-[2.12] overflow-hidden bg-[#ded7cc]">

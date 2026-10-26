@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductCategoryController as AdminProductCategoryController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\SalesController as AdminSalesController;
+use App\Http\Controllers\Admin\SeoController as AdminSeoController;
 use App\Http\Controllers\Admin\StorefrontBannerController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
@@ -21,6 +22,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class)->name('home');
 Route::get('/collections/{category:slug}', HomeController::class)->name('collections.show');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+Route::get('/sitemaps/{section}/{page}.xml', [SitemapController::class, 'section'])
+    ->where(['section' => 'home|collections|products', 'page' => '[1-9]\d*'])
+    ->name('sitemap.section');
 Route::get('/cart', CartController::class)->name('cart');
 Route::post('/cart-items', [CartItemController::class, 'store'])->name('cart-items.store');
 Route::delete('/cart-items/{variantId}', [CartItemController::class, 'destroy'])
@@ -46,6 +50,7 @@ Route::middleware(['auth', 'verified', 'role:admin|employee'])
 
         Route::get('/campaigns', AdminCampaignController::class)->middleware('permission:campaigns.read')->name('dashboard.campaigns.index');
         Route::get('/sales', AdminSalesController::class)->middleware('permission:sales.read')->name('dashboard.sales');
+        Route::get('/seo', AdminSeoController::class)->middleware('permission:seo.read')->name('dashboard.seo.index');
         Route::get('/customers', [CustomerController::class, 'index'])->middleware('permission:customers.read')->name('dashboard.customers.index');
         Route::resource('banners', StorefrontBannerController::class)->only('index')->middleware('permission:banners.read')->names('dashboard.banners');
         Route::get('/access-control', AccessControlController::class)->middleware('permission:roles.read|permissions.read')->name('dashboard.access-control');

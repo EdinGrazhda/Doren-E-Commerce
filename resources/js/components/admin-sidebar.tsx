@@ -6,6 +6,7 @@ import {
     Images,
     LayoutDashboard,
     Package,
+    SearchCheck,
     ShoppingBag,
     ShieldCheck,
     Tags,
@@ -34,6 +35,7 @@ import { index as categoriesIndex } from '@/routes/dashboard/categories';
 import { index as customersIndex } from '@/routes/dashboard/customers';
 import { index as ordersIndex } from '@/routes/dashboard/orders';
 import { index as productsIndex } from '@/routes/dashboard/products';
+import { index as seoIndex } from '@/routes/dashboard/seo';
 import type { NavItem } from '@/types';
 
 type AdminNavSection = {
@@ -113,6 +115,12 @@ const adminNavSections: AdminNavSection[] = [
     {
         title: 'Configuration',
         items: [
+            {
+                title: 'SEO audits',
+                permission: 'seo.read',
+                href: seoIndex(),
+                icon: SearchCheck,
+            },
             {
                 title: 'Banners',
                 permission: 'banners.read',

@@ -13,7 +13,7 @@ test('storefront exposes Doren branding for shared links and installed apps', fu
     $this->get(route('home'))
         ->assertSuccessful()
         ->assertSee('Clothing in Prizren, Kosovo | Doren</title>', false)
-        ->assertSee('rel="canonical" href="'.route('home').'"', false)
+        ->assertSee('rel="canonical" href="'.route('home').'/"', false)
         ->assertSee('property="og:site_name" content="Doren Menswear"', false)
         ->assertSee('property="og:image" content="'.url('/social-preview.png').'"', false)
         ->assertSee('name="twitter:card" content="summary_large_image"', false)

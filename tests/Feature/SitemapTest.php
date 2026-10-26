@@ -27,7 +27,7 @@ test('sitemap lists only indexable storefront collections and products', functio
         iterator_to_array($xml->url, false),
     );
 
-    expect($locations)->toContain(route('home'))
+    expect($locations)->toContain(route('home').'/')
         ->toContain(route('collections.show', ['category' => $visibleCategory->slug]))
         ->toContain(route('products.show', ['product' => $activeProduct->slug]))
         ->not->toContain(route('collections.show', ['category' => 'hidden']))

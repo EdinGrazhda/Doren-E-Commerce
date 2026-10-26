@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Services\ProductCampaignPrice;
+use App\Services\SeoMetadata;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ProductShowController extends Controller
 {
-    public function __construct(private readonly ProductCampaignPrice $campaignPrice) {}
+    public function __construct(
+        private readonly ProductCampaignPrice $campaignPrice,
+        private readonly SeoMetadata $seoMetadata,
+    ) {}
 
     public function __invoke(Product $product): Response
     {
@@ -29,6 +33,7 @@ class ProductShowController extends Controller
                     'image_url',
                     'price_cents',
                     'stock_quantity',
+                    'reserved_quantity',
                     'is_active',
                     'sort_order',
                 ])
@@ -59,9 +64,15 @@ class ProductShowController extends Controller
             ->get()
             ->map(fn (Product $relatedProduct): array => $this->relatedProductPayload($relatedProduct));
 
-        return Inertia::render('products/show', [
-            'product' => $this->productPayload($product),
+        $productPayload = $this->productPayload($product);
+        $props = [
+            'product' => $productPayload,
             'relatedProducts' => $relatedProducts,
+        ];
+
+        return Inertia::render('products/show', [
+            ...$props,
+            'head' => Inertia::always($this->seoMetadata->forProduct($productPayload)),
         ]);
     }
 
@@ -71,6 +82,8 @@ class ProductShowController extends Controller
     private function productPayload(Product $product): array
     {
         $pricing = $this->campaignPrice->calculate($product);
+        $availableVariants = $product->variants
+            ->filter(fn (ProductVariant $variant): bool => $variant->stock_quantity > 0);
         $images = collect([
             $product->primary_image_url,
             ...($product->gallery_image_urls ?? []),
@@ -121,6 +134,7 @@ class ProductShowController extends Controller
                     'price_cents' => $this->campaignPrice->calculate($product, $variant->price_cents ?? $product->price_cents)['price_cents'],
                 ])
                 ->values(),
+            'is_in_stock' => $availableVariants->isNotEmpty(),
         ];
     }
 
